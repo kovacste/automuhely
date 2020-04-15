@@ -4,15 +4,15 @@ class LoginService extends Service {
 
     login(username, password) {
         console.log(username, password);
-        return Promise.resolve({
+        /*return Promise.resolve({
             modul: ['Vezető', 'Iroda', 'Szervíz', 'Ügyfél'],
             username: 'Teszt Béla',
-        });
+        });*/
        //http://localhost:50873/User/Authenticate?loginName=iroda&password=rossz
-       /* return this.get('/User/Authenticate?', {
+       return this.get('User/Authenticate?', {
             loginName: username,
             password: password
-        })*/
+        })
     }
 
 }
