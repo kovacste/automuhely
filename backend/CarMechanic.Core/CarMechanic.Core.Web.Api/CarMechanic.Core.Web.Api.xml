@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CarMechanic.Core.Web.Api</name>
+    </assembly>
+    <members>
+        <member name="T:CarMechanic.Core.Web.Api.Controllers.UserController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.UserController.Authenticate(System.String,System.String)">
+            <summary>
+            A felhasználó beléptetése
+            </summary>
+            <param name="loginName">login név</param>
+            <param name="password">jelszó</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
