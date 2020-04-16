@@ -1,4 +1,4 @@
 export const OFFICE = 'Iroda';
-export const MANAGER = 'Vezető';
-export const SERVICE = 'Szerelő';
-export const CLIENT = 'Ügyfél';
+export const MANAGER = 'Vezeto';
+export const SERVICE = 'Szerelo';
+export const CLIENT = 'Ugyfel';
