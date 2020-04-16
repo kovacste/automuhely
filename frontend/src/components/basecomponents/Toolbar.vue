@@ -38,6 +38,7 @@
             logout() {
                 this.$store.commit('logOutUser');
                 this.$router.push('/login');
+                localStorage.clear();
             }
         }
     }

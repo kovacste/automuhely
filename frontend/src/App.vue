@@ -26,7 +26,7 @@
 
             </v-list-item-content>
 
-            <v-list-item-subtitle>Bejelentkezve</v-list-item-subtitle>
+            <v-list-item-subtitle v-if="hasLoggedInUser">Bejelentkezve</v-list-item-subtitle>
 
           </v-list-item>
 
@@ -34,9 +34,11 @@
 
         <v-divider />
 
-        <v-list dense v-for="(module, index) in getUserModules" :key="index">
+        <v-list dense v-for="(moduleName, index) in getUserModules" :key="index">
 
-          <v-list-group v-for="(menu, index) in getUserMenu(module)" :prepend-icon="menu.icon" :key="index">
+          <h4 class="subtitle-2"> {{ getModuleLabel(moduleName) }}</h4>
+
+          <v-list-group v-for="(menu, index) in getUserMenu(moduleName)" :prepend-icon="menu.icon" :key="index">
 
               <template v-slot:activator>
 
@@ -89,12 +91,35 @@ export default {
       return this.$store.getters.user.modules;
     }
   },
+  mounted() {
+      if(localStorage.getItem('username')) {
+        this.$store.commit('setUser', {
+          username: localStorage.getItem('username'),
+          name: localStorage.getItem('name'),
+          modules: localStorage.getItem('module').split('-')
+        });
+
+        if(this.$router.currentRoute.name === 'login') {
+          this.$router.push('home');
+        }
+      }
+  },
   methods: {
-    getUserMenu(module) {
-      return this.menuMap[module];
+    getUserMenu(modulName) {
+      return this.menuMap[modulName];
     },
+    getModuleLabel(modulName) {
+      return this.modulLabel[modulName];
+    }
   },
   data: () => ({
+    modulLabel: {
+      [MANAGER]: 'Vezető',
+      [OFFICE]: 'Iroda',
+      [SERVICE]: 'Szerelő',
+      [CLIENT]: 'Ügyfél',
+
+    },
     menuMap : {
       [MANAGER]: {
         settings: {

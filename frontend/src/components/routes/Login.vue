@@ -74,10 +74,14 @@
                 loginService.login(this.username, this.password).then(response => {
                     localStorage.setItem('token', 'token-value');
                     this.$store.commit('setUser', {
-                        username: response.LoginNev,
-                        name: response.Nev,
-                        modules: response.modul
+                        username: response.data.loginNev,
+                        name: response.data.nev,
+                        modules: response.data.modul
                     });
+                    console.log(response)
+                    localStorage.setItem('username', response.data.loginNev);
+                    localStorage.setItem('name', response.data.nev);
+                    localStorage.setItem('module', response.data.modul.join('-'));
                     this.$router.push('/home');
                 });
             }
