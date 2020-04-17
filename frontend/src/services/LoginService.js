@@ -9,7 +9,7 @@ class LoginService extends Service {
             username: 'Teszt Béla',
         });*/
        //http://localhost:50873/User/Authenticate?loginName=iroda&password=rossz
-       return this.get('/User/Authenticate?', {
+       return this.get('Authenticate?', {
             loginName: username,
             password: password
         })
@@ -17,4 +17,4 @@ class LoginService extends Service {
 
 }
 
-export const loginService = new LoginService('/api');
+export const loginService = new LoginService('/api/User/');

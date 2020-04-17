@@ -43,16 +43,17 @@
         components: {PageBase},
         methods: {
             editUser(client) {
-                this.$router.push('client/' + client.id)
+                this.$store.commit('setClient', client);
+                this.$router.push('client/' + client.id);
             },
 
             deleteUser(user) {
-                console.log(user, 'user to delete')
+                console.log(user, 'user to delete');
             }
         },
         mounted() {
             clientService.getClients().then(response => {
-                this.clients = response.clients;
+                this.clients = response.data;
             })
         },
         data() {
@@ -63,11 +64,12 @@
                         text: 'Név',
                         align: 'start',
                         sortable: false,
-                        value: 'name',
+                        value: 'nev',
                     },
-                    { text: 'Irányítószám', value: 'zip' },
-                    { text: 'Város', value: 'city' },
-                    { text: 'Adószám', value: 'taxnum' },
+                    { text: 'Irányítószám', value: 'irszam' },
+                    { text: 'Adószám', value: 'adoszam' },
+                    { text: 'Város', value: 'telepules' },
+                    { text: 'Utca', value: 'kozteruletneve' },
                     { text: 'Actions', value: 'actions', sortable: false },
                 ],
                 clients: []

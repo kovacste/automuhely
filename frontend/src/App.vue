@@ -4,11 +4,7 @@
 
     <v-card height="100%">
 
-      <v-navigation-drawer
-              absolute
-              permanent
-              left
-              v-if="hasLoggedInUser"
+      <v-navigation-drawer absolute permanent left v-if="hasLoggedInUser" src="mech.png" dark
       >
         <template v-slot:prepend>
 
