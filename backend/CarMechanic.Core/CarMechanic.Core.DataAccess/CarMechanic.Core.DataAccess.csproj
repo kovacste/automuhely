@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarMechanic.Core.DomainModel\CarMechanic.Core.DomainModel.csproj" />
+    <ProjectReference Include="..\CarMechanic.Core.Model\CarMechanic.Core.Model.csproj" />
   </ItemGroup>
 
 </Project>
