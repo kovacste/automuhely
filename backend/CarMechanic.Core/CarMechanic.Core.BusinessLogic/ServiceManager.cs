@@ -40,5 +40,10 @@ namespace CarMechanic.Core.BusinessLogic
         {
             _serviceAccess.RemoveService(szolgaltatas);
         }
+
+        public void SetServicePrice(int serviceId, decimal price)
+        {
+            _serviceAccess.SetServicePrice(serviceId, price);
         }
+    }
 }

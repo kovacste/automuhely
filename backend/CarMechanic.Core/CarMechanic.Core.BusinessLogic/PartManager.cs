@@ -38,5 +38,10 @@ namespace CarMechanic.Core.BusinessLogic
         {
             _partAccess.RemovePart(alkatresz);
         }
+
+        public void SetPartPrice(int partId, decimal purchasePrice, decimal salesPrice)
+        {
+            _partAccess.SetPartPrice(partId, purchasePrice, salesPrice);
+        }
     }
 }

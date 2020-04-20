@@ -64,12 +64,35 @@ namespace CarMechanic.Core.Web.Api.Controllers
         /// </summary>
         /// <param name="data">Alkatrész adatai</param>    
         [HttpPost]
-        public IActionResult RemoveService([FromBody] Alkatresz data)
+        public IActionResult RemovePart([FromBody] Alkatresz data)
         {
             try
             {
                 var manager = new PartManager();
                 manager.RemovePart(data);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Alaktrész árazása
+        /// </summary>
+        /// <param name="partId">Szolgáltatás azonosító</param>    
+        /// <param name="purchasePrice">Új beszerzési ára</param>    
+        /// <param name="salesPrice">Új eladási ára</param>    
+        [HttpPost]
+        public IActionResult SetPartPrice(int partId, decimal purchasePrice, decimal salesPrice)
+        {
+            try
+            {
+                var manager = new PartManager();
+                manager.SetPartPrice(partId, purchasePrice, salesPrice);
                 return Ok();
 
             }

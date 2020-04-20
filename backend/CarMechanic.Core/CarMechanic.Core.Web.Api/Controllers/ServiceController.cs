@@ -79,6 +79,28 @@ namespace CarMechanic.Core.Web.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Szolgáltatás árazása
+        /// </summary>
+        /// <param name="serviceId">Szolgáltatás azonosító</param>    
+        /// <param name="price">Új ára</param>    
+        [HttpPost]
+        public IActionResult SetServicePrice(int serviceId, decimal price)
+        {
+            try
+            {
+                var manager = new ServiceManager();
+                manager.SetServicePrice(serviceId, price);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
 

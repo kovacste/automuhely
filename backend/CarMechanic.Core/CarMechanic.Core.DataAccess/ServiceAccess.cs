@@ -31,6 +31,19 @@ namespace CarMechanic.Core.DataAccess
             }
         }
 
+        public void SetServicePrice(int serviceId, decimal price)
+        {
+            using (var context = new CarMechanicContext())
+            {
+                var result = context.Szolgaltatasok.FirstOrDefault(x => x.Id == serviceId);
+                if (result != null)
+                {
+                    result.Egysegar = price;
+                }
+                context.SaveChanges();
+            }
+        }        
+
         public void SetService(Szolgaltatas szolgaltatas)
         {
 

@@ -60,5 +60,19 @@ namespace CarMechanic.Core.DataAccess
                 context.SaveChanges();
             }
         }
+
+        public void SetPartPrice(int partId, decimal purchasePrice, decimal salesPrice)
+        {
+            using (var context = new CarMechanicContext())
+            {
+                var result = context.Alkatreszek.FirstOrDefault(x => x.Id == partId);
+                if (result != null)
+                {
+                    result.Beszerar = purchasePrice;
+                    result.Eladasiar = salesPrice;
+                }
+                context.SaveChanges();
+            }
+        }
     }
 }
