@@ -102,7 +102,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         /// <summary>
         /// Ügyfél törlése
         /// </summary>
-        /// <param name="data">Művelet eredménye</param>    
+        /// <param name="data">Ügyfél adatai</param>    
         [HttpPost]
         public IActionResult RemoveClient([FromBody] Ugyfel data)
         {

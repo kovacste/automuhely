@@ -1,4 +1,5 @@
 ﻿using CarMechanic.Core.DomainModel.Models;
+using CarMechanic.Core.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,20 @@ namespace CarMechanic.Core.DataAccess
             }
         }
 
-        public void SetService(Model.Szolgaltatas szolgaltatas)
+        public void RemoveService(Szolgaltatas szolgaltatas)
+        {
+            using (var context = new CarMechanicContext())
+            {
+                var result = context.Szolgaltatasok.FirstOrDefault(x => x.Id == szolgaltatas.Id);
+                if (result != null)
+                {
+                    context.Szolgaltatasok.Remove(result);
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void SetService(Szolgaltatas szolgaltatas)
         {
 
             using (var context = new CarMechanicContext())
