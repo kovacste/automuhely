@@ -36,6 +36,19 @@ namespace CarMechanic.Core.DataAccess
             }
         }
 
+        public void RemoveClient(Ugyfel ugyfel)
+        {
+            using (var context = new CarMechanicContext())
+            {
+                var result = context.Ugyfelek.FirstOrDefault(x => x.Id == ugyfel.Id);
+                if (result != null)
+                {
+                    context.Ugyfelek.Remove(result);
+                    context.SaveChanges();
+                }
+            }
+        }
+
         public void SetClient(Ugyfel ugyfel)
         {
 

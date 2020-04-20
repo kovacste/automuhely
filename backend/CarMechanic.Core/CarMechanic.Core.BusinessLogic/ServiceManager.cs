@@ -35,5 +35,10 @@ namespace CarMechanic.Core.BusinessLogic
             _serviceAccess.SetService(szolgaltatas);
 
         }
-    }
+
+        public void RemoveService(Szolgaltatas szolgaltatas)
+        {
+            _serviceAccess.RemoveService(szolgaltatas);
+        }
+        }
 }
