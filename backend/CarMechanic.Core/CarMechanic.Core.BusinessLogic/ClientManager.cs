@@ -15,7 +15,7 @@ namespace CarMechanic.Core.BusinessLogic
         public List<Ugyfel> GetClientList()
         {
             var ugyfel = new List<Ugyfel>();
-            var result =_clientAccess.GetClientList();
+            var result = _clientAccess.GetClientList();
             result.ForEach(row =>
             {
                 ugyfel.Add(new Ugyfel()
@@ -63,7 +63,7 @@ namespace CarMechanic.Core.BusinessLogic
             {
                 jelleg.Add(new KozteruletJelleg()
                 {
-                    Id = row.Id,                    
+                    Id = row.Id,
                     Nev = row.Nev
                 });
             });
@@ -74,6 +74,11 @@ namespace CarMechanic.Core.BusinessLogic
         {
             _clientAccess.SetClient(ugyfel);
 
+        }
+
+        public void RemoveClient(Ugyfel ugyfel)
+        {
+            _clientAccess.RemoveClient(ugyfel);
         }
     }
 }

@@ -97,5 +97,29 @@ namespace CarMechanic.Core.Web.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        /// <summary>
+        /// Ügyfél törlése
+        /// </summary>
+        /// <param name="data">Művelet eredménye</param>    
+        [HttpPost]
+        public IActionResult RemoveClient([FromBody] Ugyfel data)
+        {
+            try
+            {
+                var manager = new ClientManager();
+                manager.RemoveClient(data);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+
     }
 }
