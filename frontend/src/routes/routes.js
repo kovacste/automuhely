@@ -4,6 +4,10 @@ import Clients from "../components/routes/Clients";
 import Client from "../components/routes/Client";
 import Statistics from "../components/routes/Statistics";
 import Schedule from "../components/routes/Schedule";
+import Services from "../components/routes/Services";
+import Service from "../components/routes/Service";
+import Parts from "../components/routes/Parts";
+import Part from "../components/routes/Part";
 
 export const routes = [
     { path: '/', component: Home },
@@ -14,5 +18,11 @@ export const routes = [
     { path: '/clients', component: Clients},
     { path: '/client/:id', component: Client},
     { path: '/client', component: Client},
+    { path: '/services', component: Services},
+    { path: '/service/:id', component: Service},
+    { path: '/service', component: Service},
+    { path: '/parts', component: Parts},
+    { path: '/part/:id', component: Part},
+    { path: '/part', component: Part},
 ];
 

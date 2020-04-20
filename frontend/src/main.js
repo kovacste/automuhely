@@ -5,12 +5,14 @@ import { routes } from "./routes/routes";
 import vuetify from './plugins/vuetify';
 import { store } from "./store/store";
 import VueGoogleCharts from 'vue-google-charts';
-
-Vue.use(VueGoogleCharts);
+import Toasted from 'vue-toasted';
 
 Vue.config.productionTip = false;
 
+Vue.use(VueGoogleCharts);
+Vue.use(Toasted)
 Vue.use(VueRouter);
+
 const router = new VueRouter({ routes, mode: 'history' });
 
 router.beforeEach((to, from, next) => {

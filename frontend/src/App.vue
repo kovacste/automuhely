@@ -4,7 +4,7 @@
 
     <v-card height="100%">
 
-      <v-navigation-drawer absolute permanent left v-if="hasLoggedInUser" src="mech.png" dark
+      <v-navigation-drawer style="position: fixed;" absolute permanent left v-if="hasLoggedInUser" src="mech.png" dark
       >
         <template v-slot:prepend>
 
@@ -169,7 +169,7 @@ export default {
           icon: 'mdi-cog',
           items: [
             { title: 'Alkatrészek', to: '/parts' },
-            { title: 'Szolgáltatások', to: '/sevices' },
+            { title: 'Szolgáltatások', to: '/services' },
             { title: 'Ügyfelek', to: '/clients' },
           ]
         },
