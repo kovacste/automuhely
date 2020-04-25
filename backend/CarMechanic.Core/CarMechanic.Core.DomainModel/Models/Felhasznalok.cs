@@ -10,6 +10,7 @@ namespace CarMechanic.Core.DomainModel.Models
             Alkatreszek = new HashSet<Alkatreszek>();
             FelhasznaloJogok = new HashSet<FelhasznaloJogok>();
             MunkalapRendelesek = new HashSet<MunkalapRendelesek>();
+            MunkalapTetelek = new HashSet<MunkalapTetelek>();
             MunkalapokLezartaNavigation = new HashSet<Munkalapok>();
             MunkalapokRogzitetteNavigation = new HashSet<Munkalapok>();
             Szolgaltatasok = new HashSet<Szolgaltatasok>();
@@ -24,6 +25,7 @@ namespace CarMechanic.Core.DomainModel.Models
         public virtual ICollection<Alkatreszek> Alkatreszek { get; set; }
         public virtual ICollection<FelhasznaloJogok> FelhasznaloJogok { get; set; }
         public virtual ICollection<MunkalapRendelesek> MunkalapRendelesek { get; set; }
+        public virtual ICollection<MunkalapTetelek> MunkalapTetelek { get; set; }
         public virtual ICollection<Munkalapok> MunkalapokLezartaNavigation { get; set; }
         public virtual ICollection<Munkalapok> MunkalapokRogzitetteNavigation { get; set; }
         public virtual ICollection<Szolgaltatasok> Szolgaltatasok { get; set; }

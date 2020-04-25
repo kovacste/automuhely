@@ -8,6 +8,7 @@ namespace CarMechanic.Core.DomainModel.Models
         public Alkatreszek()
         {
             MunkalapRendelesek = new HashSet<MunkalapRendelesek>();
+            MunkalapTetelek = new HashSet<MunkalapTetelek>();
         }
 
         public int Id { get; set; }
@@ -19,5 +20,6 @@ namespace CarMechanic.Core.DomainModel.Models
 
         public virtual Felhasznalok RogzitetteNavigation { get; set; }
         public virtual ICollection<MunkalapRendelesek> MunkalapRendelesek { get; set; }
+        public virtual ICollection<MunkalapTetelek> MunkalapTetelek { get; set; }
     }
 }

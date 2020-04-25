@@ -5,6 +5,11 @@ namespace CarMechanic.Core.DomainModel.Models
 {
     public partial class Szolgaltatasok
     {
+        public Szolgaltatasok()
+        {
+            MunkalapTetelek = new HashSet<MunkalapTetelek>();
+        }
+
         public int Id { get; set; }
         public string Nev { get; set; }
         public string Me { get; set; }
@@ -15,5 +20,6 @@ namespace CarMechanic.Core.DomainModel.Models
         public int Rogzitette { get; set; }
 
         public virtual Felhasznalok RogzitetteNavigation { get; set; }
+        public virtual ICollection<MunkalapTetelek> MunkalapTetelek { get; set; }
     }
 }

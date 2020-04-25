@@ -31,6 +31,7 @@ namespace CarMechanic.Core.DomainModel.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=.;Database=CarMechanic;Trusted_Connection=True;");
             }
         }
@@ -173,17 +174,13 @@ namespace CarMechanic.Core.DomainModel.Models
 
             modelBuilder.Entity<MunkalapTetelek>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Alkatreszid).HasColumnName("alkatreszid");
 
                 entity.Property(e => e.Ar)
                     .HasColumnName("ar")
                     .HasColumnType("money");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Mennyiseg).HasColumnName("mennyiseg");
 
@@ -198,24 +195,24 @@ namespace CarMechanic.Core.DomainModel.Models
                 entity.Property(e => e.Szolgaltatasid).HasColumnName("szolgaltatasid");
 
                 entity.HasOne(d => d.Alkatresz)
-                    .WithMany()
+                    .WithMany(p => p.MunkalapTetelek)
                     .HasForeignKey(d => d.Alkatreszid)
                     .HasConstraintName("FK_MunkalapTetelek_Alkatreszek");
 
                 entity.HasOne(d => d.Munkalap)
-                    .WithMany()
+                    .WithMany(p => p.MunkalapTetelek)
                     .HasForeignKey(d => d.Munkalapid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MunkalapTetelek_Munkalapok");
 
                 entity.HasOne(d => d.RogzitetteNavigation)
-                    .WithMany()
+                    .WithMany(p => p.MunkalapTetelek)
                     .HasForeignKey(d => d.Rogzitette)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_MunkalapTetelek_Felhasznalok");
 
                 entity.HasOne(d => d.Szolgaltatas)
-                    .WithMany()
+                    .WithMany(p => p.MunkalapTetelek)
                     .HasForeignKey(d => d.Szolgaltatasid)
                     .HasConstraintName("FK_MunkalapTetelek_Szolgaltatasok");
             });
