@@ -309,6 +309,7 @@
                     this.client.id = 0;
                 }
                 this.client.rogzitette = this.$store.getters.user.username;
+                this.client.rogzitve = new Date().toISOString();
                 this.$store.commit('setClient', this.client);
                 this.$store.dispatch('saveClient').then(() => {
                      this.$toasted.show('Ügyfél mentése sikeres!',{ 

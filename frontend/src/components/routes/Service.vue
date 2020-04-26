@@ -1,4 +1,5 @@
 <template>
+
     <PageBase title="Szolgáltatás adatok" width="8">
 
         <v-card slot="content" class="elevation-12">
@@ -179,6 +180,7 @@
                     this.service.id = 0;
                 }
                 this.service.rogzitette = this.$store.getters.user.username;
+                this.service.rogzitve = new Date().toISOString();
                 this.$store.commit('setService', this.service);
                 this.$store.dispatch('saveService').then(() => {
                      this.$toasted.show('Szolgáltatás mentése sikeres!',{

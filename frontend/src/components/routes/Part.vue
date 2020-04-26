@@ -130,7 +130,6 @@
             return {
                 editable: false,
                 newPart: false,
-                parts: [],
                 part: {
                     id: null,
                     nev: null,
@@ -167,6 +166,7 @@
                     this.part.id = 0;
                 }
                 this.part.rogzitette = this.$store.getters.user.username;
+                this.part.rogzitve = new Date().toISOString();
                 this.$store.commit('setPart', this.part);
                 this.$store.dispatch('savePart').then(() => {
                      this.$toasted.show('Alkatrész mentése sikeres!',{

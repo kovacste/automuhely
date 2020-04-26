@@ -1,12 +1,12 @@
 <template>
 
-    <PageBase title="Szolgáltatások kezelése" width="12">
+    <PageBase title="Munkalapok kezelése" width="12">
 
         <v-data-table
                 slot="content"
                 v-model="selected"
                 :headers="headers"
-                :items="services"
+                :items="worksheets"
                 item-key="name"
                 show-select
                 class="elevation-5"
@@ -14,13 +14,13 @@
 
             <template v-slot:item.actions="{ item }">
 
-                <v-icon small class="mr-2" @click="editService(item)">
+                <v-icon small class="mr-2" @click="editWorksheet(item)">
 
                     mdi-pencil
 
                 </v-icon>
 
-                <v-icon small @click="deleteService(item)">
+                <v-icon small @click="deleteWorksheet(item)">
 
                     mdi-delete
 
@@ -36,43 +36,40 @@
 
 <script>
     import PageBase from "../basecomponents/PageBase";
-    import {servicesService} from "../../services/ServicesService";
+    import { worksheetService } from "../../services/WorksheetService";
 
     export default {
         name: "Clients",
-        components: {PageBase},
+        components: { PageBase },
         methods: {
-            editService(service) {
-                this.$store.commit('setService', service);
-                this.$router.push('service/' + service.id);
+            editWorksheet(worksheet) {
+                this.$store.commit('setWorksheet', worksheet);
+                this.$router.push('worksheet/' + worksheet.id);
             },
-
-            deleteService(service) {
-                console.log(service);
+            deleteWorksheet(worksheet) {
+                console.log(worksheet);
             }
         },
         mounted() {
-            servicesService.getServiceList().then(response => {
-                this.services = response.data;
-            });
+            worksheetService.getWorksheetList().then(response => {
+                this.worksheets = response.data;
+            })
         },
         data() {
             return {
                 selected: [],
                 headers: [
                     {
-                        text: 'Név',
+                        text: 'Munkalap azonosító',
                         align: 'start',
                         sortable: false,
-                        value: 'nev',
+                        value: 'id',
                     },
-                    { text: 'Irányítószám', value: 'irszam' },
-                    { text: 'Darab', value: 'me' },
-                    { text: 'Egységár', value: 'egysegar' },
-                    { text: 'Ismétlődő', value: 'ismetlodo' },
+                    { text: 'Ügyfél neve', value: 'ugyfel.nev' },
+                    { text: 'Időpont', value: 'idopont' },
                     { text: 'Actions', value: 'actions', sortable: false },
                 ],
-                services: []
+                worksheets: []
             }
         }
     }

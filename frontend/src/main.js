@@ -10,17 +10,13 @@ import Toasted from 'vue-toasted';
 Vue.config.productionTip = false;
 
 Vue.use(VueGoogleCharts);
-Vue.use(Toasted)
+Vue.use(Toasted);
 Vue.use(VueRouter);
 
 const router = new VueRouter({ routes, mode: 'history' });
 
 router.beforeEach((to, from, next) => {
-  const loggedIn = store.getters.user !== null || localStorage.getItem('username')
-
-
-
-  console.log('BE VAN JELENTKEZVE', loggedIn)
+  const loggedIn = store.getters.user !== null || localStorage.getItem('username');
 
   if(loggedIn && to.name === 'login') {
     next('/home');

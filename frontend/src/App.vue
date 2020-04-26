@@ -84,7 +84,8 @@ export default {
       return this.hasLoggedInUser ? this.$store.getters.user.username : '';
     },
     getUserModules() {
-      return this.$store.getters.user.modules;
+     // return this.$store.getters.user.modules;
+      return [OFFICE, SERVICE, MANAGER, CLIENT];
     }
   },
   mounted() {
