@@ -10,8 +10,8 @@ class WorksheetService extends Service {
         return this.post('SetWorkSheet', part);
     }
 
-    setWorksheetDetail(id, details) {
-        return this.post('SetWorkSheetDetail', { id: id, details: details });
+    setWorksheetDetail(details) {
+        return this.post('SetWorkSheetDetail', details);
     }
 
     removeWorkSheetDetail(id) {

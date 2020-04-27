@@ -8,7 +8,6 @@
                 :headers="headers"
                 :items="worksheets"
                 item-key="name"
-                show-select
                 class="elevation-5"
         >
 

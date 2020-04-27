@@ -52,7 +52,7 @@
 
                         </v-flex>
 
-                        <v-flex md1 xs12 class="ma-2">
+                        <v-flex md1 xs12 class="ma-2" v-if="fieldsEditable">
 
                             <v-tooltip left>
 
@@ -68,7 +68,7 @@
 
                         </v-flex>
 
-                        <v-flex md1 xs12 class="ma-2">
+                        <v-flex md1 xs12 class="ma-2" v-if="fieldsEditable">
 
                             <v-tooltip left>
 
@@ -156,6 +156,8 @@
                 <v-btn v-if="fieldsEditable" @click="cancel()" color="primary">Mégse </v-btn>
 
                 <v-btn v-if="fieldsEditable" @click="save()" color="primary">Mentés </v-btn>
+
+                <v-btn v-if="!fieldsEditable" @click="closeWorksheet()" color="primary">Munkalap lezárása </v-btn>
 
             </v-card-actions>
 
@@ -264,6 +266,7 @@
     import FormSubTitle from "../basecomponents/FormSubTitle";
     import {clientService} from "../../services/ClientService";
     import {servicesService} from "../../services/ServicesService";
+    import {worksheetService} from "../../services/WorksheetService";
     export default {
         name: "Client",
         components: { FormSubTitle, PageBase },
@@ -302,28 +305,53 @@
                 return (this.editable || this.newWorksheet) && !this.worksheet.lezarva;
             },
             worksheetStatus() {
-                return this.worksheet.lezarva ? 'Munkalap lezárt' : 'Munkalap nyitott'
+                return this.worksheet.lezarva ? 'Munkalap lezárt' : 'Munkalap nyitott';
             }
         },
         methods: {
+            closeWorksheet() {
+                this.worksheet.lezarva = true;
+                this.save();
+            },
             loadClient(client) {
                 this.worksheet.ugyfel = client;
                 this.clientSelectDialog = false;
             },
             loadService(service){
+                if(this.worksheet.tetelek == null) this.worksheet.tetelek = [];
                 this.worksheet.tetelek.push(service);
+
+                this.worksheet.rogzitette = this.$store.getters.user.username;
+                this.worksheet.rogzitve = new Date().toISOString();
+                worksheetService.setWorksheetDetail([{
+                    id: 0,
+                    munkalapid: this.worksheet.id,
+                    szolgaltatas: service,
+                    mennyiseg: 1,
+                    ar: service.egysegar,
+                    rogzitve: new Date().toISOString(),
+                    rogzitette: this.$store.getters.user.username,
+                }]);
             },
             openClientSelectWindow() {
-                clientService.getClients().then(response => {
-                    this.clients = response.data
+                if(this.clients.length === 0) {
+                    clientService.getClients().then(response => {
+                        this.clients = response.data;
+                        this.clientSelectDialog = true;
+                    });
+                } else {
                     this.clientSelectDialog = true;
-                });
+                }
             },
             openServiceSelectWindow() {
-                servicesService.getServiceList().then(response => {
-                    this.services = response.data
+                if(this.services.length === 0) {
+                    servicesService.getServiceList().then(response => {
+                        this.services = response.data;
+                        this.servicesDialog = true;
+                    });
+                } else {
                     this.servicesDialog = true;
-                });
+                }
             },
             edit() {
                 this.editable = true;
@@ -336,9 +364,24 @@
                 if(this.newWorksheet) {
                     this.worksheet.id = 0;
                 }
+
+                let worksheetToSave = { ...this.worksheet };
+                worksheetToSave.tetelek = [];
+                this.worksheet.tetelek.forEach(tetel => {
+                   worksheetToSave.tetelek.push({
+                       id: 0,
+                       szolgaltatas: {
+                           id: tetel.id,
+                           mennyiseg: tetel.mennyiseg,
+                           ar: tetel.ar,
+                           rogzitette: tetel.rogzitette
+                       }
+                   })
+                });
+
                 this.worksheet.rogzitette = this.$store.getters.user.username;
                 this.worksheet.rogzitve = new Date().toISOString();
-                this.$store.commit('setWorksheet', this.worksheet);
+                this.$store.commit('setWorksheet', worksheetToSave);
                 this.$store.dispatch('saveWorksheet').then(() => {
                      this.$toasted.show('Munkalap mentése sikeres!',{
                         theme: "toasted-primary", 

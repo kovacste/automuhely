@@ -9,8 +9,15 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     modules: [user, client, service, part, worksheet],
-    state: {},
-    getters: {},
-    mutations: {},
+    state: {
+        lists: []
+    },
+    getters: {
+        lists: (state) => state.lists
+
+    },
+    mutations: {
+        addList: (state, {key, list}) => state.lists[key] = list
+    },
     actions: {}
 });

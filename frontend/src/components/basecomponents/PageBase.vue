@@ -2,7 +2,7 @@
 
     <v-layout row>
 
-        <Toolbar :title="title"/>
+        <Toolbar :title="title" :functions="functions"/>
 
         <v-container class="fill-height" fluid>
 
@@ -36,6 +36,10 @@
             width: {
                 type: String,
                 required: true
+            },
+            functions: {
+                type: Array,
+                required: false
             }
         }
     }

@@ -1,6 +1,8 @@
 <template>
 
-    <PageBase title="Alkatrészek kezelése" width="12">
+    <PageBase title="Alkatrészek kezelése" width="12" :functions="[
+        { cb: exportPartData, icon: 'mdi-file-download-outline', tooltip: 'Alkatrész adatok exportálása' },
+    ]">
 
         <v-data-table
                 slot="content"
@@ -8,7 +10,6 @@
                 :headers="headers"
                 :items="parts"
                 item-key="name"
-                show-select
                 class="elevation-5"
         >
 
@@ -37,11 +38,15 @@
 <script>
     import PageBase from "../basecomponents/PageBase";
     import { partService } from "../../services/PartService";
+    import {exportToCsv} from "../../utils/ExportToCsv";
 
     export default {
         name: "Clients",
         components: { PageBase },
         methods: {
+            exportPartData() {
+                window.open(encodeURI(exportToCsv(this.parts)));
+            },
             editPart(part) {
                 this.$store.commit('setPart', part);
                 this.$router.push('part/' + part.id);

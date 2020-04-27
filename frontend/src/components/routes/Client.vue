@@ -277,16 +277,29 @@
                 this.client = { ...client };
             }
 
-            this.zipChange()
-            //this.cities = $store.getters.lists.cities;
 
-            clientService.getCities().then(response => {
-                this.cities = response.data;
-            });
+            const cachedCities = this.$store.getters.lists.cities;
+            if(!cachedCities) {
+                clientService.getCities().then(response => {
+                    this.cities = response.data;
+                    this.$store.commit('addList', { key: 'cities', list: this.cities })
+                    this.zipChange();
+                });
+            } else {
+                this.cities = cachedCities;
+                this.zipChange();
+            }
 
-            clientService.getStreetTypes().then(response => {
-                this.streetTypes = response.data;
-            });
+            const cachedStreetTypes = this.$store.getters.lists.streetTypes;
+            if(!cachedStreetTypes) {
+                clientService.getStreetTypes().then(response => {
+                    this.streetTypes = response.data;
+                    this.$store.commit('addList', { key: 'streetTypes', list: this.streetTypes })
+                });
+            } else {
+                this.streetTypes = cachedStreetTypes;
+            }
+
         },
         computed: {
             adoszamEditable() {

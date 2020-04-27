@@ -1,7 +1,23 @@
 <template>
 
     <v-card color="grey lighten-4" flat tile width="100%">
+
         <v-toolbar dense>
+
+
+            <v-tooltip left>
+
+                <template v-slot:activator="{on}">
+
+                    <v-icon v-on="on" class="back-icon" @click="$router.back()"> mdi-keyboard-backspace </v-icon>
+
+                </template>
+
+                <span> Vissza  </span>
+
+            </v-tooltip>
+
+            <v-divider class="mx-4" vertical />
 
             <v-toolbar-title class="toolbar-title">
 
@@ -9,7 +25,25 @@
 
             </v-toolbar-title>
 
+            <v-divider class="mx-4" vertical />
+
+
+            <v-tooltip left v-for="(fn, index) in functions" :key="index">
+
+                <template v-slot:activator="{on}">
+
+                    <v-icon class="ma-2" v-on="on"  @click="fn.cb()" :key="index"> {{ fn.icon }}</v-icon>
+
+                </template>
+
+                <span> {{ fn.tooltip }}</span>
+
+            </v-tooltip>
+
+
             <v-spacer />
+
+            <v-divider class="mx-4" vertical />
 
             <span class="logout-text-button" @click="logout()">
 
@@ -32,6 +66,10 @@
             title: {
                 type: String,
                 required: true
+            },
+            functions: {
+                type: Array,
+                required: false
             }
         },
         methods: {
@@ -49,7 +87,7 @@
         cursor: pointer;
         font-size: 12px;
     }
-    .toolbar-title {
-        margin-left: 20px;
+    .back-icon {
+        margin-left: 15px;
     }
 </style>

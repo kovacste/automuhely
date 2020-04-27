@@ -55,17 +55,22 @@
 
                         <v-flex md3 xs12 class="ma-2">
 
-                            <v-text-field
+                            <v-select
                                     :disabled="!fieldsEditable"
                                     v-model="service.ismetlodo"
                                     label="Imsétlődő"
                                     name="ismetlodo"
-                                    :rules="[v => !!v || 'Kötelező mező!']"
+                                    item-text="item-text"
+                                    item-value="item-value"
+                                    :items="[
+                                        {'item-text': 'Igen', 'item-value': true},
+                                        {'item-text': 'Nem', 'item-value': false},
+                                    ]"
                             />
 
                         </v-flex>
 
-                        <v-flex md3 xs12 class="ma-2">
+                        <v-flex md3 xs12 class="ma-2" v-if="service.ismetlodo">
 
                             <v-text-field
                                     :disabled="!fieldsEditable"
@@ -181,6 +186,10 @@
                 }
                 this.service.rogzitette = this.$store.getters.user.username;
                 this.service.rogzitve = new Date().toISOString();
+                this.service.egysegar = +this.service.egysegar;
+                if(!this.service.ismetlodo) {
+                    this.service.ismetlodesiidoszak = 0;
+                }
                 this.$store.commit('setService', this.service);
                 this.$store.dispatch('saveService').then(() => {
                      this.$toasted.show('Szolgáltatás mentése sikeres!',{

@@ -4,8 +4,7 @@
 
     <v-card height="100%">
 
-      <v-navigation-drawer style="position: fixed;" absolute permanent left v-if="hasLoggedInUser" src="mech.png" dark
-      >
+      <v-navigation-drawer style="position: fixed;" absolute permanent left v-if="hasLoggedInUser" src="mech.png" dark>
         <template v-slot:prepend>
 
           <v-list-item two-line>
@@ -115,7 +114,6 @@ export default {
       [OFFICE]: 'Iroda',
       [SERVICE]: 'Szerelő',
       [CLIENT]: 'Ügyfél',
-
     },
     menuMap : {
       [MANAGER]: {
@@ -169,7 +167,9 @@ export default {
           label: 'Beállítások',
           icon: 'mdi-cog',
           items: [
+            { title: 'Új alkatrész', to: '/part' },
             { title: 'Alkatrészek', to: '/parts' },
+            { title: 'Új szolgáltatás', to: '/service' },
             { title: 'Szolgáltatások', to: '/services' },
             { title: 'Ügyfelek', to: '/clients' },
           ]

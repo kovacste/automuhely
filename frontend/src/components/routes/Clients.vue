@@ -1,6 +1,9 @@
 <template>
 
-    <PageBase title="Ügyfelek kezelése" width="12">
+    <PageBase title="Ügyfelek kezelése" width="12" :functions="[
+        { cb: exportClientData, icon: 'mdi-file-download-outline', tooltip: 'Ügyfél adatok exportálása' },
+        { cb: () => $router.push('/client'), icon: 'mdi-account-plus-outline', tooltip: 'Új ügyfél felvitele' },
+    ]">
 
         <v-data-table
                 slot="content"
@@ -8,7 +11,6 @@
                 :headers="headers"
                 :items="clients"
                 item-key="name"
-                show-select
                 class="elevation-5"
         >
 
@@ -37,11 +39,15 @@
 <script>
     import {clientService} from "../../services/ClientService";
     import PageBase from "../basecomponents/PageBase";
+    import {exportToCsv} from "../../utils/ExportToCsv";
 
     export default {
         name: "Clients",
         components: {PageBase},
         methods: {
+            exportClientData() {
+                window.open(encodeURI(exportToCsv(this.clients)));
+            },
             editUser(client) {
                 this.$store.commit('setClient', client);
                 this.$router.push('client/' + client.id);

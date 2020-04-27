@@ -14,7 +14,7 @@ export const part = {
     },
 
     actions: {
-        saveService(context) {
+        savePart(context) {
             return partService.setPart(context.state.part)
         }
     }

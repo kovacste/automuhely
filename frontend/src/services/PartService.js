@@ -7,6 +7,7 @@ class PartService extends Service {
     }
 
     setPart(part) {
+        console.trace()
         return this.post('SetPart', part);
     }
 
