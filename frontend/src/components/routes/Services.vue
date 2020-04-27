@@ -1,8 +1,16 @@
 <template>
 
     <PageBase title="Szolgáltatások kezelése" width="12" :functions="[
-        { cb: exportServiceData, icon: 'mdi-file-download-outline', tooltip: 'Szolgáltatás adatok exportálása' },
-        { cb: () => $router.push('/service'), icon: 'mdi-account-plus-outline', tooltip: 'Új szolgáltatás felvitele' },
+        {
+            cb: exportServiceData,
+            icon: 'mdi-file-download-outline',
+            tooltip: 'Szolgáltatás adatok exportálása'
+        },
+        {
+            cb: () => $router.push('/service'),
+            icon: 'mdi-account-plus-outline',
+            tooltip: 'Új szolgáltatás felvitele'
+        },
     ]">
 
         <v-data-table
@@ -38,12 +46,12 @@
 
 <script>
     import PageBase from "../basecomponents/PageBase";
-    import {servicesService} from "../../services/ServicesService";
-    import {exportToCsv} from "../../utils/ExportToCsv";
+    import { servicesService } from "../../services/ServicesService";
+    import { exportToCsv } from "../../utils/ExportToCsv";
 
     export default {
         name: "Clients",
-        components: {PageBase},
+        components: { PageBase },
         methods: {
             exportServiceData() {
                 window.open(encodeURI(exportToCsv(this.services)));
@@ -52,7 +60,6 @@
                 this.$store.commit('setService', service);
                 this.$router.push('service/' + service.id);
             },
-
             deleteService(service) {
                 console.log(service);
             }

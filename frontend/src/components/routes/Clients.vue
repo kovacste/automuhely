@@ -1,8 +1,16 @@
 <template>
 
     <PageBase title="Ügyfelek kezelése" width="12" :functions="[
-        { cb: exportClientData, icon: 'mdi-file-download-outline', tooltip: 'Ügyfél adatok exportálása' },
-        { cb: () => $router.push('/client'), icon: 'mdi-account-plus-outline', tooltip: 'Új ügyfél felvitele' },
+        {
+            cb: exportClientData,
+            icon: 'mdi-file-download-outline',
+            tooltip: 'Ügyfél adatok exportálása'
+        },
+        {
+            cb: () => $router.push('/client'),
+            icon: 'mdi-account-plus-outline',
+            tooltip: 'Új ügyfél felvitele'
+        },
     ]">
 
         <v-data-table

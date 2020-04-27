@@ -194,8 +194,8 @@ export default {
           label: 'Munkalapok',
           icon: 'mdi-file-document-edit-outline',
           items: [
-            { title: 'Aktuális munkalapok', to: '/worksheets/open' },
-            { title: 'Korábbi munkalapok', to: '/worksheets/closed' },
+            { title: 'Aktuális munkalapok', to: '/worksheets?open=true' },
+            { title: 'Korábbi munkalapok', to: '/worksheets?closed=true' },
           ]
         }
       },

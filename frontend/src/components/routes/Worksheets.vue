@@ -6,7 +6,7 @@
                 slot="content"
                 v-model="selected"
                 :headers="headers"
-                :items="worksheets"
+                :items="filterdWorksheets"
                 item-key="name"
                 class="elevation-5"
         >
@@ -40,6 +40,16 @@
     export default {
         name: "Clients",
         components: { PageBase },
+        watch: {
+            queryString() {
+                this.filterWorksheets();
+            }
+        },
+        computed: {
+            queryString() {
+                return this.$route.query;
+            }
+        },
         methods: {
             editWorksheet(worksheet) {
                 this.$store.commit('setWorksheet', worksheet);
@@ -47,12 +57,26 @@
             },
             deleteWorksheet(worksheet) {
                 console.log(worksheet);
+            },
+            filterWorksheets() {
+                if(this.$route.query.open) {
+                    this.filterdWorksheets = this.worksheets.filter(worksheet => {
+                        return !worksheet.lezarva
+                    })
+                }
+                if(this.$route.query.closed) {
+                    this.filterdWorksheets = this.worksheets.filter(worksheet => {
+                        return worksheet.lezarva
+                    })
+                }
             }
         },
         mounted() {
             worksheetService.getWorksheetList().then(response => {
                 this.worksheets = response.data;
-            })
+                this.filterdWorksheets = response.data;
+                this.filterWorksheets();
+            });
         },
         data() {
             return {
@@ -68,7 +92,8 @@
                     { text: 'Időpont', value: 'idopont' },
                     { text: 'Actions', value: 'actions', sortable: false },
                 ],
-                worksheets: []
+                worksheets: [],
+                filterdWorksheets: []
             }
         }
     }
