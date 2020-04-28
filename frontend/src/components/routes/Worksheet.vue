@@ -339,8 +339,6 @@
                     rogzitette: this.$store.getters.user.username,
                 });
 
-                this.worksheet.rogzitette = this.$store.getters.user.username;
-                this.worksheet.rogzitve = new Date().toISOString();
 
                 if(this.worksheet.id > 0) {
                     worksheetService.setWorksheetDetail([{
