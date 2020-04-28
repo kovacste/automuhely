@@ -341,15 +341,18 @@
 
                 this.worksheet.rogzitette = this.$store.getters.user.username;
                 this.worksheet.rogzitve = new Date().toISOString();
-                worksheetService.setWorksheetDetail([{
-                    id: 0,
-                    munkalapid: this.worksheet.id,
-                    szolgaltatas: service,
-                    mennyiseg: 1,
-                    ar: service.egysegar,
-                    rogzitve: new Date().toISOString(),
-                    rogzitette: this.$store.getters.user.username,
-                }]);
+
+                if(this.worksheet.id > 0) {
+                    worksheetService.setWorksheetDetail([{
+                        id: 0,
+                        munkalapid: this.worksheet.id,
+                        szolgaltatas: service,
+                        mennyiseg: 1,
+                        ar: service.egysegar,
+                        rogzitve: new Date().toISOString(),
+                        rogzitette: this.$store.getters.user.username,
+                    }]);
+                }
             },
             openClientSelectWindow() {
                 if(this.clients.length === 0) {
