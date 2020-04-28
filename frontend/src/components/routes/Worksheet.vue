@@ -101,7 +101,7 @@
 
                                 <li v-for="(service, index) in worksheet.tetelek" :key="index">
 
-                                    {{ service.nev }}
+                                    {{ service.szolgaltatas.nev }} <v-icon v-if="fieldsEditable" @click="removeService(service.id, index)"> mdi-close </v-icon>
 
                                 </li>
 
@@ -151,13 +151,13 @@
 
                 <v-spacer />
 
-                <v-btn v-if="!fieldsEditable" @click="edit()" color="primary">Módosítás </v-btn>
+                <v-btn v-if="!fieldsEditable && !worksheet.lezarva" @click="edit()" color="primary">Módosítás </v-btn>
 
                 <v-btn v-if="fieldsEditable" @click="cancel()" color="primary">Mégse </v-btn>
 
                 <v-btn v-if="fieldsEditable" @click="save()" color="primary">Mentés </v-btn>
 
-                <v-btn v-if="!fieldsEditable" @click="closeWorksheet()" color="primary">Munkalap lezárása </v-btn>
+                <v-btn v-if="!fieldsEditable  && !worksheet.lezarva" @click="closeWorksheet()" color="primary">Munkalap lezárása </v-btn>
 
             </v-card-actions>
 
@@ -268,7 +268,7 @@
     import {servicesService} from "../../services/ServicesService";
     import {worksheetService} from "../../services/WorksheetService";
     export default {
-        name: "Client",
+        name: "Worksheet",
         components: { FormSubTitle, PageBase },
         data() {
             return {
@@ -298,6 +298,10 @@
             this.newWorksheet = !id;
             if(id && id === worksheet.id) {
                 this.worksheet = { ...worksheet };
+
+                worksheetService.getWorksheetDetails(id).then(response => {
+                    this.worksheet.tetelek = response.data;
+                })
             }
         },
         computed: {
@@ -309,8 +313,14 @@
             }
         },
         methods: {
+            removeService(serviceid, index) {
+                worksheetService.removeWorkSheetDetail(serviceid).then(() => {
+                    this.worksheet.tetelek.splice(index, 1);
+                })
+            },
             closeWorksheet() {
-                this.worksheet.lezarva = true;
+                this.worksheet.lezarva = new Date().toISOString();
+                this.worksheet.lezarta = this.$store.getters.user.username;
                 this.save();
             },
             loadClient(client) {
@@ -319,7 +329,15 @@
             },
             loadService(service){
                 if(this.worksheet.tetelek == null) this.worksheet.tetelek = [];
-                this.worksheet.tetelek.push(service);
+                this.worksheet.tetelek.push({
+                    id: 0,
+                    munkalapid: this.worksheet.id,
+                    szolgaltatas: service,
+                    mennyiseg: 1,
+                    ar: service.egysegar,
+                    rogzitve: new Date().toISOString(),
+                    rogzitette: this.$store.getters.user.username,
+                });
 
                 this.worksheet.rogzitette = this.$store.getters.user.username;
                 this.worksheet.rogzitve = new Date().toISOString();
@@ -363,25 +381,11 @@
                 this.editable = false;
                 if(this.newWorksheet) {
                     this.worksheet.id = 0;
+                    this.worksheet.rogzitette = this.$store.getters.user.username;
+                    this.worksheet.rogzitve = new Date().toISOString();
                 }
 
-                let worksheetToSave = { ...this.worksheet };
-                worksheetToSave.tetelek = [];
-                this.worksheet.tetelek.forEach(tetel => {
-                   worksheetToSave.tetelek.push({
-                       id: 0,
-                       szolgaltatas: {
-                           id: tetel.id,
-                           mennyiseg: tetel.mennyiseg,
-                           ar: tetel.ar,
-                           rogzitette: tetel.rogzitette
-                       }
-                   })
-                });
-
-                this.worksheet.rogzitette = this.$store.getters.user.username;
-                this.worksheet.rogzitve = new Date().toISOString();
-                this.$store.commit('setWorksheet', worksheetToSave);
+                this.$store.commit('setWorksheet', this.worksheet);
                 this.$store.dispatch('saveWorksheet').then(() => {
                      this.$toasted.show('Munkalap mentése sikeres!',{
                         theme: "toasted-primary", 

@@ -18,9 +18,6 @@ const router = new VueRouter({ routes, mode: 'history' });
 router.beforeEach((to, from, next) => {
   const loggedIn = store.getters.user !== null || localStorage.getItem('username');
 
-
-  console.log(to)
-
   if(loggedIn && to.name === 'login') {
     next('/home');
   }

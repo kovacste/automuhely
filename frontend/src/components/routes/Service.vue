@@ -183,9 +183,10 @@
                 this.editable = false;
                 if(this.newService) {
                     this.service.id = 0;
+                    this.service.rogzitette = this.$store.getters.user.username;
+                    this.service.rogzitve = new Date().toISOString();
                 }
-                this.service.rogzitette = this.$store.getters.user.username;
-                this.service.rogzitve = new Date().toISOString();
+
                 this.service.egysegar = +this.service.egysegar;
                 if(!this.service.ismetlodo) {
                     this.service.ismetlodesiidoszak = 0;

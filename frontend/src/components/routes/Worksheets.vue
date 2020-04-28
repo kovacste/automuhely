@@ -1,6 +1,12 @@
 <template>
 
-    <PageBase title="Munkalapok kezelése" width="12">
+    <PageBase title="Munkalapok kezelése" width="12" :functions="[
+        {
+            cb: exportWorksheets,
+            icon: 'mdi-file-download-outline',
+            tooltip: 'Szolgáltatás adatok exportálása'
+        }
+    ]">
 
         <v-data-table
                 slot="content"
@@ -36,9 +42,10 @@
 <script>
     import PageBase from "../basecomponents/PageBase";
     import { worksheetService } from "../../services/WorksheetService";
+    import {exportToCsv} from "../../utils/ExportToCsv";
 
     export default {
-        name: "Clients",
+        name: "Worksheets",
         components: { PageBase },
         watch: {
             queryString() {
@@ -51,6 +58,36 @@
             }
         },
         methods: {
+            async exportWorksheets() {
+                let listToExport = [];
+                const win = window.open('about:blank');
+
+                for (const worksheet of this.worksheets) {
+                    let wsitem = {
+                      ...worksheet.ugyfel,
+                      ...worksheet
+                    }
+                  delete wsitem.ugyfel
+
+                  let response = await worksheetService.getWorksheetDetails(wsitem.id);
+                  worksheet.tetelek = response.data;
+
+                  worksheet.tetelek.forEach((tetel, index) => {
+                      Object.keys(tetel).forEach(key => {
+                          if(key === 'szolgaltatas') {
+                              Object.keys(tetel.szolgaltatas).forEach(szolgKey => {
+                                  wsitem[index + '_tetel_' + key + '_' + szolgKey] = tetel.szolgaltatas[szolgKey]
+                              })
+                          } else {
+                              wsitem[index + '_tetel_' + key] = tetel[key]
+                          }
+                      })
+                  })
+                  delete wsitem.tetelek
+                  listToExport.push(wsitem)
+                }
+                win.location = encodeURI(exportToCsv(listToExport));
+            },
             editWorksheet(worksheet) {
                 this.$store.commit('setWorksheet', worksheet);
                 this.$router.push('worksheet/' + worksheet.id);
@@ -66,7 +103,7 @@
                 }
                 if(this.$route.query.closed) {
                     this.filterdWorksheets = this.worksheets.filter(worksheet => {
-                        return worksheet.lezarva
+                        return !!worksheet.lezarva
                     })
                 }
             }

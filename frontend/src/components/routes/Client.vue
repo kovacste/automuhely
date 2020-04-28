@@ -74,7 +74,7 @@
                         <v-flex md3 xs6 class="ma-2">
 
                             <v-select
-                                    :disabled="!fieldsEditable"
+                                    :disabled="!fieldsEditable || !(!!client.irszam && client.irszam.length === 4)"
                                     v-model="client.telepulesid"
                                     label="Település"
                                     name="telepulesid"
@@ -115,7 +115,7 @@
                             <v-select
                                     :disabled="!fieldsEditable"
                                     v-model="client.kozteruletjellegid"
-                                    label="Közterület jelleg azonosító"
+                                    label="Közterület jellege"
                                     name="kozteruletjellegid"
                                     :rules="[v => !!v || 'Kötelező mező!']"
                                     :items="streetTypes"
@@ -320,9 +320,10 @@
                 this.editable = false;
                 if(this.newClient) {
                     this.client.id = 0;
+                    this.client.rogzitette = this.$store.getters.user.username;
+                    this.client.rogzitve = new Date().toISOString();
                 }
-                this.client.rogzitette = this.$store.getters.user.username;
-                this.client.rogzitve = new Date().toISOString();
+
                 this.$store.commit('setClient', this.client);
                 this.$store.dispatch('saveClient').then(() => {
                      this.$toasted.show('Ügyfél mentése sikeres!',{ 

@@ -164,9 +164,10 @@
                 this.editable = false;
                 if(this.newPart) {
                     this.part.id = 0;
+                    this.part.rogzitette = this.$store.getters.user.username;
+                    this.part.rogzitve = new Date().toISOString();
                 }
-                this.part.rogzitette = this.$store.getters.user.username;
-                this.part.rogzitve = new Date().toISOString();
+
                 this.$store.commit('setPart', this.part);
                 this.$store.dispatch('savePart').then(() => {
                      this.$toasted.show('Alkatrész mentése sikeres!',{

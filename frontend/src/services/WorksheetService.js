@@ -6,8 +6,8 @@ class WorksheetService extends Service {
         return this.get('GetWorkSheets');
     }
 
-    setWorksheet(part) {
-        return this.post('SetWorkSheet', part);
+    setWorksheet(worksheet) {
+        return this.post('SetWorkSheet', worksheet);
     }
 
     setWorksheetDetail(details) {
@@ -15,11 +15,11 @@ class WorksheetService extends Service {
     }
 
     removeWorkSheetDetail(id) {
-        return this.post('RemoveWorkSheetDetail', { id: id });
+        return this.post('RemoveWorkSheetDetail?', { id: id });
     }
 
     getWorksheetDetails(id) {
-        return this.get('GetWorkSheetDetails', { worksheetid: id })
+        return this.get('GetWorkSheetDetails?', { worksheetid: id })
     }
 }
 
