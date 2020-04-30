@@ -28,6 +28,25 @@ namespace CarMechanic.Core.BusinessLogic
             }
             return alkatresz;
         }
+
+        public Alkatresz GetPart(int partId)
+        {
+
+            var result = _partAccess.GetPart(partId);
+
+            var alkatresz = new Alkatresz()
+            {
+                Id = result.Id,
+                Nev = result.Nev,
+                Eladasiar = result.Eladasiar,
+                Beszerar = result.Beszerar,
+                Rogzitette = result.RogzitetteNavigation.Nev,
+                Rogzitve = result.Rogzitve
+            };
+
+            return alkatresz;
+        }
+
         public void SetPart(Alkatresz alkatresz)
         {
             _partAccess.SetPart(alkatresz);

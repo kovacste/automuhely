@@ -39,6 +39,26 @@ namespace CarMechanic.Core.Web.Api.Controllers
         }
 
         /// <summary>
+        /// Szolgáltatás adatai
+        /// </summary>
+        /// <returns>Szolgáltatások</returns>
+        [HttpGet]
+        public IActionResult GetService(int serviceId)
+        {
+            try
+            {
+                var manager = new ServiceManager();
+                return Ok(manager.GetService(serviceId));
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Szolgáltatás mentése / módosítás
         /// </summary>
         /// <param name="data">Szolgáltatás adatai</param>    

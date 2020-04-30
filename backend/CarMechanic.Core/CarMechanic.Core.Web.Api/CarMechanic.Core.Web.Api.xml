@@ -4,6 +4,120 @@
         <name>CarMechanic.Core.Web.Api</name>
     </assembly>
     <members>
+        <member name="T:CarMechanic.Core.Web.Api.Controllers.ClientController">
+            <summary>
+            Ügyfél kontoller
+            </summary>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ClientController.GetClientList">
+            <summary>
+            Ügyfelek listája
+            </summary>
+            <returns>Ügyfelek</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ClientController.GetClient(System.Int32)">
+            <summary>
+            Ügyfél adatai        
+            </summary>
+            <returns>Ügyfél</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ClientController.GetCities">
+            <summary>
+            Települések listája
+            </summary>
+            <returns>Települések</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ClientController.GetStreetTypes">
+            <summary>
+            Közterületek listája
+            </summary>
+            <returns>Közterületek</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ClientController.SetClient(CarMechanic.Core.Model.Ugyfel)">
+            <summary>
+            Ügyfél mentése / módosítás
+            </summary>
+            <param name="data">ügyfél adatai</param>    
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ClientController.RemoveClient(CarMechanic.Core.Model.Ugyfel)">
+            <summary>
+            Ügyfél törlése
+            </summary>
+            <param name="data">Ügyfél adatai</param>    
+        </member>
+        <member name="T:CarMechanic.Core.Web.Api.Controllers.PartController">
+            <summary>
+            Alkatrész kontroller
+            </summary>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.PartController.GetPartList">
+            <summary>
+            Alkatrészek listája
+            </summary>
+            <returns>Alkatérszek</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.PartController.GetPart(System.Int32)">
+            <summary>
+            Alkatrész adatai
+            </summary>
+            <returns>Alkatérszek</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.PartController.SetPart(CarMechanic.Core.Model.Alkatresz)">
+            <summary>
+            Alaktrész mentése / módosítás
+            </summary>
+            <param name="data">Alaktrész adatai</param>    
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.PartController.RemovePart(CarMechanic.Core.Model.Alkatresz)">
+            <summary>
+            Alkatrész törlése
+            </summary>
+            <param name="data">Alkatrész adatai</param>    
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.PartController.SetPartPrice(System.Int32,System.Decimal,System.Decimal)">
+            <summary>
+            Alaktrész árazása
+            </summary>
+            <param name="partId">Szolgáltatás azonosító</param>    
+            <param name="purchasePrice">Új beszerzési ára</param>    
+            <param name="salesPrice">Új eladási ára</param>    
+        </member>
+        <member name="T:CarMechanic.Core.Web.Api.Controllers.ServiceController">
+            <summary>
+            Szolgáltatás kontroller
+            </summary>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ServiceController.GetServiceList">
+            <summary>
+            Szolgáltatások listája
+            </summary>
+            <returns>Szolgáltatások</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ServiceController.GetService(System.Int32)">
+            <summary>
+            Szolgáltatás adatai
+            </summary>
+            <returns>Szolgáltatások</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ServiceController.SetService(CarMechanic.Core.Model.Szolgaltatas)">
+            <summary>
+            Szolgáltatás mentése / módosítás
+            </summary>
+            <param name="data">Szolgáltatás adatai</param>    
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ServiceController.RemoveService(CarMechanic.Core.Model.Szolgaltatas)">
+            <summary>
+            Szolgáltatás törlése
+            </summary>
+            <param name="data">Szolgáltatás adatai</param>    
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ServiceController.SetServicePrice(System.Int32,System.Decimal)">
+            <summary>
+            Szolgáltatás árazása
+            </summary>
+            <param name="serviceId">Szolgáltatás azonosító</param>    
+            <param name="price">Új ára</param>    
+        </member>
         <member name="T:CarMechanic.Core.Web.Api.Controllers.UserController">
             <summary>
             
@@ -16,6 +130,71 @@
             <param name="loginName">login név</param>
             <param name="password">jelszó</param>
             <returns></returns>
+        </member>
+        <member name="T:CarMechanic.Core.Web.Api.Controllers.WorksheetController">
+            <summary>
+            Munkalap kontroller
+            </summary>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheets">
+            <summary>
+            Munkalapok listája
+            </summary>
+            <returns>Munkalapok</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheet(System.Int32)">
+            <summary>
+            Munkalap adatai
+            </summary>
+            <returns>Munkalap adatai</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheetDetails(System.Int32)">
+            <summary>
+            Munkalapok listája
+            </summary>
+            <returns>Munkalapok</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheetOrders(System.Int32)">
+            <summary>
+            Munkalap rendelések listája
+            </summary>
+            <returns>Munkalap rendelések</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheetDetail(System.Int32)">
+            <summary>
+            Munkalap tétel adatai
+            </summary>
+            <returns>Munkalap tétel</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.SetWorkSheet(CarMechanic.Core.Model.Munkalap)">
+            <summary>
+            Munkalap mentése / módosítása
+            </summary>
+            <param name="data">Munkalap adatai</param>    
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.SetWorkSheetDetail(CarMechanic.Core.Model.MunkalapTetel[])">
+            <summary>
+            Munkalap tétel mentése / módosítása
+            </summary>
+            <param name="data">Munkalap tétel adatai</param>    
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.SetWorkSheetOrder(CarMechanic.Core.Model.MunkalapRendeles[])">
+            <summary>
+            Munkalap rendelés mentése / módosítása
+            </summary>
+            <param name="data">Munkalap rendelés adatai</param>    
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.RemoveWorkSheetDetail(CarMechanic.Core.Model.MunkalapTetel)">
+            <summary>
+            Munkalap teétel törlése
+            </summary>
+            <param name="data">Munkalap adatai</param>    
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.RemoveWorkSheetOrder(CarMechanic.Core.Model.MunkalapRendeles)">
+            <summary>
+            Munkalap teétel törlése
+            </summary>
+            <param name="data">Munkalap adatai</param>    
         </member>
     </members>
 </doc>

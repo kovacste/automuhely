@@ -10,13 +10,22 @@ using System.Windows.Markup;
 
 namespace CarMechanic.Core.DataAccess
 {
+   
     public class WorksheetAccess
     {
         public List<Munkalapok> GetWorkSheets()
         {
-            using (var context = new CarMechanicContext())
+            using (var context =  new CarMechanicContext())
             {
                 return context.Munkalapok.Include(x => x.RogzitetteNavigation).Include(x => x.LezartaNavigation).Include(x=>x.Ugyfel).ThenInclude(x=>x.Telepules).Include(x=>x.Ugyfel).ThenInclude(x=>x.Kozteruletjelleg).ToList();
+            }
+        }
+
+        public Munkalapok GetWorkSheet(int workSheetId)
+        {
+            using (var context = new CarMechanicContext())
+            {
+                return context.Munkalapok.Where(x => x.Id == workSheetId).Include(x => x.RogzitetteNavigation).Include(x => x.LezartaNavigation).Include(x => x.Ugyfel).ThenInclude(x => x.Telepules).Include(x => x.Ugyfel).ThenInclude(x => x.Kozteruletjelleg).FirstOrDefault();
             }
         }
 
@@ -33,6 +42,14 @@ namespace CarMechanic.Core.DataAccess
             using (var context = new CarMechanicContext())
             {
                 return context.MunkalapTetelek.Where(x => x.Munkalapid == worksheetId).Include(x => x.RogzitetteNavigation).Include(x => x.Szolgaltatas).ToList();
+            }
+        }
+
+        public MunkalapTetelek GetWorkSheetDetail(int detailId)
+        {
+            using (var context = new CarMechanicContext())
+            {
+                return context.MunkalapTetelek.Where(x => x.Id == detailId).Include(x => x.RogzitetteNavigation).Include(x => x.Szolgaltatas).FirstOrDefault();
             }
         }
 
@@ -64,6 +81,7 @@ namespace CarMechanic.Core.DataAccess
                 context.SaveChanges();
             }
         }
+
         public void RemoveWorkSheetOrder(MunkalapRendeles order)
         {
             using (var context = new CarMechanicContext())
@@ -122,7 +140,7 @@ namespace CarMechanic.Core.DataAccess
         }
 
 
-        public void SetWorkSheet(Munkalap worksheet)
+        public int SetWorkSheet(Munkalap worksheet)
         {
             using (var context = new CarMechanicContext())
             {
@@ -157,6 +175,8 @@ namespace CarMechanic.Core.DataAccess
                     ws.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == worksheet.Rogzitette).FirstOrDefault().Id;
                 }                
                 context.SaveChanges();
+
+                return ws.Id;
             }
         }
 

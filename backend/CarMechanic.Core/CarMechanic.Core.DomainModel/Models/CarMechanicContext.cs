@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CarMechanic.Core.DomainModel.Models
@@ -8,6 +9,7 @@ namespace CarMechanic.Core.DomainModel.Models
     {
         public CarMechanicContext()
         {
+
         }
 
         public CarMechanicContext(DbContextOptions<CarMechanicContext> options)
@@ -31,8 +33,7 @@ namespace CarMechanic.Core.DomainModel.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=.;Database=CarMechanic;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(@"Server=.;Database=CarMechanic;Trusted_Connection=True;");
             }
         }
 

@@ -39,6 +39,86 @@ namespace CarMechanic.Core.Web.Api.Controllers
         }
 
         /// <summary>
+        /// Munkalap adatai
+        /// </summary>
+        /// <returns>Munkalap adatai</returns>
+        [HttpGet]
+        public IActionResult GetWorkSheet(int worksheetId)
+        {
+            try
+            {
+                var manager = new WorksheetManager();
+                return Ok(manager.GetWorkSheet(worksheetId));
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Munkalapok listája
+        /// </summary>
+        /// <returns>Munkalapok</returns>
+        [HttpGet]
+        public IActionResult GetWorkSheetDetails(int worksheetId)
+        {
+            try
+            {
+                var manager = new WorksheetManager();
+                return Ok(manager.GetWorkSheetDetails(worksheetId));
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Munkalap rendelések listája
+        /// </summary>
+        /// <returns>Munkalap rendelések</returns>
+        [HttpGet]
+        public IActionResult GetWorkSheetOrders(int worksheetId)
+        {
+            try
+            {
+                var manager = new WorksheetManager();
+                return Ok(manager.GetWorkSheetOrders(worksheetId));
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Munkalap tétel adatai
+        /// </summary>
+        /// <returns>Munkalap tétel</returns>
+        [HttpGet]
+        public IActionResult GetWorkSheetDetail(int worksheetId)
+        {
+            try
+            {
+                var manager = new WorksheetManager();
+                return Ok(manager.GetWorkSheetDetail(worksheetId));
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Munkalap mentése / módosítása
         /// </summary>
         /// <param name="data">Munkalap adatai</param>    
@@ -48,8 +128,8 @@ namespace CarMechanic.Core.Web.Api.Controllers
             try
             {
                 var manager = new WorksheetManager();
-                manager.SetWorkSheet(data);
-                return Ok();
+                var result = manager.SetWorkSheet(data);
+                return Ok(result);
 
             }
             catch (Exception ex)
@@ -81,6 +161,28 @@ namespace CarMechanic.Core.Web.Api.Controllers
         }
 
         /// <summary>
+        /// Munkalap rendelés mentése / módosítása
+        /// </summary>
+        /// <param name="data">Munkalap rendelés adatai</param>    
+        [HttpPost]
+        public IActionResult SetWorkSheetOrder([FromBody] MunkalapRendeles[] data)
+        {
+            try
+            {
+                var manager = new WorksheetManager();
+                manager.SetWorkSheetOrders(data);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        /// <summary>
         /// Munkalap teétel törlése
         /// </summary>
         /// <param name="data">Munkalap adatai</param>    
@@ -91,6 +193,27 @@ namespace CarMechanic.Core.Web.Api.Controllers
             {
                 var manager = new WorksheetManager();
                 manager.RemoveWorkSheetDetail(data);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Munkalap teétel törlése
+        /// </summary>
+        /// <param name="data">Munkalap adatai</param>    
+        [HttpPost]
+        public IActionResult RemoveWorkSheetOrder([FromBody] MunkalapRendeles data)
+        {
+            try
+            {
+                var manager = new WorksheetManager();
+                manager.RemoveWorkSheetOrder(data);
                 return Ok();
 
             }

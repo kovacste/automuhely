@@ -18,6 +18,14 @@ namespace CarMechanic.Core.DataAccess
             }
         }
 
+        public Alkatreszek GetPart(int partId)
+        {
+            using (var context = new CarMechanicContext())
+            {
+                return context.Alkatreszek.Where(x => x.Id == partId).Include(x => x.RogzitetteNavigation).FirstOrDefault();
+            }
+        }
+
         public void RemovePart(Alkatresz alkatresz)
         {
             using (var context = new CarMechanicContext())

@@ -16,7 +16,15 @@ namespace CarMechanic.Core.DataAccess
         {
             using (var context = new CarMechanicContext())
             {
-                return context.Ugyfelek.Include(x => x.Telepules).Include(x => x.Kozteruletjelleg).Include(x=>x.RogzitetteNavigation).ToList();
+                return context.Ugyfelek.Include(x => x.Telepules).Include(x => x.Kozteruletjelleg).Include(x => x.RogzitetteNavigation).ToList();
+            }
+        }
+
+        public Ugyfelek GetClient(int clientId)
+        {
+            using (var context = new CarMechanicContext())
+            {
+                return context.Ugyfelek.Where(x=>x.Id == clientId).Include(x => x.Telepules).Include(x => x.Kozteruletjelleg).Include(x => x.RogzitetteNavigation).FirstOrDefault();
             }
         }
 

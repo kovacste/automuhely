@@ -30,6 +30,25 @@ namespace CarMechanic.Core.BusinessLogic
             }
             return szolgaltatas;
         }
+
+        public Szolgaltatas GetService(int serviceId)
+        {
+            var result = _serviceAccess.GetService(serviceId);
+            var szolgaltatas = new Szolgaltatas()
+            {
+                Id = result.Id,
+                Nev = result.Nev,
+                Me = result.Me,
+                Egysegar = result.Egysegar,
+                Ismetlodesiidoszak = result.Ismetlodesiidoszak,
+                Ismetlodo = result.Ismetlodo,
+                Rogzitette = result.RogzitetteNavigation.Nev,
+                Rogzitve = result.Rogzitve
+            };
+
+            return szolgaltatas;
+        }
+
         public void SetService(Szolgaltatas szolgaltatas)
         {
             _serviceAccess.SetService(szolgaltatas);

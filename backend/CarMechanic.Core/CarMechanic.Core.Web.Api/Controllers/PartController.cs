@@ -39,6 +39,26 @@ namespace CarMechanic.Core.Web.Api.Controllers
         }
 
         /// <summary>
+        /// Alkatrész adatai
+        /// </summary>
+        /// <returns>Alkatérszek</returns>
+        [HttpGet]
+        public IActionResult GetPart(int partId)
+        {
+            try
+            {
+                var manager = new PartManager();
+                return Ok(manager.GetPart(partId));
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Alaktrész mentése / módosítás
         /// </summary>
         /// <param name="data">Alaktrész adatai</param>    

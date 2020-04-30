@@ -39,6 +39,32 @@ namespace CarMechanic.Core.BusinessLogic
             return ugyfel;
         }
 
+        public Ugyfel GetClient(int clientId)
+        {
+
+            var result = _clientAccess.GetClient(clientId);
+
+            var ugyfel = new Ugyfel()
+            {
+                Id = result.Id,
+                Nev = result.Nev,
+                Adoszam = result.Adoszam,
+                Telepulesid = result.Telepulesid,
+                Irszam = result.Telepules.Irszam,
+                Telepules = result.Telepules.Nev,
+                Kozteruletneve = result.Kozteruletneve,
+                Kozteruletjellegid = result.Kozteruletjellegid,
+                Kozteruletjelleg = result.Kozteruletjelleg.Nev,
+                Hazszam = result.Hazszam,
+                Telefonszam = result.Telefonszam,
+                Email = result.Email,
+                Rogzitve = result.Rogzitve,
+                Rogzitette = result.RogzitetteNavigation.Nev
+            };
+
+            return ugyfel;
+        }
+
         public List<Telepules> GetCities()
         {
             var telepules = new List<Telepules>();

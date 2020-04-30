@@ -18,6 +18,14 @@ namespace CarMechanic.Core.DataAccess
             }
         }
 
+        public Szolgaltatasok GetService(int serviceId)
+        {
+            using (var context = new CarMechanicContext())
+            {
+                return context.Szolgaltatasok.Where(x => x.Id == serviceId).Include(x => x.RogzitetteNavigation).FirstOrDefault();
+            }
+        }
+
         public void RemoveService(Szolgaltatas szolgaltatas)
         {
             using (var context = new CarMechanicContext())

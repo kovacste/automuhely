@@ -37,11 +37,31 @@ namespace CarMechanic.Core.Web.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-         /// <summary>
-         /// Települések listája
-         /// </summary>
-         /// <returns>Települések</returns>
-       [HttpGet]
+
+        /// <summary>
+        /// Ügyfél adatai        
+        /// </summary>
+        /// <returns>Ügyfél</returns>
+        [HttpGet]
+        public IActionResult GetClient(int clientId)
+        {
+            try
+            {
+                var manager = new ClientManager();
+                return Ok(manager.GetClient(clientId));
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+        /// <summary>
+        /// Települések listája
+        /// </summary>
+        /// <returns>Települések</returns>
+        [HttpGet]
          public IActionResult GetCities()
          {
              try

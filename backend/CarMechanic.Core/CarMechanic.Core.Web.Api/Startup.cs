@@ -4,9 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using CarMechanic.Core.DomainModel.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,9 +30,8 @@ namespace CarMechanic.Core.Web.Api
         [Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<CarMechanicContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarMechanicDatabase")));
             services.AddMvc(option => option.EnableEndpointRouting = false)
-                
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             SetSwagger(services);
