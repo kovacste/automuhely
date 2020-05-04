@@ -39,34 +39,41 @@ namespace CarMechanic.Core.DataAccess
             }
         }
 
-        public void SetPart(Alkatresz alkatresz)
+        public int SetPart(Alkatresz alkatresz)
         {
-
+            var result = 0;
             using (var context = new CarMechanicContext())
             {
+                var part = new Alkatreszek();
                 if (alkatresz.Id == 0)
-                    context.Alkatreszek.Add(new Alkatreszek()
+                {
+                    part = new Alkatreszek()
                     {
                         Nev = alkatresz.Nev,
                         Beszerar = alkatresz.Beszerar,
                         Eladasiar = alkatresz.Eladasiar,
                         Rogzitve = DateTime.Now,
                         Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == alkatresz.Rogzitette).FirstOrDefault().Id
-                    });
+                    };
+                    context.Alkatreszek.Add(part);
+                }
                 else
                 {
-                    var result = context.Alkatreszek.FirstOrDefault(x => x.Id == alkatresz.Id);
-                    if (result != null)
+                    part = context.Alkatreszek.FirstOrDefault(x => x.Id == alkatresz.Id);
+                    if (part != null)
                     {
-                        result.Nev = alkatresz.Nev;
-                        result.Beszerar = alkatresz.Beszerar;
-                        result.Eladasiar = alkatresz.Eladasiar;
-                        result.Rogzitve = DateTime.Now;
-                        result.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == alkatresz.Rogzitette).FirstOrDefault().Id;
+                        part.Nev = alkatresz.Nev;
+                        part.Beszerar = alkatresz.Beszerar;
+                        part.Eladasiar = alkatresz.Eladasiar;
+                        part.Rogzitve = DateTime.Now;
+                        part.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == alkatresz.Rogzitette).FirstOrDefault().Id;
                     }
                 }
                 context.SaveChanges();
+                result = part.Id;
+
             }
+            return result;
         }
 
         public void SetPartPrice(int partId, decimal purchasePrice, decimal salesPrice)

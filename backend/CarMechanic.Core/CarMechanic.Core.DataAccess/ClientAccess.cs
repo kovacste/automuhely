@@ -57,43 +57,48 @@ namespace CarMechanic.Core.DataAccess
             }
         }
 
-        public void SetClient(Ugyfel ugyfel)
+        public int SetClient(Ugyfel ugyfel)
         {
-
+            var result = 0;
             using (var context = new CarMechanicContext())
             {
-                if (ugyfel.Id == 0)
-                    context.Ugyfelek.Add(new Ugyfelek() {
-                        Nev = ugyfel.Nev,                        
-                        Adoszam = ugyfel.Adoszam,
-                        Telepulesid = ugyfel.Telepulesid,
-                        Kozteruletneve = ugyfel.Kozteruletneve,
-                        Kozteruletjellegid = ugyfel.Kozteruletjellegid,
-                        Hazszam = ugyfel.Hazszam,
-                        Telefonszam = ugyfel.Telefonszam,
-                        Email = ugyfel.Email,
-                        Rogzitve = DateTime.Now,
-                        Rogzitette =  context.Felhasznalok.Where(x=>x.Loginnev == ugyfel.Rogzitette).FirstOrDefault().Id
-                    });
+                var client = new Ugyfelek();
+                client = new Ugyfelek()
+                {
+                    Nev = ugyfel.Nev,
+                    Adoszam = ugyfel.Adoszam,
+                    Telepulesid = ugyfel.Telepulesid,
+                    Kozteruletneve = ugyfel.Kozteruletneve,
+                    Kozteruletjellegid = ugyfel.Kozteruletjellegid,
+                    Hazszam = ugyfel.Hazszam,
+                    Telefonszam = ugyfel.Telefonszam,
+                    Email = ugyfel.Email,
+                    Rogzitve = DateTime.Now,
+                    Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == ugyfel.Rogzitette).FirstOrDefault().Id
+                };
+                if (ugyfel.Id == 0)                    
+                    context.Ugyfelek.Add(client);
                 else
                 {
-                    var result = context.Ugyfelek.FirstOrDefault(x => x.Id == ugyfel.Id);
-                    if(result != null)
+                    client = context.Ugyfelek.FirstOrDefault(x => x.Id == ugyfel.Id);
+                    if(client != null)
                     {
-                        result.Nev = ugyfel.Nev;
-                        result.Adoszam = ugyfel.Adoszam;
-                        result.Telepulesid = ugyfel.Telepulesid;
-                        result.Kozteruletneve = ugyfel.Kozteruletneve;
-                        result.Kozteruletjellegid = ugyfel.Kozteruletjellegid;
-                        result.Hazszam = ugyfel.Hazszam;
-                        result.Telefonszam = ugyfel.Telefonszam;
-                        result.Email = ugyfel.Email;
-                        result.Rogzitve = DateTime.Now;
-                        result.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == ugyfel.Rogzitette).FirstOrDefault().Id;
+                        client.Nev = ugyfel.Nev;
+                        client.Adoszam = ugyfel.Adoszam;
+                        client.Telepulesid = ugyfel.Telepulesid;
+                        client.Kozteruletneve = ugyfel.Kozteruletneve;
+                        client.Kozteruletjellegid = ugyfel.Kozteruletjellegid;
+                        client.Hazszam = ugyfel.Hazszam;
+                        client.Telefonszam = ugyfel.Telefonszam;
+                        client.Email = ugyfel.Email;
+                        client.Rogzitve = DateTime.Now;
+                        client.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == ugyfel.Rogzitette).FirstOrDefault().Id;
                     }
                 }
                 context.SaveChanges();
+                result = client.Id;
             }
+            return result;
         }
     }
 }

@@ -52,13 +52,15 @@ namespace CarMechanic.Core.DataAccess
             }
         }        
 
-        public void SetService(Szolgaltatas szolgaltatas)
+        public int SetService(Szolgaltatas szolgaltatas)
         {
-
+            var result = 0;
             using (var context = new CarMechanicContext())
             {
+                var service = new Szolgaltatasok();
                 if (szolgaltatas.Id == 0)
-                    context.Szolgaltatasok.Add(new Szolgaltatasok()
+                {
+                    service = new Szolgaltatasok()
                     {
                         Nev = szolgaltatas.Nev,
                         Me = szolgaltatas.Me,
@@ -67,23 +69,28 @@ namespace CarMechanic.Core.DataAccess
                         Ismetlodesiidoszak = szolgaltatas.Ismetlodesiidoszak,
                         Rogzitve = DateTime.Now,
                         Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == szolgaltatas.Rogzitette).FirstOrDefault().Id
-                    });
+                    };
+                    context.Szolgaltatasok.Add(service);
+                }
                 else
                 {
-                    var result = context.Szolgaltatasok.FirstOrDefault(x => x.Id == szolgaltatas.Id);
-                    if (result != null)
+                    service = context.Szolgaltatasok.FirstOrDefault(x => x.Id == szolgaltatas.Id);                    
+                    if (service != null)
                     {
-                        result.Nev = szolgaltatas.Nev;
-                        result.Me = szolgaltatas.Me;
-                        result.Egysegar = szolgaltatas.Egysegar;
-                        result.Ismetlodo = szolgaltatas.Ismetlodo;
-                        result.Ismetlodesiidoszak = szolgaltatas.Ismetlodesiidoszak;              
-                        result.Rogzitve = DateTime.Now;
-                        result.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == szolgaltatas.Rogzitette).FirstOrDefault().Id;
+                        service.Nev = szolgaltatas.Nev;
+                        service.Me = szolgaltatas.Me;
+                        service.Egysegar = szolgaltatas.Egysegar;
+                        service.Ismetlodo = szolgaltatas.Ismetlodo;
+                        service.Ismetlodesiidoszak = szolgaltatas.Ismetlodesiidoszak;
+                        service.Rogzitve = DateTime.Now;
+                        service.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == szolgaltatas.Rogzitette).FirstOrDefault().Id;
+
                     }
                 }
                 context.SaveChanges();
+                result = service.Id;
             }
+            return result;
         }
     }
 }

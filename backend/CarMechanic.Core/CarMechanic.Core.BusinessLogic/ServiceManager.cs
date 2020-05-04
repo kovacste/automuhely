@@ -49,9 +49,9 @@ namespace CarMechanic.Core.BusinessLogic
             return szolgaltatas;
         }
 
-        public void SetService(Szolgaltatas szolgaltatas)
+        public int SetService(Szolgaltatas szolgaltatas)
         {
-            _serviceAccess.SetService(szolgaltatas);
+            return _serviceAccess.SetService(szolgaltatas);
 
         }
 

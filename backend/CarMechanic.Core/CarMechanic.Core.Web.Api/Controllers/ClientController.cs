@@ -107,8 +107,8 @@ namespace CarMechanic.Core.Web.Api.Controllers
             try
             {
                 var manager = new ClientManager();
-                manager.SetClient(data);
-                return Ok();
+                var result = manager.SetClient(data);
+                return Ok(result);
 
             }
             catch (Exception ex)

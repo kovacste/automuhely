@@ -16,7 +16,7 @@ namespace CarMechanic.Core.BusinessLogic
             var worksheets = new List<Munkalap>();
             var result = _worksheetAccess.GetWorkSheets();
             foreach (var row in result)
-            {               
+            {
                 worksheets.Add(new Munkalap() { Id = row.Id, Idopont = row.Idopont, Ugyfel = new Ugyfel() { Id = row.Ugyfel.Id, Nev = row.Ugyfel.Nev }, Lezarta = row.LezartaNavigation != null ? row.LezartaNavigation.Nev : null, Lezarva = row.Lezarva, Rogzitette = row.RogzitetteNavigation.Nev, Rogzitve = row.Rogzitve });
             }
 
@@ -34,7 +34,23 @@ namespace CarMechanic.Core.BusinessLogic
             worksheet.Lezarta = result.LezartaNavigation != null ? result.LezartaNavigation.Nev : null;
             worksheet.Lezarva = result.Lezarva;
             worksheet.Rogzitette = result.RogzitetteNavigation.Nev;
-            worksheet.Rogzitve = result.Rogzitve;            
+            worksheet.Rogzitve = result.Rogzitve;
+
+            return worksheet;
+        }
+
+        public Munkalap GetWorkSheetWithClientId(int clientId)
+        {
+            var worksheet = new Munkalap();
+            var result = _worksheetAccess.GetWorkSheetWithClientId(clientId);
+
+            worksheet.Id = result.Id;
+            worksheet.Idopont = result.Idopont;
+            worksheet.Ugyfel = new Ugyfel() { Id = result.Ugyfel.Id, Nev = result.Ugyfel.Nev };
+            worksheet.Lezarta = result.LezartaNavigation != null ? result.LezartaNavigation.Nev : null;
+            worksheet.Lezarva = result.Lezarva;
+            worksheet.Rogzitette = result.RogzitetteNavigation.Nev;
+            worksheet.Rogzitve = result.Rogzitve;
 
             return worksheet;
         }
@@ -44,9 +60,14 @@ namespace CarMechanic.Core.BusinessLogic
             return _worksheetAccess.SetWorkSheet(worksheet);
         }
 
-        public void SetWorkSheetDetails(MunkalapTetel[] details)
+        public void RemoveWorkSheet(Munkalap worksheet)
         {
-            _worksheetAccess.SetWorkSheetDetails(details);
+            _worksheetAccess.RemoveWorkSheet(worksheet);
+        }
+
+        public int SetWorkSheetDetails(MunkalapTetel[] details)
+        {
+            return _worksheetAccess.SetWorkSheetDetails(details);
         }
 
         public void RemoveWorkSheetDetail(MunkalapTetel detail)
@@ -94,9 +115,9 @@ namespace CarMechanic.Core.BusinessLogic
             return orders;
         }
 
-        public void SetWorkSheetOrders(MunkalapRendeles[] orders)
+        public int SetWorkSheetOrders(MunkalapRendeles[] orders)
         {
-            _worksheetAccess.SetWorkSheetOrders(orders);
+            return _worksheetAccess.SetWorkSheetOrders(orders);
         }
 
         public void RemoveWorkSheetOrder(MunkalapRendeles order)

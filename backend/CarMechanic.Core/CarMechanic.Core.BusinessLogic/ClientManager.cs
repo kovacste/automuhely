@@ -96,9 +96,9 @@ namespace CarMechanic.Core.BusinessLogic
             return jelleg;
         }
 
-        public void SetClient(Ugyfel ugyfel)
+        public int SetClient(Ugyfel ugyfel)
         {
-            _clientAccess.SetClient(ugyfel);
+            return _clientAccess.SetClient(ugyfel);
 
         }
 

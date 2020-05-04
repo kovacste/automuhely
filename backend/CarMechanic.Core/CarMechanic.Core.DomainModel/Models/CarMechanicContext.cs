@@ -33,7 +33,7 @@ namespace CarMechanic.Core.DomainModel.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=.;Database=CarMechanic;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(@"");
             }
         }
 
