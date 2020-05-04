@@ -59,6 +59,26 @@ namespace CarMechanic.Core.Web.Api.Controllers
         }
 
         /// <summary>
+        /// Munkalap adatai
+        /// </summary>
+        /// <returns>Munkalap adatai</returns>
+        [HttpGet]
+        public IActionResult GetWorkSheetWithClientId(int clientId)
+        {
+            try
+            {
+                var manager = new WorksheetManager();
+                return Ok(manager.GetWorkSheetWithClientId(clientId));
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Munkalapok listája
         /// </summary>
         /// <returns>Munkalapok</returns>
@@ -149,8 +169,8 @@ namespace CarMechanic.Core.Web.Api.Controllers
             try
             {
                 var manager = new WorksheetManager();
-                manager.SetWorkSheetDetails(data);
-                return Ok();
+                var result = manager.SetWorkSheetDetails(data);
+                return Ok(result);
 
             }
             catch (Exception ex)
@@ -170,8 +190,8 @@ namespace CarMechanic.Core.Web.Api.Controllers
             try
             {
                 var manager = new WorksheetManager();
-                manager.SetWorkSheetOrders(data);
-                return Ok();
+                var result = manager.SetWorkSheetOrders(data);
+                return Ok(result);
 
             }
             catch (Exception ex)
@@ -181,7 +201,26 @@ namespace CarMechanic.Core.Web.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Munkalap törlése
+        /// </summary>
+        /// <param name="data">Munkalap adatai</param>    
+        [HttpPost]
+        public IActionResult RemoveWorkSheet([FromBody] Munkalap data)
+        {
+            try
+            {
+                var manager = new WorksheetManager();
+                manager.RemoveWorkSheet(data);
+                return Ok();
 
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
         /// <summary>
         /// Munkalap teétel törlése
         /// </summary>

@@ -21,6 +21,14 @@ namespace CarMechanic.Core.DataAccess
             }
         }
 
+        public Munkalapok GetWorkSheetWithClientId(int clientId)
+        {
+            using (var context = new CarMechanicContext())
+            {
+                return context.Munkalapok.Where(x => x.Ugyfelid == clientId).Include(x => x.RogzitetteNavigation).Include(x => x.LezartaNavigation).Include(x => x.Ugyfel).ThenInclude(x => x.Telepules).Include(x => x.Ugyfel).ThenInclude(x => x.Kozteruletjelleg).FirstOrDefault();
+            }
+        }
+
         public Munkalapok GetWorkSheet(int workSheetId)
         {
             using (var context = new CarMechanicContext())
@@ -53,13 +61,14 @@ namespace CarMechanic.Core.DataAccess
             }
         }
 
-        public void SetWorkSheetOrders(MunkalapRendeles[] orders)
+        public int SetWorkSheetOrders(MunkalapRendeles[] orders)
         {
+            var result = 0;
             using (var context = new CarMechanicContext())
             {
+                var order = new MunkalapRendelesek();
                 foreach (var row in orders)
                 {
-                    var order = new MunkalapRendelesek();
                     if (row.Id == 0)
                     {
                         order.Munkalapid = row.Munkalapid;
@@ -79,7 +88,9 @@ namespace CarMechanic.Core.DataAccess
                     }
                 }
                 context.SaveChanges();
+                result = order.Id;
             }
+            return result;
         }
 
         public void RemoveWorkSheetOrder(MunkalapRendeles order)
@@ -95,13 +106,15 @@ namespace CarMechanic.Core.DataAccess
             }
         }
 
-        public void SetWorkSheetDetails(MunkalapTetel[] details)
+        public int SetWorkSheetDetails(MunkalapTetel[] details)
         {
+            var result = 0;
             using (var context = new CarMechanicContext())
             {
+                var detail = new MunkalapTetelek();
                 foreach (var row in details)
                 {
-                    var detail = new MunkalapTetelek();
+
                     if (row.Id == 0)
                     {
                         detail.Munkalapid = row.Munkalapid;
@@ -121,9 +134,12 @@ namespace CarMechanic.Core.DataAccess
                         detail.Rogzitve = DateTime.Now;                        
                         detail.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == row.Rogzitette).FirstOrDefault().Id;
                     }
+                    
                 }
                 context.SaveChanges();
+                result = detail.Id;
             }
+            return result;
         }
 
         public void RemoveWorkSheetDetail(MunkalapTetel detail)
@@ -177,6 +193,30 @@ namespace CarMechanic.Core.DataAccess
                 context.SaveChanges();
 
                 return ws.Id;
+            }
+        }
+
+        public void RemoveWorkSheet(Munkalap worksheet)
+        {
+            using (var context = new CarMechanicContext())
+            {
+                var oResult = context.MunkalapRendelesek.FirstOrDefault(x => x.Munkalapid == worksheet.Id);
+                if (oResult != null)
+                {
+                    context.MunkalapRendelesek.Remove(oResult);
+                }
+                var wsResult = context.MunkalapTetelek.FirstOrDefault(x => x.Munkalapid == worksheet.Id);
+                if (wsResult != null)
+                {
+                    context.MunkalapTetelek.Remove(wsResult);
+                }
+                var result = context.Munkalapok.FirstOrDefault(x => x.Id == worksheet.Id);
+                if (result != null)
+                {
+                    context.Munkalapok.Remove(result);
+                }
+
+                context.SaveChanges();
             }
         }
 

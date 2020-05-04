@@ -13,7 +13,7 @@ namespace CarMechanic.Core.Model
         public DateTime Rogzitve { get; set; }
         public string Rogzitette { get; set; }
         public DateTime? Lezarva { get; set; }
-        public string? Lezarta { get; set; }
+        public string Lezarta { get; set; }
 
         public List<MunkalapTetel> Tetelek { get; set; }
     }

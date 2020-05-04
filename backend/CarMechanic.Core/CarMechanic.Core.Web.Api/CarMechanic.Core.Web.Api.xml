@@ -82,6 +82,23 @@
             <param name="purchasePrice">Új beszerzési ára</param>    
             <param name="salesPrice">Új eladási ára</param>    
         </member>
+        <member name="T:CarMechanic.Core.Web.Api.Controllers.ReportController">
+            <summary>
+            Riport kontroller
+            </summary>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ReportController.GetWorkerStatistic(System.Int32,System.Int32)">
+            <summary>
+            Dolgozói statisztika
+            </summary>
+            <returns>Statisztika</returns>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ReportController.GetServiceStatistic(System.Int32,System.Int32)">
+            <summary>
+            Szervíz statisztika
+            </summary>
+            <returns>statisztika</returns>
+        </member>
         <member name="T:CarMechanic.Core.Web.Api.Controllers.ServiceController">
             <summary>
             Szolgáltatás kontroller
@@ -148,6 +165,12 @@
             </summary>
             <returns>Munkalap adatai</returns>
         </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheetWithClientId(System.Int32)">
+            <summary>
+            Munkalap adatai
+            </summary>
+            <returns>Munkalap adatai</returns>
+        </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheetDetails(System.Int32)">
             <summary>
             Munkalapok listája
@@ -183,6 +206,12 @@
             Munkalap rendelés mentése / módosítása
             </summary>
             <param name="data">Munkalap rendelés adatai</param>    
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.RemoveWorkSheet(CarMechanic.Core.Model.Munkalap)">
+            <summary>
+            Munkalap törlése
+            </summary>
+            <param name="data">Munkalap adatai</param>    
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.RemoveWorkSheetDetail(CarMechanic.Core.Model.MunkalapTetel)">
             <summary>

@@ -68,8 +68,8 @@ namespace CarMechanic.Core.Web.Api.Controllers
             try
             {
                 var manager = new PartManager();
-                manager.SetPart(data);
-                return Ok();
+                var result = manager.SetPart(data);
+                return Ok(result);
 
             }
             catch (Exception ex)

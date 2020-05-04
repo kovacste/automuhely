@@ -47,9 +47,9 @@ namespace CarMechanic.Core.BusinessLogic
             return alkatresz;
         }
 
-        public void SetPart(Alkatresz alkatresz)
+        public int SetPart(Alkatresz alkatresz)
         {
-            _partAccess.SetPart(alkatresz);
+            return _partAccess.SetPart(alkatresz);
 
         }
 
