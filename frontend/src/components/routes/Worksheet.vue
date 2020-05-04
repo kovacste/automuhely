@@ -451,9 +451,13 @@
                 })
             },
             closeWorksheet() {
-                this.worksheet.lezarva = new Date().toISOString();
                 this.worksheet.lezarta = this.$store.getters.user.username;
-                this.save();
+                worksheetService.closeWorksheet(this.worksheet.id, this.worksheet.lezarta).then(() => {
+                    this.saveSuccess();
+                }).catch(() => {
+                    this.saveFail('Munkalap lezárása sikertelen!');
+                });
+                this.editable = false;
             },
             loadClient(client) {
                 this.worksheet.ugyfel = client;

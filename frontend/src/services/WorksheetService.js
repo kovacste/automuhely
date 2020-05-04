@@ -46,6 +46,10 @@ class WorksheetService extends Service {
         return this.post('RemoveWorkSheet', { id: id });
     }
 
+    closeWorksheet(worksheetId, user) {
+        return this.post('CloseWorkSheet?worksheetId=' + worksheetId + '&' + 'user=' + user, {});
+    }
+
 
 }
 
