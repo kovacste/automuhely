@@ -11,7 +11,7 @@
 
             <v-card-text>
 
-                <v-form>
+                <v-form v-model="formValid">
 
                     <FormSubTitle :active="fieldsEditable" title="Személyes adatok" />
 
@@ -195,7 +195,6 @@
                                     label="Rögzítve"
                                     name="rogzitve"
                                     type="text"
-                                    :rules="[v => !!v || 'Kötelező mező!']"
                             />
 
                         </v-flex>
@@ -208,7 +207,6 @@
                                     label="Rögzítette"
                                     name="rogzitette"
                                     type="text"
-                                    :rules="[v => !!v || 'Kötelező mező!']"
                             />
 
                         </v-flex>
@@ -225,9 +223,9 @@
 
                 <v-btn v-if="!fieldsEditable" @click="edit()" color="primary">Módosítás </v-btn>
 
-                <v-btn v-if="fieldsEditable" @click="cancel()" color="primary">Mégse </v-btn>
+                <v-btn v-if="fieldsEditable && !newClient" @click="cancel()" color="primary">Mégse </v-btn>
 
-                <v-btn v-if="fieldsEditable" @click="save()" color="primary">Mentés </v-btn>
+                <v-btn v-if="fieldsEditable && formValid" @click="save()" color="primary">Mentés </v-btn>
 
             </v-card-actions>
 
@@ -241,11 +239,14 @@
     import PageBase from "../basecomponents/PageBase";
     import {clientService} from "../../services/ClientService";
     import FormSubTitle from "../basecomponents/FormSubTitle";
+    import {toast} from "../../mixins/toast";
     export default {
         name: "Client",
         components: { FormSubTitle, PageBase },
+        mixins: [toast],
         data() {
             return {
+                formValid: false,
                 editable: false,
                 newClient: false,
                 cities: [],
@@ -271,10 +272,19 @@
         },
         mounted() {
             const id = parseInt(this.$route.params.id, 10);
-            const client = this.$store.getters.client;
             this.newClient = !id;
-            if(id && id === client.id) {
-                this.client = { ...client };
+
+            if(!this.newClient) {
+                const client = this.$store.getters.client;
+
+                if(client.id && id === client.id) {
+                    this.client = { ...client };
+                } else {
+                    clientService.getClient(id).then(response => {
+                        this.client = response.data;
+                        this.$store.commit('setClient', this.client);
+                    });
+                }
             }
 
 
@@ -320,17 +330,17 @@
                 this.editable = false;
                 if(this.newClient) {
                     this.client.id = 0;
-                    this.client.rogzitette = this.$store.getters.user.username;
-                    this.client.rogzitve = new Date().toISOString();
                 }
-
+                this.client.rogzitette = this.$store.getters.user.username;
+                this.client.rogzitve = new Date().toISOString();
                 this.$store.commit('setClient', this.client);
-                this.$store.dispatch('saveClient').then(() => {
-                     this.$toasted.show('Ügyfél mentése sikeres!',{ 
-                        theme: "toasted-primary", 
-                        position: "bottom-right", 
-                        duration : 5000
-                    });
+                this.$store.dispatch('saveClient').then((response) => {
+                     this.saveSuccess();
+                     if(this.newClient) {
+                         this.client.id = response.data;
+                     }
+                }).catch(() => {
+                    this.saveFail();
                 });
             },
             zipChange() {

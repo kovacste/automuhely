@@ -12,7 +12,7 @@
 
             <v-card-text>
 
-                <v-form>
+                <v-form v-model="formValid">
 
                     <FormSubTitle :active="fieldsEditable" title="Alapadatok" />
 
@@ -58,7 +58,7 @@
                             <v-select
                                     :disabled="!fieldsEditable"
                                     v-model="service.ismetlodo"
-                                    label="Imsétlődő"
+                                    label="Ismétlődő"
                                     name="ismetlodo"
                                     item-text="item-text"
                                     item-value="item-value"
@@ -75,8 +75,9 @@
                             <v-text-field
                                     :disabled="!fieldsEditable"
                                     v-model="service.ismetlodesiidoszak"
-                                    label="Ismétlődés gyakorisága"
+                                    label="Ismétlődés gyakorisága napokban"
                                     name="ismetlodesiidoszak"
+                                    v-mask="'###'"
                                     :rules="[v => !!v || 'Kötelező mező!']"
                             />
 
@@ -96,7 +97,6 @@
                                     label="Rögzítve"
                                     name="rogzitve"
                                     type="text"
-                                    :rules="[v => !!v || 'Kötelező mező!']"
                             />
 
                         </v-flex>
@@ -109,7 +109,6 @@
                                     label="Rögzítette"
                                     name="rogzitette"
                                     type="text"
-                                    :rules="[v => !!v || 'Kötelező mező!']"
                             />
 
                         </v-flex>
@@ -126,9 +125,9 @@
 
                 <v-btn v-if="!fieldsEditable" @click="edit()" color="primary">Módosítás </v-btn>
 
-                <v-btn v-if="fieldsEditable" @click="cancel()" color="primary">Mégse </v-btn>
+                <v-btn v-if="fieldsEditable && !newService" @click="cancel()" color="primary">Mégse </v-btn>
 
-                <v-btn v-if="fieldsEditable" @click="save()" color="primary">Mentés </v-btn>
+                <v-btn v-if="fieldsEditable && formValid" @click="save()" color="primary">Mentés </v-btn>
 
             </v-card-actions>
 
@@ -141,11 +140,15 @@
 <script>
     import PageBase from "../basecomponents/PageBase";
     import FormSubTitle from "../basecomponents/FormSubTitle";
+    import {servicesService} from "../../services/ServicesService";
+    import {toast} from "../../mixins/toast";
     export default {
         name: "Client",
+        mixins: [toast],
         components: { FormSubTitle, PageBase },
         data() {
             return {
+                formValid: false,
                 editable: false,
                 newService: false,
                 services: [],
@@ -161,10 +164,18 @@
         },
         mounted() {
             const id = parseInt(this.$route.params.id, 10);
-            const service = this.$store.getters.service;
             this.newService = !id;
-            if(id && id === service.id) {
-                this.service = { ...service };
+
+            if(!this.newService) {
+                const service = this.$store.getters.service;
+                if(service.id && id === service.id) {
+                    this.service = { ...service };
+                } else {
+                    servicesService.getService(id).then(response => {
+                        this.service = response.data;
+                        this.$store.commit('setService', service)
+                    })
+                }
             }
         },
         computed: {
@@ -183,22 +194,25 @@
                 this.editable = false;
                 if(this.newService) {
                     this.service.id = 0;
-                    this.service.rogzitette = this.$store.getters.user.username;
-                    this.service.rogzitve = new Date().toISOString();
                 }
+                this.service.rogzitette = this.$store.getters.user.username;
+                this.service.rogzitve = new Date().toISOString();
 
                 this.service.egysegar = +this.service.egysegar;
                 if(!this.service.ismetlodo) {
                     this.service.ismetlodesiidoszak = 0;
                 }
+                this.service.ismetlodesiidoszak = +this.service.ismetlodesiidoszak;
+                this.service.me = '1';
                 this.$store.commit('setService', this.service);
-                this.$store.dispatch('saveService').then(() => {
-                     this.$toasted.show('Szolgáltatás mentése sikeres!',{
-                        theme: "toasted-primary", 
-                        position: "bottom-right", 
-                        duration : 5000
-                    });
-                });
+                this.$store.dispatch('saveService').then((response) => {
+                    this.saveSuccess();
+                     if(this.newService) {
+                         this.service.id = response.data;
+                     }
+                }).catch(() => {
+                    this.saveFail();
+                })
             }
         }
     }

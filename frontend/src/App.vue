@@ -187,7 +187,7 @@ export default {
           label: 'Alkatrészek',
           icon: 'mdi-hammer-wrench',
           items: [
-            { title: 'Alkatrész rendelése', to: '/order' },
+            { title: 'Alkatrész rendelések', to: '/orders' },
           ]
         },
         worksheets: {

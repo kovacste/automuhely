@@ -66,8 +66,8 @@
                     let wsitem = {
                       ...worksheet.ugyfel,
                       ...worksheet
-                    }
-                  delete wsitem.ugyfel
+                    };
+                  delete wsitem.ugyfel;
 
                   let response = await worksheetService.getWorksheetDetails(wsitem.id);
                   worksheet.tetelek = response.data;
@@ -76,15 +76,15 @@
                       Object.keys(tetel).forEach(key => {
                           if(key === 'szolgaltatas') {
                               Object.keys(tetel.szolgaltatas).forEach(szolgKey => {
-                                  wsitem[index + '_tetel_' + key + '_' + szolgKey] = tetel.szolgaltatas[szolgKey]
+                                  wsitem[index + '_tetel_' + key + '_' + szolgKey] = tetel.szolgaltatas[szolgKey];
                               })
                           } else {
-                              wsitem[index + '_tetel_' + key] = tetel[key]
+                              wsitem[index + '_tetel_' + key] = tetel[key];
                           }
-                      })
-                  })
-                  delete wsitem.tetelek
-                  listToExport.push(wsitem)
+                      });
+                  });
+                  delete wsitem.tetelek;
+                  listToExport.push(wsitem);
                 }
                 win.location = encodeURI(exportToCsv(listToExport));
             },
@@ -93,17 +93,23 @@
                 this.$router.push('worksheet/' + worksheet.id);
             },
             deleteWorksheet(worksheet) {
-                console.log(worksheet);
+                worksheetService.removeWorksheet(worksheet.id).then(() => {
+                    worksheetService.getWorksheetList().then(response => {
+                        this.worksheets = response.data;
+                        this.filterdWorksheets = response.data;
+                        this.filterWorksheets();
+                    });
+                })
             },
             filterWorksheets() {
                 if(this.$route.query.open) {
                     this.filterdWorksheets = this.worksheets.filter(worksheet => {
-                        return !worksheet.lezarva
+                        return !worksheet.lezarva;
                     })
                 }
                 if(this.$route.query.closed) {
                     this.filterdWorksheets = this.worksheets.filter(worksheet => {
-                        return !!worksheet.lezarva
+                        return !!worksheet.lezarva;
                     })
                 }
             }

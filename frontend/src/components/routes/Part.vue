@@ -11,7 +11,7 @@
 
             <v-card-text>
 
-                <v-form>
+                <v-form v-model="formValid">
 
                     <FormSubTitle :active="fieldsEditable" title="Alapadatok" />
 
@@ -78,7 +78,6 @@
                                     label="Rögzítve"
                                     name="rogzitve"
                                     type="text"
-                                    :rules="[v => !!v || 'Kötelező mező!']"
                             />
 
                         </v-flex>
@@ -91,7 +90,6 @@
                                     label="Rögzítette"
                                     name="rogzitette"
                                     type="text"
-                                    :rules="[v => !!v || 'Kötelező mező!']"
                             />
 
                         </v-flex>
@@ -108,9 +106,9 @@
 
                 <v-btn v-if="!fieldsEditable" @click="edit()" color="primary">Módosítás </v-btn>
 
-                <v-btn v-if="fieldsEditable" @click="cancel()" color="primary">Mégse </v-btn>
+                <v-btn v-if="fieldsEditable && !newPart" @click="cancel()" color="primary">Mégse </v-btn>
 
-                <v-btn v-if="fieldsEditable" @click="save()" color="primary">Mentés </v-btn>
+                <v-btn v-if="fieldsEditable && formValid" @click="save()" color="primary">Mentés </v-btn>
 
             </v-card-actions>
 
@@ -123,11 +121,15 @@
 <script>
     import PageBase from "../basecomponents/PageBase";
     import FormSubTitle from "../basecomponents/FormSubTitle";
+    import {partService} from "../../services/PartService";
+    import { toast } from "../../mixins/toast"
     export default {
         name: "Client",
         components: { FormSubTitle, PageBase },
+        mixins: [toast],
         data() {
             return {
+                formValid: false,
                 editable: false,
                 newPart: false,
                 part: {
@@ -142,10 +144,18 @@
         },
         mounted() {
             const id = parseInt(this.$route.params.id, 10);
-            const part = this.$store.getters.part;
             this.newPart = !id;
-            if(id && id === part.id) {
-                this.part = { ...part };
+
+            if(!this.newPart) {
+                const part = this.$store.getters.part;
+                if(part.id && id === part.id) {
+                    this.part = { ...part };
+                } else {
+                    partService.getPart(id).then(response => {
+                        this.part = response.data;
+                        this.$store.commit('setPart');
+                    })
+                }
             }
         },
         computed: {
@@ -164,18 +174,20 @@
                 this.editable = false;
                 if(this.newPart) {
                     this.part.id = 0;
-                    this.part.rogzitette = this.$store.getters.user.username;
-                    this.part.rogzitve = new Date().toISOString();
                 }
-
+                this.part.rogzitette = this.$store.getters.user.username;
+                this.part.rogzitve = new Date().toISOString();
+                this.part.beszerar = +this.part.beszerar;
+                this.part.eladasiar = +this.part.eladasiar;
                 this.$store.commit('setPart', this.part);
-                this.$store.dispatch('savePart').then(() => {
-                     this.$toasted.show('Alkatrész mentése sikeres!',{
-                        theme: "toasted-primary", 
-                        position: "bottom-right", 
-                        duration : 5000
-                    });
-                });
+                this.$store.dispatch('savePart').then((response) => {
+                     this.saveSuccess();
+                     if(this.newPart) {
+                         this.part.id = response.data;
+                     }
+                }).catch(() => {
+                    this.saveFail();
+                })
             }
         }
     }

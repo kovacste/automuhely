@@ -2,6 +2,10 @@ import { Service } from "./Service";
 
 class ClientService extends Service {
 
+    getClient(id) {
+        return this.get('GetClient?',{ clientId: id })
+    }
+
     getClients() {
         return this.get('GetClientList');
     }
@@ -16,6 +20,10 @@ class ClientService extends Service {
 
     setClient(client) {
         return this.post('SetClient', client);
+    }
+
+    removeClient(client) {
+        return this.post('RemoveClient', client)
     }
 
 }

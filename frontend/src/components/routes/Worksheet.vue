@@ -11,7 +11,7 @@
 
             <v-card-text>
 
-                <v-form>
+                <v-form v-model="formValid">
 
                     <FormSubTitle :active="fieldsEditable" title="Alapadatok" />
 
@@ -34,6 +34,7 @@
                                     :disabled="!fieldsEditable"
                                     v-model="worksheet.idopont"
                                     label="Időpont"
+                                    v-mask="'####-##-##'"
                                     name="idopont"
                                     :rules="[v => !!v || 'Kötelező mező!']"
                             />
@@ -62,7 +63,7 @@
 
                                 </template>
 
-                                <span> Ügyfél hozzárednelés </span>
+                                <span> Ügyfél hozzárendelés </span>
 
                             </v-tooltip>
 
@@ -84,8 +85,26 @@
 
                         </v-flex>
 
+                        <v-flex md1 xs12 class="ma-2" v-if="fieldsEditable">
+
+                            <v-tooltip left>
+
+                                <template v-slot:activator="{on}">
+
+                                    <v-icon v-on="on" x-large @click="openOrderWindow()"> mdi-hammer-wrench </v-icon>
+
+                                </template>
+
+                                <span> Alkatrész rendelés </span>
+
+                            </v-tooltip>
+
+                        </v-flex>
+
                         <v-flex md2 xs12 class="ma-2">
+
                             {{ worksheetStatus }}
+
                         </v-flex>
 
 
@@ -111,6 +130,26 @@
 
                     </v-layout>
 
+                    <FormSubTitle :active="false" title="Munkához rendelt alkatrészek" />
+
+                    <v-layout row class="ma-2 pa-1">
+
+                        <v-flex md4 xs12 class="ma-2">
+
+                            <ul>
+
+                                <li v-for="(order, index) in orderedParts" :key="index">
+
+                                    {{ order.alkatresz.nev }} <v-icon v-if="fieldsEditable" @click="removeOrder(order.id, index)"> mdi-close </v-icon>
+
+                                </li>
+
+                            </ul>
+
+                        </v-flex>
+
+                    </v-layout>
+
                     <FormSubTitle :active="false" title="Egyéb" />
 
                     <v-layout row class="ma-2 pa-1">
@@ -123,7 +162,6 @@
                                     label="Rögzítve"
                                     name="rogzitve"
                                     type="text"
-                                    :rules="[v => !!v || 'Kötelező mező!']"
                             />
 
                         </v-flex>
@@ -136,7 +174,6 @@
                                     label="Rögzítette"
                                     name="rogzitette"
                                     type="text"
-                                    :rules="[v => !!v || 'Kötelező mező!']"
                             />
 
                         </v-flex>
@@ -153,9 +190,9 @@
 
                 <v-btn v-if="!fieldsEditable && !worksheet.lezarva" @click="edit()" color="primary">Módosítás </v-btn>
 
-                <v-btn v-if="fieldsEditable" @click="cancel()" color="primary">Mégse </v-btn>
+                <v-btn v-if="fieldsEditable && !newWorksheet" @click="cancel()" color="primary">Mégse </v-btn>
 
-                <v-btn v-if="fieldsEditable" @click="save()" color="primary">Mentés </v-btn>
+                <v-btn v-if="fieldsEditable && formValid" @click="save()" color="primary">Mentés </v-btn>
 
                 <v-btn v-if="!fieldsEditable  && !worksheet.lezarva" @click="closeWorksheet()" color="primary">Munkalap lezárása </v-btn>
 
@@ -245,7 +282,55 @@
                                 @click="servicesDialog = false"
                         >
 
-                            Mégse
+                            Rendben
+
+                        </v-btn>
+
+                    </v-card-actions>
+
+                </v-card>
+
+            </v-dialog>
+
+            <v-dialog v-model="partsDialog" width="700">
+
+                <v-card>
+
+                    <v-card-title class="headline grey lighten-2" primary-title>
+
+                        Alkatrészek
+
+                    </v-card-title>
+
+                    <v-card-text>
+
+                        Válassza ki a megrendelni kívánt alkatrészt
+
+                        <ul>
+
+                            <li v-for="(part, index) in parts" :key="index">
+
+                                {{ part.nev }} <v-btn text @click="orderPart(part)"> Megrendel </v-btn>
+
+                            </li>
+
+                        </ul>
+
+                    </v-card-text>
+
+                    <v-divider />
+
+                    <v-card-actions>
+
+                        <v-spacer />
+
+                        <v-btn
+                                color="primary"
+                                text
+                                @click="partsDialog = false"
+                        >
+
+                            Rendben
 
                         </v-btn>
 
@@ -267,15 +352,20 @@
     import {clientService} from "../../services/ClientService";
     import {servicesService} from "../../services/ServicesService";
     import {worksheetService} from "../../services/WorksheetService";
+    import {partService} from "../../services/PartService";
+    import {toast} from "../../mixins/toast";
     export default {
         name: "Worksheet",
         components: { FormSubTitle, PageBase },
+        mixins: [toast],
         data() {
             return {
+                formValid: false,
                 editable: false,
                 newWorksheet: false,
                 clientSelectDialog: false,
                 servicesDialog: false,
+                partsDialog: false,
                 worksheet: {
                     id: null,
                     idopont: null,
@@ -289,19 +379,38 @@
                     }
                 },
                 clients: [],
-                services: []
+                services: [],
+                parts: [],
+                orderedParts: []
             }
         },
         mounted() {
             const id = parseInt(this.$route.params.id, 10);
-            const worksheet = this.$store.getters.worksheet;
             this.newWorksheet = !id;
-            if(id && id === worksheet.id) {
-                this.worksheet = { ...worksheet };
 
-                worksheetService.getWorksheetDetails(id).then(response => {
-                    this.worksheet.tetelek = response.data;
+            if(!this.newWorksheet) {
+                const worksheet = this.$store.getters.worksheet;
+
+                new Promise((resolve) => {
+                    if(worksheet.id && id === worksheet.id) {
+                        this.worksheet = { ...worksheet };
+                        resolve();
+                    } else {
+                        worksheetService.getWorkSheet(id).then(response => {
+                            this.worksheet = response.data;
+                            resolve();
+                        })
+                    }
+                }).then(() => {
+                    worksheetService.getWorksheetDetails(id).then(details => {
+                        this.worksheet.tetelek = details.data;
+                        this.$store.commit('setWorksheet', this.worksheet)
+                    });
+                    worksheetService.getWorksheetOrder(id).then(orders => {
+                        this.orderedParts = orders.data;
+                    });
                 })
+
             }
         },
         computed: {
@@ -313,9 +422,32 @@
             }
         },
         methods: {
+            orderPart(part) {
+                const partToOrder = {
+                    id: 0,
+                    munkalapid: this.worksheet.id,
+                    alkatresz: part,
+                    mennyiseg: 1,
+                    rogzitette: this.$store.getters.user.username
+                };
+                worksheetService.setWorksheetOrder([partToOrder]).then(() => {
+                    this.orderedParts.push(partToOrder)
+                }).catch(() => {
+                    this.saveFail('Rendelés rögzítése sikertelen!');
+                })
+            },
             removeService(serviceid, index) {
                 worksheetService.removeWorkSheetDetail(serviceid).then(() => {
                     this.worksheet.tetelek.splice(index, 1);
+                }).catch(() => {
+                    this.saveFail('Szolgáltatás eltávolítása sikertelen!');
+                })
+            },
+            removeOrder(orderid, index) {
+                worksheetService.removeWorksheetOrder(orderid).then(() => {
+                    this.orderedParts.splice(index, 1);
+                }).catch(() => {
+                    this.saveFail('Rendelés eltávolítása sikertelen!')
                 })
             },
             closeWorksheet() {
@@ -372,6 +504,16 @@
                     this.servicesDialog = true;
                 }
             },
+            openOrderWindow() {
+                if(this.parts.length === 0) {
+                    partService.getPartList().then(response => {
+                        this.parts = response.data;
+                        this.partsDialog = true
+                    });
+                } else {
+                    this.partsDialog = true;
+                }
+            },
             edit() {
                 this.editable = true;
             },
@@ -382,17 +524,17 @@
                 this.editable = false;
                 if(this.newWorksheet) {
                     this.worksheet.id = 0;
-                    this.worksheet.rogzitette = this.$store.getters.user.username;
-                    this.worksheet.rogzitve = new Date().toISOString();
                 }
-
+                this.worksheet.rogzitette = this.$store.getters.user.username;
+                this.worksheet.rogzitve = new Date().toISOString();
                 this.$store.commit('setWorksheet', this.worksheet);
-                this.$store.dispatch('saveWorksheet').then(() => {
-                     this.$toasted.show('Munkalap mentése sikeres!',{
-                        theme: "toasted-primary", 
-                        position: "bottom-right", 
-                        duration : 5000
-                    });
+                this.$store.dispatch('saveWorksheet').then((response) => {
+                     this.saveSuccess();
+                     if(this.newWorksheet) {
+                         this.worksheet.id = response.data;
+                     }
+                }).catch(() => {
+                    this.saveFail();
                 });
             }
         }

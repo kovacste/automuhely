@@ -54,12 +54,17 @@
 
             deletePart(part) {
                 console.log(part);
+                partService.removePart(this.part).then(() => {
+                    partService.getPartList().then(response => {
+                        this.parts = response.data;
+                    });
+                });
             }
         },
         mounted() {
             partService.getPartList().then(response => {
                 this.parts = response.data;
-            })
+            });
         },
         data() {
             return {

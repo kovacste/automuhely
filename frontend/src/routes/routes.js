@@ -10,6 +10,7 @@ import Parts from "../components/routes/Parts";
 import Part from "../components/routes/Part";
 import Worksheets from "../components/routes/Worksheets";
 import Worksheet from "../components/routes/Worksheet";
+import Orders from "../components/routes/Orders";
 
 export const routes = [
     { path: '/', component: Home },
@@ -29,5 +30,6 @@ export const routes = [
     { path: '/worksheets', component: Worksheets },
     { path: '/worksheet/:id', component: Worksheet },
     { path: '/worksheet', component: Worksheet },
+    { path: '/orders', component: Orders },
 ];
 

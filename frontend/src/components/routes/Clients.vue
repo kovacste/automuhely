@@ -62,7 +62,11 @@
             },
 
             deleteUser(user) {
-                console.log(user, 'user to delete');
+                return clientService.removeClient(user).then(() => {
+                    clientService.getClients().then(response => {
+                        this.clients = response.data;
+                    });
+                });
             }
         },
         mounted() {

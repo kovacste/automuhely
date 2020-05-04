@@ -2,6 +2,10 @@ import { Service } from "./Service";
 
 class PartService extends Service {
 
+    getPart(id) {
+        return this.get('GetPart?', { partId: id })
+    }
+
     getPartList() {
         return this.get('GetPartList');
     }
@@ -13,6 +17,10 @@ class PartService extends Service {
 
     setPartPrice(part) {
         return this.post('SetPartPrice', part);
+    }
+
+    removePart(part) {
+        return this.post('RemovePart', part)
     }
 
 }

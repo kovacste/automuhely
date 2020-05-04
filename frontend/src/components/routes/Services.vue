@@ -50,7 +50,7 @@
     import { exportToCsv } from "../../utils/ExportToCsv";
 
     export default {
-        name: "Clients",
+        name: "Services",
         components: { PageBase },
         methods: {
             exportServiceData() {
@@ -61,7 +61,11 @@
                 this.$router.push('service/' + service.id);
             },
             deleteService(service) {
-                console.log(service);
+                servicesService.removeService(service).then(() => {
+                    servicesService.getServiceList().then(response => {
+                        this.services = response.data;
+                    });
+                });
             }
         },
         mounted() {

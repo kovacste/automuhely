@@ -6,12 +6,15 @@ import vuetify from './plugins/vuetify';
 import { store } from "./store/store";
 import VueGoogleCharts from 'vue-google-charts';
 import Toasted from 'vue-toasted';
+import { VueMaskDirective } from 'v-mask'
 
 Vue.config.productionTip = false;
 
 Vue.use(VueGoogleCharts);
 Vue.use(Toasted);
 Vue.use(VueRouter);
+Vue.directive('mask', VueMaskDirective);
+
 
 const router = new VueRouter({ routes, mode: 'history' });
 
