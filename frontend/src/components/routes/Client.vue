@@ -24,6 +24,7 @@
                                     v-model="client.id"
                                     label="Azonosító"
                                     name="id"
+                                    v-mask="'########-#-##'"
                             />
 
                         </v-flex>
@@ -331,6 +332,7 @@
                 if(this.newClient) {
                     this.client.id = 0;
                 }
+                this.client.id = +this.client.id;
                 this.client.rogzitette = this.$store.getters.user.username;
                 this.client.rogzitve = new Date().toISOString();
                 this.$store.commit('setClient', this.client);

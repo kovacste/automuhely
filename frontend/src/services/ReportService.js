@@ -2,14 +2,14 @@ import {Service} from "./Service";
 
 class ReportService extends Service {
 
-    getWorkerStatistics() {
-        return this.get('GetWorkerStatistics')
+    getWorkerStatistics(year, month) {
+        return this.get('GetWorkerStatistic?', { year: year, month: month });
     }
 
-    getServiceStatistics() {
-        return this.get('GetServiceStatistics')
+    getServiceStatistics(year, month) {
+        return this.get('GetServiceStatistic?', { year: year, month: month });
     }
 
 }
 
-export const reportService = new ReportService('/api/api/Report/')
+export const reportService = new ReportService('/api/api/Report/');

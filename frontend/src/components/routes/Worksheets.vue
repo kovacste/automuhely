@@ -60,8 +60,6 @@
         methods: {
             async exportWorksheets() {
                 let listToExport = [];
-                const win = window.open('about:blank');
-
                 for (const worksheet of this.worksheets) {
                     let wsitem = {
                       ...worksheet.ugyfel,
@@ -86,7 +84,10 @@
                   delete wsitem.tetelek;
                   listToExport.push(wsitem);
                 }
-                win.location = encodeURI(exportToCsv(listToExport));
+                let link = document.createElement('a');
+                link.href = encodeURI(exportToCsv(listToExport));
+                link.download = 'worksheets.csv';
+                link.click();
             },
             editWorksheet(worksheet) {
                 this.$store.commit('setWorksheet', worksheet);

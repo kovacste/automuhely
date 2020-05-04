@@ -45,7 +45,10 @@
         components: { PageBase },
         methods: {
             exportPartData() {
-                window.open(encodeURI(exportToCsv(this.parts)));
+                let link = document.createElement('a');
+                link.href = encodeURI(exportToCsv(this.parts));
+                link.download = 'parts.csv';
+                link.click();
             },
             editPart(part) {
                 this.$store.commit('setPart', part);

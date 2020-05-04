@@ -54,7 +54,10 @@
         components: {PageBase},
         methods: {
             exportClientData() {
-                window.open(encodeURI(exportToCsv(this.clients)));
+                let link = document.createElement('a');
+                link.href = encodeURI(exportToCsv(this.clients));
+                link.download = 'clients.csv';
+                link.click();
             },
             editUser(client) {
                 this.$store.commit('setClient', client);

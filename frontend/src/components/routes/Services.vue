@@ -54,13 +54,17 @@
         components: { PageBase },
         methods: {
             exportServiceData() {
-                window.open(encodeURI(exportToCsv(this.services)));
+                let link = document.createElement('a');
+                link.href = encodeURI(exportToCsv(this.services));
+                link.download = 'services.csv';
+                link.click();
             },
             editService(service) {
                 this.$store.commit('setService', service);
                 this.$router.push('service/' + service.id);
             },
             deleteService(service) {
+                service.rogzitette = this.$store.getters.user.username;
                 servicesService.removeService(service).then(() => {
                     servicesService.getServiceList().then(response => {
                         this.services = response.data;

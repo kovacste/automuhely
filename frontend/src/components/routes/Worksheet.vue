@@ -454,6 +454,7 @@
                 this.worksheet.lezarta = this.$store.getters.user.username;
                 worksheetService.closeWorksheet(this.worksheet.id, this.worksheet.lezarta).then(() => {
                     this.saveSuccess();
+                    this.worksheet.lezarva = true;
                 }).catch(() => {
                     this.saveFail('Munkalap lezárása sikertelen!');
                 });
