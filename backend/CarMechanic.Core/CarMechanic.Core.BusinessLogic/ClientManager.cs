@@ -106,5 +106,22 @@ namespace CarMechanic.Core.BusinessLogic
         {
             _clientAccess.RemoveClient(ugyfel);
         }
+
+        public Felhasznalo AuthenticateUser(string loginName, string password)
+        {
+            var result = _clientAccess.AuthenticateClient(loginName, password);
+            if (result != null)
+            {
+                var currentUser = new Felhasznalo();
+                currentUser.LoginNev = result.Email;
+                currentUser.Nev = result.Nev;
+                var modul = new List<string>();
+                modul.Add("Ügyfél");              
+                currentUser.Modul = modul;
+                return currentUser;
+            }
+            else
+                throw new Exception("NOT_AUTHENTICATED");
+        }
     }
 }

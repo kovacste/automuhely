@@ -18,6 +18,7 @@ namespace CarMechanic.Core.Model
         public string Hazszam { get; set; }
         public string Telefonszam { get; set; }
         public string Email { get; set; }
+        public string Jelszo { get; set; }
         public DateTime Rogzitve { get; set; }
         public string Rogzitette { get; set; }
 

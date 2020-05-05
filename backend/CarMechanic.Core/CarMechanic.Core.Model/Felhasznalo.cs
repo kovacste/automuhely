@@ -8,7 +8,7 @@ namespace CarMechanic.Core.Model
     {
         public string LoginNev { get; set; }
         public string Nev { get; set; }
-
+        public string Jelszo { get; set; }
         public List<string> Modul { get; set; }
     }
 }

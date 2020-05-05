@@ -326,6 +326,10 @@ namespace CarMechanic.Core.DomainModel.Models
                     .HasColumnName("email")
                     .HasMaxLength(250)
                     .IsUnicode(false);
+                entity.Property(e => e.Jelszo)                   
+                   .HasColumnName("jelszo")
+                   .HasMaxLength(250)
+                   .IsUnicode(false);
 
                 entity.Property(e => e.Hazszam)
                     .IsRequired()
