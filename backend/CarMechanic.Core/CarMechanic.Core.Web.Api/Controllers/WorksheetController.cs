@@ -262,5 +262,28 @@ namespace CarMechanic.Core.Web.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        /// <summary>
+        /// Munkalap lezárása
+        /// </summary>
+        /// <param name="worksheetId">munkalap azonosító</param>
+        /// <param name="user">felhasználó loginnév</param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult CloseWorkSheet(int worksheetId, string user)
+        {
+            try
+            {
+                var manager = new WorksheetManager();
+                manager.CloseWorkSheet(worksheetId, user);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -82,7 +82,7 @@ namespace CarMechanic.Core.BusinessLogic
             var result = _worksheetAccess.GetWorkSheetDetails(worksheetId);
             foreach (var row in result)
             {
-                details.Add(new MunkalapTetel() { Id = row.Id,  Szolgaltatas = new Szolgaltatas() { Id = row.Szolgaltatas.Id, Nev = row.Szolgaltatas.Nev} , Mennyiseg = row.Mennyiseg, Ar = row.Ar, Munkalapid = row.Munkalapid, Rogzitve = row.Rogzitve, Rogzitette = row.RogzitetteNavigation.Nev });
+                details.Add(new MunkalapTetel() { Id = row.Id, Szolgaltatas = new Szolgaltatas() { Id = row.Szolgaltatas.Id, Nev = row.Szolgaltatas.Nev }, Mennyiseg = row.Mennyiseg, Ar = row.Ar, Munkalapid = row.Munkalapid, Rogzitve = row.Rogzitve, Rogzitette = row.RogzitetteNavigation.Nev });
             }
             return details;
         }
@@ -99,7 +99,7 @@ namespace CarMechanic.Core.BusinessLogic
             detail.Munkalapid = result.Munkalapid;
             detail.Rogzitve = result.Rogzitve;
             detail.Rogzitette = result.RogzitetteNavigation.Nev;
-            
+
             return detail;
         }
 
@@ -108,8 +108,8 @@ namespace CarMechanic.Core.BusinessLogic
             var orders = new List<MunkalapRendeles>();
             var result = _worksheetAccess.GetWorkSheetOrders(worksheetId);
             foreach (var row in result)
-            {                
-                orders.Add(new MunkalapRendeles() { Id = row.Id, Alkatresz = new Alkatresz() { Id = row.Alkatresz.Id, Nev = row.Alkatresz.Nev, Beszerar = row.Alkatresz.Beszerar,  Eladasiar = row.Alkatresz.Eladasiar }, Mennyiseg = row.Mennyiseg, Munkalapid = row.Munkalapid, Rogzitve = row.Rogzitve, Rogzitette = row.RogzitetteNavigation.Nev});
+            {
+                orders.Add(new MunkalapRendeles() { Id = row.Id, Alkatresz = new Alkatresz() { Id = row.Alkatresz.Id, Nev = row.Alkatresz.Nev, Beszerar = row.Alkatresz.Beszerar, Eladasiar = row.Alkatresz.Eladasiar }, Mennyiseg = row.Mennyiseg, Munkalapid = row.Munkalapid, Rogzitve = row.Rogzitve, Rogzitette = row.RogzitetteNavigation.Nev });
             }
 
             return orders;
@@ -125,5 +125,10 @@ namespace CarMechanic.Core.BusinessLogic
             _worksheetAccess.RemoveWorkSheetOrder(order);
         }
 
+        public void CloseWorkSheet(int worksheetId, string user)
+        {
+
+            _worksheetAccess.CloseWorkSheet(worksheetId, user);
+        }
     }
 }
