@@ -225,5 +225,13 @@
             </summary>
             <param name="data">Munkalap adatai</param>    
         </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.CloseWorkSheet(System.Int32,System.String)">
+            <summary>
+            Munkalap lezárása
+            </summary>
+            <param name="worksheetId">munkalap azonosító</param>
+            <param name="user">felhasználó loginnév</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

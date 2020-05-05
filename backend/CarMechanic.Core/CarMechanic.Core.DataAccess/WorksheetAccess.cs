@@ -162,13 +162,14 @@ namespace CarMechanic.Core.DataAccess
             {
 
                 var ws = new Munkalapok();
-                if (ws.Id == 0)
+                if (worksheet.Id == 0)
                 {
                     ws.Ugyfelid = worksheet.Ugyfel.Id;
                     ws.Idopont = worksheet.Idopont;
                     ws.Rogzitve = DateTime.Now;
                     ws.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == worksheet.Rogzitette).FirstOrDefault().Id;
                     ws.MunkalapTetelek = new List<MunkalapTetelek>();
+                    if (worksheet.Tetelek != null)
                     foreach (var row in worksheet.Tetelek)
                     {
                         ws.MunkalapTetelek.Add(new MunkalapTetelek()
@@ -200,22 +201,21 @@ namespace CarMechanic.Core.DataAccess
         {
             using (var context = new CarMechanicContext())
             {
-                var oResult = context.MunkalapRendelesek.FirstOrDefault(x => x.Munkalapid == worksheet.Id);
+                var oResult = context.MunkalapRendelesek.Where(x => x.Munkalapid == worksheet.Id);
                 if (oResult != null)
                 {
-                    context.MunkalapRendelesek.Remove(oResult);
-                }
-                var wsResult = context.MunkalapTetelek.FirstOrDefault(x => x.Munkalapid == worksheet.Id);
+                    context.MunkalapRendelesek.RemoveRange(oResult);
+                                    }
+                var wsResult = context.MunkalapTetelek.Where(x => x.Munkalapid == worksheet.Id);
                 if (wsResult != null)
                 {
-                    context.MunkalapTetelek.Remove(wsResult);
+                    context.MunkalapTetelek.RemoveRange(wsResult);                    
                 }
                 var result = context.Munkalapok.FirstOrDefault(x => x.Id == worksheet.Id);
                 if (result != null)
                 {
                     context.Munkalapok.Remove(result);
                 }
-
                 context.SaveChanges();
             }
         }
@@ -227,6 +227,7 @@ namespace CarMechanic.Core.DataAccess
                 var ws = context.Munkalapok.FirstOrDefault(x => x.Id == worksheetId);
                 ws.Lezarva = DateTime.Now;
                 ws.Lezarta = context.Felhasznalok.Where(x => x.Loginnev == user).FirstOrDefault().Id;
+                context.SaveChanges();
             }
         }
     }
