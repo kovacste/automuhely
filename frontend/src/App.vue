@@ -120,14 +120,14 @@ export default {
           label: 'Beállítások',
           icon: 'mdi-cog',
           items: [
-            { title: 'Szolgáltatások', to: '/home' },
+            { title: 'Szolgáltatások', to: '/services' },
           ]
         },
         parts: {
           label: 'Alkatrészek',
           icon: 'mdi-hammer-wrench',
           items: [
-            { title: 'Minden alkatrész', to: '/home' },
+            { title: 'Minden alkatrész', to: '/parts' },
           ]
         },
         clients: {
