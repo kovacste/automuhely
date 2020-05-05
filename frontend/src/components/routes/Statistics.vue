@@ -34,7 +34,9 @@
             <GChart type="ColumnChart"
                     :data="workerStat"
                     :options="workerStatOpts"
+                    v-if="workerStat.length > 1"
             />
+            <span v-else>Nincs megjeleníthető adat </span>
 
             <v-divider class="ma-5"/>
 
@@ -69,7 +71,9 @@
             <GChart type="ColumnChart"
                     :data="serviceStat"
                     :options="serviceStatOpts"
+                    v-if="serviceStat.length > 1"
             />
+            <span v-else>Nincs megjeleníthető adat </span>
 
         </template>
 

@@ -184,6 +184,7 @@
                      this.saveSuccess();
                      if(this.newPart) {
                          this.part.id = response.data;
+                         this.newPart = false;
                      }
                 }).catch(() => {
                     this.saveFail();

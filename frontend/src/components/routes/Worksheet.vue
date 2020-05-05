@@ -85,7 +85,7 @@
 
                         </v-flex>
 
-                        <v-flex md1 xs12 class="ma-2" v-if="fieldsEditable">
+                        <v-flex md1 xs12 class="ma-2" v-if="fieldsEditable && this.worksheet.id > 0">
 
                             <v-tooltip left>
 
@@ -468,7 +468,7 @@
                 if(this.worksheet.tetelek == null) this.worksheet.tetelek = [];
                 this.worksheet.tetelek.push({
                     id: 0,
-                    munkalapid: this.worksheet.id,
+                    munkalapid: this.worksheet.id ? this.worksheet.id : 0,
                     szolgaltatas: service,
                     mennyiseg: 1,
                     ar: service.egysegar,
@@ -537,6 +537,7 @@
                      this.saveSuccess();
                      if(this.newWorksheet) {
                          this.worksheet.id = response.data;
+                         this.newWorksheet = false;
                      }
                 }).catch(() => {
                     this.saveFail();

@@ -24,7 +24,6 @@
                                     v-model="client.id"
                                     label="Azonosító"
                                     name="id"
-                                    v-mask="'########-#-##'"
                             />
 
                         </v-flex>
@@ -48,6 +47,7 @@
                                     v-model="client.adoszam"
                                     label="Adószám"
                                     name="adoszam"
+                                    v-mask="'########-#-##'"
                                     :rules="[v => !!v || 'Kötelező mező!']"
                             />
 
@@ -340,6 +340,7 @@
                      this.saveSuccess();
                      if(this.newClient) {
                          this.client.id = response.data;
+                         this.newClient = false;
                      }
                 }).catch(() => {
                     this.saveFail();

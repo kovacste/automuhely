@@ -72,13 +72,29 @@
 
                         <v-flex md3 xs12 class="ma-2" v-if="service.ismetlodo">
 
-                            <v-text-field
+                            <v-select
                                     :disabled="!fieldsEditable"
                                     v-model="service.ismetlodesiidoszak"
-                                    label="Ismétlődés gyakorisága napokban"
+                                    label="Ismétlődés gyakorisága"
                                     name="ismetlodesiidoszak"
                                     v-mask="'###'"
                                     :rules="[v => !!v || 'Kötelező mező!']"
+                                    item-text="item-text"
+                                    item-value="item-value"
+                                    :items="[
+                                        { 'item-text': '1 hónap', 'item-value': 30 },
+                                        { 'item-text': '2 hónap', 'item-value': 60 },
+                                        { 'item-text': '3 hónap', 'item-value': 90 },
+                                        { 'item-text': '4 hónap', 'item-value': 120 },
+                                        { 'item-text': '5 hónap', 'item-value': 150 },
+                                        { 'item-text': '6 hónap', 'item-value': 180 },
+                                        { 'item-text': '7 hónap', 'item-value': 210 },
+                                        { 'item-text': '8 hónap', 'item-value': 240 },
+                                        { 'item-text': '9 hónap', 'item-value': 270 },
+                                        { 'item-text': '10 hónap', 'item-value': 300 },
+                                        { 'item-text': '11 hónap', 'item-value': 330 },
+                                        { 'item-text': '12 hónap', 'item-value': 360 },
+                                    ]"
                             />
 
                         </v-flex>
@@ -209,6 +225,7 @@
                     this.saveSuccess();
                      if(this.newService) {
                          this.service.id = response.data;
+                         this.newService = false;
                      }
                 }).catch(() => {
                     this.saveFail();
