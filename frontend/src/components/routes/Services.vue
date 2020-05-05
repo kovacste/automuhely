@@ -91,7 +91,7 @@
                     { text: 'Darab', value: 'me' },
                     { text: 'Egységár', value: 'egysegar' },
                     { text: 'Ismétlődő', value: 'ismetlodo' },
-                    { text: 'Actions', value: 'actions', sortable: false },
+                    { text: 'Lehetőségek', value: 'actions', sortable: false },
                 ],
                 services: []
             }

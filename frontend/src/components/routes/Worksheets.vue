@@ -134,7 +134,7 @@
                     },
                     { text: 'Ügyfél neve', value: 'ugyfel.nev' },
                     { text: 'Időpont', value: 'idopont' },
-                    { text: 'Actions', value: 'actions', sortable: false },
+                    { text: 'Lehetőségek', value: 'actions', sortable: false },
                 ],
                 worksheets: [],
                 filterdWorksheets: []

@@ -16,7 +16,7 @@ class PartService extends Service {
     }
 
     setPartPrice(part) {
-        return this.post('SetPartPrice', part);
+        return this.post('SetPartPrice', { partId: part.id, purchasePrice: part.beszerar, salesPrice: part.eladasiar});
     }
 
     removePart(part) {

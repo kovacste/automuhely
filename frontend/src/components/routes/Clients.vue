@@ -91,7 +91,7 @@
                     { text: 'Adószám', value: 'adoszam' },
                     { text: 'Város', value: 'telepules' },
                     { text: 'Utca', value: 'kozteruletneve' },
-                    { text: 'Actions', value: 'actions', sortable: false },
+                    { text: 'Lehetőségek', value: 'actions', sortable: false },
                 ],
                 clients: []
             }

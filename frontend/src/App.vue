@@ -83,8 +83,7 @@ export default {
       return this.hasLoggedInUser ? this.$store.getters.user.username : '';
     },
     getUserModules() {
-     // return this.$store.getters.user.modules;
-      return [OFFICE, SERVICE, MANAGER, CLIENT];
+      return this.$store.getters.user.modules;
     }
   },
   mounted() {
@@ -183,13 +182,6 @@ export default {
         }
       },
       [SERVICE]: {
-        parts: {
-          label: 'Alkatrészek',
-          icon: 'mdi-hammer-wrench',
-          items: [
-            { title: 'Alkatrész rendelések', to: '/orders' },
-          ]
-        },
         worksheets: {
           label: 'Munkalapok',
           icon: 'mdi-file-document-edit-outline',

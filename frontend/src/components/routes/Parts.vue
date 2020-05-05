@@ -4,32 +4,84 @@
         { cb: exportPartData, icon: 'mdi-file-download-outline', tooltip: 'Alkatrész adatok exportálása' },
     ]">
 
-        <v-data-table
-                slot="content"
-                v-model="selected"
-                :headers="headers"
-                :items="parts"
-                item-key="name"
-                class="elevation-5"
-        >
+        <div slot="content">
 
-            <template v-slot:item.actions="{ item }">
+            <v-data-table
+                    v-model="selected"
+                    :headers="headers"
+                    :items="parts"
+                    item-key="name"
+                    class="elevation-5"
+            >
 
-                <v-icon small class="mr-2" @click="editPart(item)">
+                <template v-slot:item.actions="{ item }">
 
-                    mdi-pencil
+                    <v-icon small class="mr-2" @click="editPart(item)">
 
-                </v-icon>
+                        mdi-pencil
 
-                <v-icon small @click="deletePart(item)">
+                    </v-icon>
 
-                    mdi-delete
+                    <v-icon v-if="isManager" small class="mr-2" @click="setPrice(item)">
 
-                </v-icon>
+                        mdi-percent
 
-            </template>
+                    </v-icon>
 
-        </v-data-table>
+                    <v-icon small @click="deletePart(item)">
+
+                        mdi-delete
+
+                    </v-icon>
+
+
+                </template>
+
+            </v-data-table>
+
+            <v-dialog v-model="partPricingDialog" width="700">
+
+                <v-card>
+
+                    <v-card-title class="headline grey lighten-2" primary-title>
+
+                        Alkatrész árazása
+
+                    </v-card-title>
+
+                    <v-card-text>
+
+                        <v-text-field label="Beszerzési ár" v-model="partToPrice.beszerar" />
+
+                        <v-text-field label="Eladási ár" v-model="partToPrice.eladasiar" />
+
+                        <v-btn @click="savePartPrice()"> Mentés </v-btn>
+
+                    </v-card-text>
+
+                    <v-divider />
+
+                    <v-card-actions>
+
+                        <v-spacer />
+
+                        <v-btn
+                                color="primary"
+                                text
+                                @click="partPricingDialog = false"
+                        >
+
+                            Mégse
+
+                        </v-btn>
+
+                    </v-card-actions>
+
+                </v-card>
+
+            </v-dialog>
+
+        </div>
 
     </PageBase>
 
@@ -39,10 +91,18 @@
     import PageBase from "../basecomponents/PageBase";
     import { partService } from "../../services/PartService";
     import {exportToCsv} from "../../utils/ExportToCsv";
+    import {MANAGER} from "../../User";
+    import {toast} from "../../mixins/toast";
 
     export default {
         name: "Clients",
         components: { PageBase },
+        mixins: [toast],
+        computed: {
+            isManager() {
+                return this.$store.getters.user.modules.includes(MANAGER);
+            }
+        },
         methods: {
             exportPartData() {
                 let link = document.createElement('a');
@@ -54,10 +114,19 @@
                 this.$store.commit('setPart', part);
                 this.$router.push('part/' + part.id);
             },
-
+            setPrice(part) {
+                this.partToPrice = part;
+                this.partPricingDialog = true;
+            },
+            savePartPrice() {
+                partService.setPartPrice(this.partToPrice).then(() => {
+                    this.saveSuccess();
+                }).catch(() => {
+                    this.saveFail();
+                })
+            },
             deletePart(part) {
-                console.log(part);
-                partService.removePart(this.part).then(() => {
+                partService.removePart(part).then(() => {
                     partService.getPartList().then(response => {
                         this.parts = response.data;
                     });
@@ -71,6 +140,8 @@
         },
         data() {
             return {
+                partPricingDialog: false,
+                partToPrice: {},
                 selected: [],
                 headers: [
                     {
@@ -81,7 +152,7 @@
                     },
                     { text: 'Beszerzési ár', value: 'beszerar' },
                     { text: 'Eladási ár', value: 'eladasiar' },
-                    { text: 'Actions', value: 'actions', sortable: false },
+                    { text: 'Lehetőségek', value: 'actions', sortable: false },
                 ],
                 parts: []
             }
