@@ -11,12 +11,11 @@ class PartService extends Service {
     }
 
     setPart(part) {
-        console.trace()
         return this.post('SetPart', part);
     }
 
     setPartPrice(part) {
-        return this.post('SetPartPrice', { partId: part.id, purchasePrice: part.beszerar, salesPrice: part.eladasiar});
+        return this.post('SetPartPrice', { id: part.id, beszerar: part.beszerar, eladasiar: part.eladasiar});
     }
 
     removePart(part) {

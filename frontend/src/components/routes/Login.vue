@@ -28,12 +28,21 @@
                                 />
 
                                 <v-text-field
-                                        id="Jelszó"
-                                        label="Password"
+                                        id="password"
+                                        label="Jelszó"
                                         name="password"
                                         type="password"
                                         v-model="password"
                                 />
+                                <v-checkbox
+                                        id="user-login"
+                                        label="Dolgozó bejelentkezés"
+                                        name="userLogin"
+                                        type="userLogin"
+                                        v-model="userLogin"
+                                />
+
+
                             </v-form>
 
                         </v-card-text>
@@ -68,11 +77,40 @@
         data(){
             return {
                 username: null,
-                password: null
+                password: null,
+                userLogin: false
             }
         },
         methods: {
             login() {
+                if(this.userLogin) {
+                    this.uLogin();
+                } else {
+                    this.clientLogin();
+                }
+            },
+            clientLogin() {
+                loginService.clientLogin(this.username, this.password).then(response => {
+                    localStorage.setItem('token', 'token-value');
+                    this.$store.commit('setUser', {
+                        username: response.data.loginNev,
+                        name: response.data.nev,
+                        modules: response.data.modul
+                    });
+                    console.log(response)
+                    localStorage.setItem('username', response.data.loginNev);
+                    localStorage.setItem('name', response.data.nev);
+                    localStorage.setItem('module', response.data.modul.join('-'));
+                    this.$router.push('/home');
+                }).catch((error) => {
+                    if(error.response.data === 'NOT_AUTHENTICATED') {
+                        this.saveFail('Hibás felhasználónév vagy jelszó!');
+                    } else {
+                        this.saveFail('Bejelentkezés sikertelen!');
+                    }
+                })
+            },
+            uLogin() {
                 loginService.login(this.username, this.password).then(response => {
                     localStorage.setItem('token', 'token-value');
                     this.$store.commit('setUser', {
