@@ -120,11 +120,27 @@
 
                                 <li v-for="(service, index) in worksheet.tetelek" :key="index">
 
-                                    {{ service.szolgaltatas.nev }} <v-icon v-if="fieldsEditable" @click="removeService(service.id, index)"> mdi-close </v-icon>
+                                    <v-layout>
+
+                                        <v-flex md6>
+
+                                            {{ service.szolgaltatas.nev }}
+
+                                        </v-flex>
+
+                                        <v-flex md1>
+
+                                            <v-icon v-if="fieldsEditable" @click="removeService(service.id, index)"> mdi-close </v-icon>
+
+                                        </v-flex>
+
+                                    </v-layout>
+
 
                                 </li>
 
                             </ul>
+
 
                         </v-flex>
 
@@ -140,7 +156,21 @@
 
                                 <li v-for="(order, index) in orderedParts" :key="index">
 
-                                    {{ order.alkatresz.nev }} <v-icon v-if="fieldsEditable" @click="removeOrder(order.id, index)"> mdi-close </v-icon>
+                                    <v-layout>
+
+                                        <v-flex md6>
+
+                                            {{ order.alkatresz.nev }}
+
+                                        </v-flex>
+
+                                        <v-flex md1>
+
+                                            <v-icon v-if="fieldsEditable" @click="removeOrder(order.id, index)"> mdi-close </v-icon>
+
+                                        </v-flex>
+
+                                    </v-layout>
 
                                 </li>
 
