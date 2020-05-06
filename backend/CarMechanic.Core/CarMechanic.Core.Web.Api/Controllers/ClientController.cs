@@ -140,6 +140,30 @@ namespace CarMechanic.Core.Web.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Az ügyfél beléptetése
+        /// </summary>
+        /// <param name="loginName">loginnév</param>
+        /// <param name="password">jelszó</param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult Authenticate(string loginName, string password)
+        {
+            try
+            {
+                var manager = new ClientManager();
+                return Ok(manager.AuthenticateUser(loginName, password));
+
+            }
+            catch (Exception ex)
+            {
+                logger.Error(ex);
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
 
     }
 }

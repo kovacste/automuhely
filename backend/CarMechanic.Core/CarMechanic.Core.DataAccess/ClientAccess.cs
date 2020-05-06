@@ -100,5 +100,14 @@ namespace CarMechanic.Core.DataAccess
             }
             return result;
         }
+
+        public Ugyfelek AuthenticateClient(string loginName, string password)
+        {
+            using (var context = new CarMechanicContext())
+            {
+
+                return context.Ugyfelek.Where(x => x.Email == loginName && x.Jelszo == password).FirstOrDefault();
+            }
+        }
     }
 }
