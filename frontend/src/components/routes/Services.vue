@@ -13,32 +13,42 @@
         },
     ]">
 
-        <v-data-table
-                slot="content"
-                v-model="selected"
-                :headers="headers"
-                :items="services"
-                item-key="name"
-                class="elevation-5"
-        >
+        <div slot="content">
 
-            <template v-slot:item.actions="{ item }">
+            <v-data-table
+                    slot="content"
+                    v-model="selected"
+                    :headers="headers"
+                    :items="services"
+                    item-key="name"
+                    class="elevation-5"
+            >
 
-                <v-icon small class="mr-2" @click="editService(item)">
+                <template v-slot:item.actions="{ item }">
 
-                    mdi-pencil
+                    <v-icon small class="mr-2" @click="editService(item)">
 
-                </v-icon>
+                        mdi-pencil
 
-                <v-icon small @click="deleteService(item)">
+                    </v-icon>
 
-                    mdi-delete
+                    <v-icon small @click="openDeleteDialog(item)">
 
-                </v-icon>
+                        mdi-delete
 
-            </template>
+                    </v-icon>
 
-        </v-data-table>
+                </template>
+
+            </v-data-table>
+
+            <ConfirmDialog
+                    ref="dialog"
+                    title="Szolgáltatás törlése"
+                    text="Biztosan törli a szolgáltatást?"
+                    @confirm="deleteService()"/>
+
+        </div>
 
     </PageBase>
 
@@ -48,10 +58,13 @@
     import PageBase from "../basecomponents/PageBase";
     import { servicesService } from "../../services/ServicesService";
     import { exportToCsv } from "../../utils/ExportToCsv";
+    import ConfirmDialog from "../basecomponents/ConfirmDialog";
+    import {toast} from "../../mixins/toast";
 
     export default {
         name: "Services",
-        components: { PageBase },
+        components: {ConfirmDialog, PageBase },
+        mixins: [toast],
         methods: {
             exportServiceData() {
                 let link = document.createElement('a');
@@ -63,13 +76,25 @@
                 this.$store.commit('setService', service);
                 this.$router.push('service/' + service.id);
             },
-            deleteService(service) {
-                service.rogzitette = this.$store.getters.user.username;
-                servicesService.removeService(service).then(() => {
+            deleteService() {
+                this.serviceToDelete.rogzitette = this.$store.getters.user.username;
+                servicesService.removeService(this.serviceToDelete).then(() => {
                     servicesService.getServiceList().then(response => {
                         this.services = response.data;
                     });
-                });
+                    this.serviceToDelete = null;
+                    this.saveSuccess('Szolgáltatás törlése sikeres!');
+                }).catch(error => {
+                    if(error.response.data === 'DATA_IN_USE') {
+                        this.saveFail('A szolgáltatás használatban van, nem törölhető!');
+                    } else {
+                        this.saveFail('Szolgáltatás törlése sikertelen!');
+                    }
+                })
+            },
+            openDeleteDialog(service) {
+                this.$refs['dialog'].openDialog();
+                this.serviceToDelete = service;
             }
         },
         mounted() {
@@ -79,6 +104,7 @@
         },
         data() {
             return {
+                serviceToDelete: null,
                 selected: [],
                 headers: [
                     {

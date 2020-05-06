@@ -28,7 +28,7 @@
 
                     </v-icon>
 
-                    <v-icon small @click="deletePart(item)">
+                    <v-icon small @click="openPartDeleteDialog(item)">
 
                         mdi-delete
 
@@ -81,6 +81,12 @@
 
             </v-dialog>
 
+            <ConfirmDialog
+                    ref="dialog"
+                    title="Alkatrész törlése"
+                    text="Biztosan törli az alkatrészt?"
+                    @confirm="deletePart()"/>
+
         </div>
 
     </PageBase>
@@ -93,10 +99,11 @@
     import {exportToCsv} from "../../utils/ExportToCsv";
     import {MANAGER} from "../../User";
     import {toast} from "../../mixins/toast";
+    import ConfirmDialog from "../basecomponents/ConfirmDialog";
 
     export default {
         name: "Clients",
-        components: { PageBase },
+        components: {ConfirmDialog, PageBase },
         mixins: [toast],
         computed: {
             isManager() {
@@ -125,12 +132,24 @@
                     this.saveFail();
                 })
             },
-            deletePart(part) {
-                partService.removePart(part).then(() => {
+            deletePart() {
+                partService.removePart(this.partToDelete).then(() => {
                     partService.getPartList().then(response => {
                         this.parts = response.data;
                     });
-                });
+                    this.partToDelete = null;
+                    this.saveSuccess('Az alkatrész törlése sikeres!');
+                }).catch(error => {
+                    if(error.response.data === 'DATA_IN_USE') {
+                        this.saveFail('Az alkatrész használatban van, nem törölhető!');
+                    } else {
+                        this.saveFail('Az alkatrész törlése sikertelen!');
+                    }
+                })
+            },
+            openPartDeleteDialog(part) {
+                this.$refs['dialog'].openDialog();
+                this.partToDelete = part;
             }
         },
         mounted() {
@@ -140,6 +159,7 @@
         },
         data() {
             return {
+                partToDelete: null,
                 partPricingDialog: false,
                 partToPrice: {},
                 selected: [],

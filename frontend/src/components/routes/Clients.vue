@@ -13,32 +13,41 @@
         },
     ]">
 
-        <v-data-table
-                slot="content"
-                v-model="selected"
-                :headers="headers"
-                :items="clients"
-                item-key="name"
-                class="elevation-5"
-        >
+        <div slot="content">
 
-            <template v-slot:item.actions="{ item }">
+            <v-data-table
+                    v-model="selected"
+                    :headers="headers"
+                    :items="clients"
+                    item-key="name"
+                    class="elevation-5"
+            >
 
-                <v-icon small class="mr-2" @click="editUser(item)">
+                <template v-slot:item.actions="{ item }">
 
-                    mdi-pencil
+                    <v-icon small class="mr-2" @click="editUser(item)">
 
-                </v-icon>
+                        mdi-pencil
 
-                <v-icon small @click="deleteUser(item)">
+                    </v-icon>
 
-                    mdi-delete
+                    <v-icon small @click="openDeleteDialog(item)">
 
-                </v-icon>
+                        mdi-delete
 
-            </template>
+                    </v-icon>
 
-        </v-data-table>
+                </template>
+
+            </v-data-table>
+
+            <ConfirmDialog
+                    ref="dialog"
+                    title="Ügyfél törlése"
+                    text="Biztosan törli az ügyfelet?"
+                    @confirm="deleteUser()"/>
+
+        </div>
 
     </PageBase>
 
@@ -48,10 +57,13 @@
     import {clientService} from "../../services/ClientService";
     import PageBase from "../basecomponents/PageBase";
     import {exportToCsv} from "../../utils/ExportToCsv";
+    import ConfirmDialog from "../basecomponents/ConfirmDialog";
+    import {toast} from "../../mixins/toast";
 
     export default {
         name: "Clients",
-        components: {PageBase},
+        components: {ConfirmDialog, PageBase},
+        mixins: [toast],
         methods: {
             exportClientData() {
                 let link = document.createElement('a');
@@ -64,13 +76,25 @@
                 this.$router.push('client/' + client.id);
             },
 
-            deleteUser(user) {
-                return clientService.removeClient(user).then(() => {
+            deleteUser() {
+                return clientService.removeClient(this.userToDelete).then(() => {
                     clientService.getClients().then(response => {
                         this.clients = response.data;
                     });
-                });
-            }
+                    this.userToDelete = null;
+                    this.saveSuccess('Ügyfél törlése sikeres!');
+                }).catch((error) => {
+                    if(error.response.data === 'DATA_IN_USE') {
+                        this.saveFail('Az Ügyfél használatban van, nem törölhető!')
+                    } else {
+                        this.saveFail('Ügyfél törlése sikertelen!');
+                    }
+                })
+            },
+            openDeleteDialog(user) {
+                this.$refs['dialog'].openDialog();
+                this.userToDelete = user;
+            },
         },
         mounted() {
             clientService.getClients().then(response => {
@@ -79,6 +103,7 @@
         },
         data() {
             return {
+                userToDelete: null,
                 selected: [],
                 headers: [
                     {

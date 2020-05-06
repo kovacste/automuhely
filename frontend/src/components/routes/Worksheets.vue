@@ -8,32 +8,42 @@
         }
     ]">
 
-        <v-data-table
-                slot="content"
-                v-model="selected"
-                :headers="headers"
-                :items="filterdWorksheets"
-                item-key="name"
-                class="elevation-5"
-        >
+        <div slot="content">
 
-            <template v-slot:item.actions="{ item }">
+            <v-data-table
+                    slot="content"
+                    v-model="selected"
+                    :headers="headers"
+                    :items="filterdWorksheets"
+                    item-key="name"
+                    class="elevation-5"
+            >
 
-                <v-icon small class="mr-2" @click="editWorksheet(item)">
+                <template v-slot:item.actions="{ item }">
 
-                    mdi-pencil
+                    <v-icon small class="mr-2" @click="editWorksheet(item)">
 
-                </v-icon>
+                        mdi-pencil
 
-                <v-icon small @click="deleteWorksheet(item)">
+                    </v-icon>
 
-                    mdi-delete
+                    <v-icon small @click="openDeleteDialog(item)">
 
-                </v-icon>
+                        mdi-delete
 
-            </template>
+                    </v-icon>
 
-        </v-data-table>
+                </template>
+
+            </v-data-table>
+
+            <ConfirmDialog
+                    ref="dialog"
+                    title="Munkalap törlése"
+                    text="Biztosan törli a munkalapot?"
+                    @confirm="deleteWorksheet()"/>
+
+        </div>
 
     </PageBase>
 
@@ -43,10 +53,13 @@
     import PageBase from "../basecomponents/PageBase";
     import { worksheetService } from "../../services/WorksheetService";
     import {exportToCsv} from "../../utils/ExportToCsv";
+    import ConfirmDialog from "../basecomponents/ConfirmDialog";
+    import {toast} from "../../mixins/toast";
 
     export default {
         name: "Worksheets",
-        components: { PageBase },
+        components: {ConfirmDialog, PageBase },
+        mixins: [toast],
         watch: {
             queryString() {
                 this.filterWorksheets();
@@ -93,14 +106,25 @@
                 this.$store.commit('setWorksheet', worksheet);
                 this.$router.push('worksheet/' + worksheet.id);
             },
-            deleteWorksheet(worksheet) {
-                worksheetService.removeWorksheet(worksheet.id).then(() => {
-                    worksheetService.getWorksheetList().then(response => {
-                        this.worksheets = response.data;
-                        this.filterdWorksheets = response.data;
-                        this.filterWorksheets();
-                    });
-                })
+            deleteWorksheet() {
+                if(this.worksheetToDelete.lezarva) {
+                    this.saveFail('Lezárt munkalap nem törölhető!');
+                } else {
+                    worksheetService.removeWorksheet(this.worksheetToDelete.id).then(() => {
+                        worksheetService.getWorksheetList().then(response => {
+                            this.worksheets = response.data;
+                            this.filterdWorksheets = response.data;
+                            this.filterWorksheets();
+                        });
+                        this.saveSuccess('Munkalap törlése sikeres!');
+                    }).catch(() => {
+                        this.saveFail('Munkalap törlése sikertelen!')
+                    })
+                }
+            },
+            openDeleteDialog(worksheet) {
+                this.$refs['dialog'].openDialog();
+                this.worksheetToDelete = worksheet;
             },
             filterWorksheets() {
                 if(this.$route.query.open) {
@@ -124,6 +148,7 @@
         },
         data() {
             return {
+                worksheetToDelete: null,
                 selected: [],
                 headers: [
                     {
