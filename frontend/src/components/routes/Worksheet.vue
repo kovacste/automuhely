@@ -224,7 +224,7 @@
 
                 <v-btn v-if="fieldsEditable && formValid" @click="save()" color="primary">Mentés </v-btn>
 
-                <v-btn v-if="!fieldsEditable  && !worksheet.lezarva" @click="closeWorksheet()" color="primary">Munkalap lezárása </v-btn>
+                <v-btn v-if="!fieldsEditable  && !worksheet.lezarva && canClose" @click="closeWorksheet()" color="primary">Munkalap lezárása </v-btn>
 
             </v-card-actions>
 
@@ -415,6 +415,7 @@
     import {worksheetService} from "../../services/WorksheetService";
     import {partService} from "../../services/PartService";
     import {toast} from "../../mixins/toast";
+    import {SERVICE} from "../../User";
     export default {
         name: "Worksheet",
         components: { FormSubTitle, PageBase },
@@ -480,6 +481,9 @@
             },
             worksheetStatus() {
                 return this.worksheet.lezarva ? 'Munkalap lezárt' : 'Munkalap nyitott';
+            },
+            canClose() {
+                return this.$store.getters.user.modules.includes(SERVICE)
             }
         },
         methods: {
