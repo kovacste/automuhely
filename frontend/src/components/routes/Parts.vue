@@ -51,9 +51,19 @@
 
                     <v-card-text>
 
-                        <v-text-field label="Beszerzési ár" v-model="partToPrice.beszerar" />
+                        <span> Aktuális beszerzési ár {{ initialBeszerar }} Ft</span>
+                        <v-text-field disabled label="Új beszerzési ár" v-model="partToPrice.beszerar" />
 
-                        <v-text-field label="Eladási ár" v-model="partToPrice.eladasiar" />
+                        <span> Aktuális eladási ár {{ initialEladasiar }} Ft</span>
+                        <v-text-field disabled label="Új eladási ár" v-model="partToPrice.eladasiar" />
+
+                        <v-text-field
+                                suffix="%"
+                                label="Ár módosítás mértéke az aktuális árhoz képest"
+                                v-mask="'###'"
+                                v-model="percent"
+                                @input="changePrice()"
+                        />
 
                         <v-btn @click="savePartPrice()"> Mentés </v-btn>
 
@@ -111,6 +121,10 @@
             }
         },
         methods: {
+            changePrice() {
+               this.partToPrice.eladasiar = this.initialEladasiar * (this.percent / 100);
+               this.partToPrice.beszerar = this.initialBeszerar * (this.percent / 100);
+            },
             exportPartData() {
                 let link = document.createElement('a');
                 link.href = encodeURI(exportToCsv(this.parts));
@@ -123,6 +137,8 @@
             },
             setPrice(part) {
                 this.partToPrice = part;
+                this.initialBeszerar = this.partToPrice.beszerar;
+                this.initialEladasiar = this.partToPrice.eladasiar;
                 this.partPricingDialog = true;
             },
             savePartPrice() {
@@ -160,6 +176,9 @@
         data() {
             return {
                 partToDelete: null,
+                initialEladasiar: 0,
+                initialBeszerar: 0,
+                percent: 100,
                 partPricingDialog: false,
                 partToPrice: {},
                 selected: [],

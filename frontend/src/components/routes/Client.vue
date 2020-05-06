@@ -53,6 +53,19 @@
 
                         </v-flex>
 
+                        <v-flex md3 xs12 class="ma-2">
+
+                            <v-text-field
+                                    :disabled="!fieldsEditable"
+                                    v-model="client.jelszo"
+                                    label="Jelszó"
+                                    type="password"
+                                    name="jelszo"
+                                    :rules="[v => !!v || 'Kötelező mező!']"
+                            />
+
+                        </v-flex>
+
                     </v-layout>
 
                     <FormSubTitle :active="fieldsEditable" title="Cím" />

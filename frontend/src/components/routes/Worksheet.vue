@@ -415,7 +415,7 @@
     import {worksheetService} from "../../services/WorksheetService";
     import {partService} from "../../services/PartService";
     import {toast} from "../../mixins/toast";
-    import {SERVICE} from "../../User";
+    import {CLIENT, SERVICE} from "../../User";
     export default {
         name: "Worksheet",
         components: { FormSubTitle, PageBase },
@@ -595,7 +595,11 @@
                 if(this.newWorksheet) {
                     this.worksheet.id = 0;
                 }
-                this.worksheet.rogzitette = this.$store.getters.user.username;
+                if(this.$store.getters.user.modules.includes(CLIENT)) {
+                    this.worksheet.rogzitette = 'ugyfel';
+                } else {
+                    this.worksheet.rogzitette = this.$store.getters.user.username;
+                }
                 this.worksheet.rogzitve = new Date().toISOString();
                 this.$store.commit('setWorksheet', this.worksheet);
                 this.$store.dispatch('saveWorksheet').then((response) => {
