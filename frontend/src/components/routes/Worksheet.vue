@@ -210,15 +210,34 @@
 
                     <v-card-text>
 
-                        Válassza ki a listából a munkalaphoz rendelni kívánt ügyfelet.
+                        <h3 class="subtitle-1 ma-2"> Válassza ki a listából a munkalaphoz rendelni kívánt ügyfelet. </h3>
 
-                        <ul>
+                        <table>
 
-                            <li v-for="(client, index) in clients" :key="index">
-                                {{ client.nev }} {{ client.adoszam }} <v-btn text @click="loadClient(client)"> Betöltés </v-btn>
-                            </li>
+                            <tr>
 
-                        </ul>
+                                <td> Ügyél neve</td>
+
+                                <td> Ügyél Adószáma </td>
+
+                            </tr>
+
+                            <tr v-for="(client, index) in clients" :key="index">
+
+                                <td> {{ client.nev }} </td>
+
+                                <td> {{ client.adoszam }} </td>
+
+                                <td>
+
+                                    <v-btn text @click="loadClient(client)"> Betöltés </v-btn>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
+
 
                     </v-card-text>
 
@@ -256,17 +275,23 @@
 
                     <v-card-text>
 
-                        Válassza ki a listából a hozzá adni kívánt szolgáltatást.
+                        <h3 class="subtitle-1 ma-2">  Válassza ki a listából a hozzá adni kívánt szolgáltatást. </h3>
 
-                        <ul>
+                        <table>
 
-                            <li v-for="(service, index) in services" :key="index">
+                            <tr v-for="(service, index) in services" :key="index">
 
-                                {{ service.nev }} <v-btn text @click="loadService(service)"> Hozzáad </v-btn>
+                                <td> {{ service.nev }}  </td>
 
-                            </li>
+                                <td>
 
-                        </ul>
+                                   <v-btn text @click="loadService(service)"> Hozzáad </v-btn>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
 
                     </v-card-text>
 
@@ -304,17 +329,23 @@
 
                     <v-card-text>
 
-                        Válassza ki a megrendelni kívánt alkatrészt
+                        <h3 class="subtitle-1 ma-2">  Válassza ki a megrendelni kívánt alkatrészt </h3>
 
-                        <ul>
+                        <table>
 
-                            <li v-for="(part, index) in parts" :key="index">
+                            <tr  v-for="(part, index) in parts" :key="index">
 
-                                {{ part.nev }} <v-btn text @click="orderPart(part)"> Megrendel </v-btn>
+                                <td> {{ part.nev }}  </td>
 
-                            </li>
+                                <td>
 
-                        </ul>
+                                    <v-btn text @click="orderPart(part)"> Megrendel </v-btn>
+
+                                </td>
+
+                            </tr>
+
+                        </table>
 
                     </v-card-text>
 
