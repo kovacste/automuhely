@@ -60,9 +60,11 @@
 
 <script>
     import {loginService} from "../../services/LoginService";
+    import {toast} from "../../mixins/toast";
 
     export default {
         name: "Login",
+        mixins: [toast],
         data(){
             return {
                 username: null,
@@ -83,7 +85,13 @@
                     localStorage.setItem('name', response.data.nev);
                     localStorage.setItem('module', response.data.modul.join('-'));
                     this.$router.push('/home');
-                });
+                }).catch((error) => {
+                    if(error.response.data === 'NOT_AUTHENTICATED') {
+                        this.saveFail('Hibás felhasználónév vagy jelszó!');
+                    } else {
+                        this.saveFail('Bejelentkezés sikertelen!');
+                    }
+                })
             }
         }
     }
