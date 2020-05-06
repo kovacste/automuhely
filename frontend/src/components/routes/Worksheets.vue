@@ -130,13 +130,17 @@
                 if(this.$route.query.open) {
                     this.filterdWorksheets = this.worksheets.filter(worksheet => {
                         return !worksheet.lezarva;
-                    })
+                    });
                 }
                 if(this.$route.query.closed) {
                     this.filterdWorksheets = this.worksheets.filter(worksheet => {
                         return !!worksheet.lezarva;
-                    })
+                    });
                 }
+
+                this.filterdWorksheets.sort((a, b) => {
+                    return b.id - a.id;
+                });
             }
         },
         mounted() {
