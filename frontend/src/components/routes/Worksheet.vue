@@ -85,7 +85,7 @@
 
                         </v-flex>
 
-                        <v-flex md1 xs12 class="ma-2" v-if="fieldsEditable && this.worksheet.id > 0">
+                        <v-flex md1 xs12 class="ma-2" v-if="fieldsEditable && this.worksheet.id > 0 && canClose">
 
                             <v-tooltip left>
 
