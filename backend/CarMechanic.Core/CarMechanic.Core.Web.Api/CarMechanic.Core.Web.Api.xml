@@ -23,9 +23,10 @@
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.ClientController.GetClient(System.Int32)">
             <summary>
-            Ügyfél adatai        
+            Ügyfél adatai
             </summary>
-            <returns>Ügyfél</returns>
+            <param name="clientId">Ügyfél azonosító</param>
+            <returns>Ügyfél adata</returns>
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.ClientController.GetCities">
             <summary>
@@ -57,7 +58,7 @@
             </summary>
             <param name="loginName">loginnév</param>
             <param name="password">jelszó</param>
-            <returns></returns>
+            <returns>Ügyfél adata</returns>
         </member>
         <member name="T:CarMechanic.Core.Web.Api.Controllers.PartController">
             <summary>
@@ -66,7 +67,7 @@
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.PartController.#ctor(System.IServiceProvider)">
             <summary>
-            Ügyfél kontoller kontruktor
+            Alkatrész kontoller kontruktor
             </summary>
             <param name="serviceProvider"></param>
         </member>
@@ -80,7 +81,8 @@
             <summary>
             Alkatrész adatai
             </summary>
-            <returns>Alkatérszek</returns>
+            <param name="partId">Alkatrész azonosító</param>
+            <returns>Alkatrész adatai</returns>
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.PartController.SetPart(CarMechanic.Core.Model.Alkatresz)">
             <summary>
@@ -98,7 +100,7 @@
             <summary>
             Alaktrész árazása
             </summary>
-            <param name="data">Szolgáltatás azonosító</param>    
+            <param name="data">Alkatrész adatok</param>    
         </member>
         <member name="T:CarMechanic.Core.Web.Api.Controllers.ReportController">
             <summary>
@@ -107,7 +109,7 @@
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.ReportController.#ctor(System.IServiceProvider)">
             <summary>
-            Ügyfél kontoller kontruktor
+            Riport kontoller kontruktor
             </summary>
             <param name="serviceProvider"></param>
         </member>
@@ -130,7 +132,7 @@
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.ServiceController.#ctor(System.IServiceProvider)">
             <summary>
-            Ügyfél kontoller kontruktor
+            Szolgáltatás kontoller kontruktor
             </summary>
             <param name="serviceProvider"></param>
         </member>
@@ -144,7 +146,8 @@
             <summary>
             Szolgáltatás adatai
             </summary>
-            <returns>Szolgáltatások</returns>
+            <param name="serviceId">szolgáltatás azonosító</param>
+            <returns></returns>
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.ServiceController.SetService(CarMechanic.Core.Model.Szolgaltatas)">
             <summary>
@@ -182,7 +185,7 @@
             </summary>
             <param name="loginName">login név</param>
             <param name="password">jelszó</param>
-            <returns></returns>
+            <returns>Felhasználó adatai</returns>
         </member>
         <member name="T:CarMechanic.Core.Web.Api.Controllers.WorksheetController">
             <summary>
@@ -191,7 +194,7 @@
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.#ctor(System.IServiceProvider)">
             <summary>
-            Ügyfél kontoller kontruktor
+            Munkalap kontoller kontruktor
             </summary>
             <param name="serviceProvider"></param>
         </member>
@@ -205,30 +208,35 @@
             <summary>
             Munkalap adatai
             </summary>
+            <param name="worksheetId">Munkalap azonosító</param>
             <returns>Munkalap adatai</returns>
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheetWithClientId(System.Int32)">
             <summary>
-            Munkalap adatai
+            Adott ügyfélhez tartozó munkalapok
             </summary>
-            <returns>Munkalap adatai</returns>
+            <param name="clientId">Ügyfél azonosító</param>
+            <returns>Munkalap adatok</returns>
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheetDetails(System.Int32)">
             <summary>
-            Munkalapok listája
+            Adott munkalaphoz tartozó szolgáltatások tételek
             </summary>
-            <returns>Munkalapok</returns>
+            <param name="worksheetId">Munkalap azonosító</param>
+            <returns>Munkalaphoz tartozó szolgáltatás tételek</returns>
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheetOrders(System.Int32)">
             <summary>
-            Munkalap rendelések listája
+            Adott munkalaphoz tartozó rendelések listája
             </summary>
-            <returns>Munkalap rendelések</returns>
+            <param name="worksheetId">Munkalap azonosító</param>
+            <returns>Munkalaphoz tartozó rendelések</returns>
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheetDetail(System.Int32)">
             <summary>
             Munkalap tétel adatai
             </summary>
+            <param name="worksheetId">Munkalap azonosító</param>
             <returns>Munkalap tétel</returns>
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.SetWorkSheet(CarMechanic.Core.Model.Munkalap)">

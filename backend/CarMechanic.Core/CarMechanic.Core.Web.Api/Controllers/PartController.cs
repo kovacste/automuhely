@@ -54,7 +54,8 @@ namespace CarMechanic.Core.Web.Api.Controllers
         /// <summary>
         /// Alkatrész adatai
         /// </summary>
-        /// <returns>Alkatérszek</returns>
+        /// <param name="partId">Alkatrész azonosító</param>
+        /// <returns>Alkatrész adatai</returns>
         [HttpGet]
         public IActionResult GetPart(int partId)
         {

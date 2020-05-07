@@ -6,6 +6,7 @@ namespace CarMechanic.Core.Model
 {
     public class Felhasznalo
     {
+        public int Id { get; set; }
         public string LoginNev { get; set; }
         public string Nev { get; set; }
         public string Jelszo { get; set; }

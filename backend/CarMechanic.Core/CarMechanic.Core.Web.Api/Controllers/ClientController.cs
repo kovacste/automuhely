@@ -167,7 +167,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         /// </summary>
         /// <param name="loginName">loginnév</param>
         /// <param name="password">jelszó</param>
-        /// <returns></returns>
+        /// <returns>Ügyfél adata</returns>
         [HttpGet]
         public IActionResult Authenticate(string loginName, string password)
         {
