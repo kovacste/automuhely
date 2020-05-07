@@ -151,8 +151,6 @@
             }
         },
         mounted() {
-
-            console.log(this.$store.getters.user.modules)
             const listService = this.$store.getters.user.modules.includes(CLIENT)
                 ? () => worksheetService.getWorkSheetWithClientId(this.$store.getters.user.id)
                 : () => worksheetService.getWorksheetList();
@@ -162,20 +160,6 @@
                 this.filterdWorksheets = response.data;
                 this.filterWorksheets();
             });
-
-           /* if(this.$store.getters.user.modules.include(CLIENT)) {
-                worksheetService.getWorkSheetWithClientId(this.$store.getters.user.id).then(response => {
-                    this.worksheets = response.data;
-                    this.filterdWorksheets = response.data;
-                    this.filterWorksheets();
-                });
-            } else {
-                worksheetService.getWorksheetList().then(response => {
-                    this.worksheets = response.data;
-                    this.filterdWorksheets = response.data;
-                    this.filterWorksheets();
-                });
-            }*/
         },
         data() {
             return {
