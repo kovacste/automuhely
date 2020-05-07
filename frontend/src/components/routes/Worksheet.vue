@@ -114,7 +114,7 @@
 
                     <v-layout row class="ma-2 pa-1">
 
-                        <v-flex md4 xs12 class="ma-2">
+                        <v-flex md6 xs12 class="ma-2">
 
                             <ul>
 
@@ -125,6 +125,18 @@
                                         <v-flex md6>
 
                                             {{ service.szolgaltatas.nev }}
+
+                                        </v-flex>
+
+                                        <v-flex md3 style="text-align: right;">
+
+                                            {{ service.ar }} Ft
+
+                                        </v-flex>
+
+                                        <v-flex md3 style="text-align: right;">
+
+                                            {{ service.mennyiseg }} db
 
                                         </v-flex>
 
@@ -150,7 +162,7 @@
 
                     <v-layout row class="ma-2 pa-1">
 
-                        <v-flex md4 xs12 class="ma-2">
+                        <v-flex md6 xs12 class="ma-2">
 
                             <ul>
 
@@ -161,6 +173,18 @@
                                         <v-flex md6>
 
                                             {{ order.alkatresz.nev }}
+
+                                        </v-flex>
+
+                                        <v-flex md3 style="text-align: right;">
+
+                                            {{ order.alkatresz.eladasiar }} Ft
+
+                                        </v-flex>
+
+                                        <v-flex md3 style="text-align: right;">
+
+                                            1 db
 
                                         </v-flex>
 
@@ -311,7 +335,11 @@
 
                             <tr v-for="(service, index) in services" :key="index">
 
-                                <td> {{ service.nev }}  </td>
+                                <td style="padding-right: 10px;"> {{ service.nev }}  </td>
+
+                                <td> {{ service.egysegar }} Ft  </td>
+
+                                <td> {{ service.me }} db  </td>
 
                                 <td>
 
@@ -366,6 +394,10 @@
                             <tr  v-for="(part, index) in parts" :key="index">
 
                                 <td> {{ part.nev }}  </td>
+
+                                <td> {{ part.eladasiar }}  </td>
+
+                                <td> 1 db  </td>
 
                                 <td>
 
@@ -488,7 +520,7 @@
                 return this.worksheet.lezarva ? 'Munkalap lezárt' : 'Munkalap nyitott';
             },
             canClose() {
-                return this.$store.getters.user.modules.includes(SERVICE)
+                return this.$store.getters.user.modules.includes(SERVICE);
             },
             client() {
                 return this.$store.getters.user.modules.includes(CLIENT);
