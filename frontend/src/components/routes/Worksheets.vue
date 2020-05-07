@@ -108,9 +108,15 @@
                 this.$router.push('worksheet/' + worksheet.id);
             },
             deleteWorksheet() {
-                if(this.worksheetToDelete.lezarva) {
+
+               let worksheetDate = new Date(this.worksheetToDelete.idopont);
+               let today = new Date();
+
+                if(this.worksheetToDelete.lezarva ) {
                     this.saveFail('Lezárt munkalap nem törölhető!');
-                } else {
+                } else if(today >= worksheetDate) {
+                    this.saveFail('Munkalap legkésőbb az foglalt időpont előtt egy nappal törölhető!');
+                } else  {
                     worksheetService.removeWorksheet(this.worksheetToDelete.id).then(() => {
                         worksheetService.getWorksheetList().then(response => {
                             this.worksheets = response.data;
