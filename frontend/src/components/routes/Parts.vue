@@ -51,15 +51,15 @@
 
                     <v-card-text>
 
-                        <span> Aktuális beszerzési ár {{ initialBeszerar }} Ft</span>
-                        <v-text-field disabled label="Új beszerzési ár" v-model="partToPrice.beszerar" />
+                        <v-text-field disabled label="Beszerzési ár" v-model="partToPrice.beszerar" />
 
                         <span> Aktuális eladási ár {{ initialEladasiar }} Ft</span>
+
                         <v-text-field disabled label="Új eladási ár" v-model="partToPrice.eladasiar" />
 
                         <v-text-field
                                 suffix="%"
-                                label="Ár módosítás mértéke az aktuális árhoz képest"
+                                label="Haszonkulcs"
                                 v-mask="'###'"
                                 v-model="percent"
                                 @input="changePrice()"
@@ -122,8 +122,7 @@
         },
         methods: {
             changePrice() {
-               this.partToPrice.eladasiar = this.initialEladasiar * (this.percent / 100);
-               this.partToPrice.beszerar = this.initialBeszerar * (this.percent / 100);
+               this.partToPrice.eladasiar = Math.round(this.initialBeszerar * ((+this.percent + 100) / 100));
             },
             exportPartData() {
                 let link = document.createElement('a');
@@ -139,6 +138,7 @@
                 this.partToPrice = part;
                 this.initialBeszerar = this.partToPrice.beszerar;
                 this.initialEladasiar = this.partToPrice.eladasiar;
+                this.percent = ((this.initialEladasiar / this.initialBeszerar) * 100) - 100;
                 this.partPricingDialog = true;
             },
             savePartPrice() {
