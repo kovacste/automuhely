@@ -80,7 +80,7 @@ namespace CarMechanic.Core.DataAccess
                     Email = ugyfel.Email,
                     Jelszo = ugyfel.Jelszo,
                     Rogzitve = DateTime.Now,
-                    Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == ugyfel.Rogzitette).FirstOrDefault().Id
+                    Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == (ugyfel.Rogzitette.Contains("@") ? "ugyfel" : ugyfel.Rogzitette)).FirstOrDefault().Id
                 };
                 if (ugyfel.Id == 0)                    
                     context.Ugyfelek.Add(client);
@@ -99,7 +99,7 @@ namespace CarMechanic.Core.DataAccess
                         client.Email = ugyfel.Email;
                         client.Jelszo = ugyfel.Jelszo;
                         client.Rogzitve = DateTime.Now;
-                        client.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == ugyfel.Rogzitette).FirstOrDefault().Id;
+                        client.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == (ugyfel.Rogzitette.Contains("@") ? "ugyfel" : ugyfel.Rogzitette)).FirstOrDefault().Id;
                     }
                 }
                 context.SaveChanges();

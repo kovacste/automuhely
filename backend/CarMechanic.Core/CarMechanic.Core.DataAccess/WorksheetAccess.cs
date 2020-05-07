@@ -26,11 +26,11 @@ namespace CarMechanic.Core.DataAccess
             }
         }
 
-        public Munkalapok GetWorkSheetWithClientId(int clientId)
+        public List<Munkalapok> GetWorkSheetWithClientId(int clientId)
         {
             using (var context = new CarMechanicContext(_options))
             {
-                return context.Munkalapok.Where(x => x.Ugyfelid == clientId).Include(x => x.RogzitetteNavigation).Include(x => x.LezartaNavigation).Include(x => x.Ugyfel).ThenInclude(x => x.Telepules).Include(x => x.Ugyfel).ThenInclude(x => x.Kozteruletjelleg).FirstOrDefault();
+                return context.Munkalapok.Where(x => x.Ugyfelid == clientId).Include(x => x.RogzitetteNavigation).Include(x => x.LezartaNavigation).Include(x => x.Ugyfel).ThenInclude(x => x.Telepules).Include(x => x.Ugyfel).ThenInclude(x => x.Kozteruletjelleg).ToList();
             }
         }
 
@@ -127,7 +127,7 @@ namespace CarMechanic.Core.DataAccess
                         detail.Mennyiseg = row.Mennyiseg;
                         detail.Ar = row.Ar;
                         detail.Rogzitve = DateTime.Now;
-                        detail.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == row.Rogzitette).FirstOrDefault().Id;
+                        detail.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == (row.Rogzitette.Contains("@") ? "ugyfel" : row.Rogzitette)).FirstOrDefault().Id; ;
                         context.MunkalapTetelek.Add(detail);
                     }
                     else
@@ -137,7 +137,7 @@ namespace CarMechanic.Core.DataAccess
                         detail.Mennyiseg = row.Mennyiseg;
                         detail.Ar = row.Ar; 
                         detail.Rogzitve = DateTime.Now;                        
-                        detail.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == row.Rogzitette).FirstOrDefault().Id;
+                        detail.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == (row.Rogzitette.Contains("@") ? "ugyfel" : row.Rogzitette)).FirstOrDefault().Id; ;
                     }
                     
                 }
@@ -172,7 +172,7 @@ namespace CarMechanic.Core.DataAccess
                     ws.Ugyfelid = worksheet.Ugyfel.Id;
                     ws.Idopont = worksheet.Idopont;
                     ws.Rogzitve = DateTime.Now;
-                    ws.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == worksheet.Rogzitette).FirstOrDefault().Id;
+                    ws.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == (worksheet.Rogzitette.Contains("@") ? "ugyfel" : worksheet.Rogzitette)).FirstOrDefault().Id; ;
                     ws.MunkalapTetelek = new List<MunkalapTetelek>();
                     if (worksheet.Tetelek != null)
                     foreach (var row in worksheet.Tetelek)
@@ -194,7 +194,7 @@ namespace CarMechanic.Core.DataAccess
                     ws = context.Munkalapok.FirstOrDefault(x => x.Id == worksheet.Id);
                     ws.Idopont = worksheet.Idopont;
                     ws.Rogzitve = DateTime.Now;
-                    ws.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == worksheet.Rogzitette).FirstOrDefault().Id;
+                    ws.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == (worksheet.Rogzitette.Contains("@") ? "ugyfel" : worksheet.Rogzitette)).FirstOrDefault().Id; ;
                 }                
                 context.SaveChanges();
 

@@ -20,8 +20,9 @@ namespace CarMechanic.Core.Web.Api.Controllers
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private readonly DbContextOptions<DomainModel.Models.CarMechanicContext> _options;
+
         /// <summary>
-        /// Ügyfél kontoller kontruktor
+        /// Szolgáltatás kontoller kontruktor
         /// </summary>
         /// <param name="serviceProvider"></param>
         public ServiceController(IServiceProvider serviceProvider)
@@ -52,7 +53,8 @@ namespace CarMechanic.Core.Web.Api.Controllers
         /// <summary>
         /// Szolgáltatás adatai
         /// </summary>
-        /// <returns>Szolgáltatások</returns>
+        /// <param name="serviceId">szolgáltatás azonosító</param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetService(int serviceId)
         {

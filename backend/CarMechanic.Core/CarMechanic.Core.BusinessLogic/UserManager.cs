@@ -23,6 +23,7 @@ namespace CarMechanic.Core.BusinessLogic
             if (result != null)
             {
                 var currentUser = new Felhasznalo();
+                currentUser.Id = result.Id;
                 currentUser.LoginNev = result.Loginnev;
                 currentUser.Nev = result.Nev;
                 var modul = new List<string>();

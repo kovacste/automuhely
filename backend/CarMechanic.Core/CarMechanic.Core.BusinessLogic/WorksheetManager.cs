@@ -47,20 +47,17 @@ namespace CarMechanic.Core.BusinessLogic
             return worksheet;
         }
 
-        public Munkalap GetWorkSheetWithClientId(int clientId)
+        public List<Munkalap> GetWorkSheetWithClientId(int clientId)
         {
-            var worksheet = new Munkalap();
+            var worksheets = new List<Munkalap>();
             var result = _worksheetAccess.GetWorkSheetWithClientId(clientId);
 
-            worksheet.Id = result.Id;
-            worksheet.Idopont = result.Idopont;
-            worksheet.Ugyfel = new Ugyfel() { Id = result.Ugyfel.Id, Nev = result.Ugyfel.Nev };
-            worksheet.Lezarta = result.LezartaNavigation != null ? result.LezartaNavigation.Nev : null;
-            worksheet.Lezarva = result.Lezarva;
-            worksheet.Rogzitette = result.RogzitetteNavigation.Nev;
-            worksheet.Rogzitve = result.Rogzitve;
+            foreach (var row in result)
+            {
+                worksheets.Add(new Munkalap() { Id = row.Id, Idopont = row.Idopont, Ugyfel = new Ugyfel() { Id = row.Ugyfel.Id, Nev = row.Ugyfel.Nev }, Lezarta = row.LezartaNavigation != null ? row.LezartaNavigation.Nev : null, Lezarva = row.Lezarva, Rogzitette = row.RogzitetteNavigation.Nev, Rogzitve = row.Rogzitve });
+            }
 
-            return worksheet;
+            return worksheets;
         }
 
         public int SetWorkSheet(Munkalap worksheet)
