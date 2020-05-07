@@ -18,6 +18,7 @@ export const routes = [
     { path: '/home', component: Home },
     { path: '/schedule', component: Schedule },
     { path: '/login', component: Login, name: 'login' },
+    { path: '/logout', component: Login, name: 'logout' },
     { path: '/clients', component: Clients },
     { path: '/client/:id', component: Client },
     { path: '/client', component: Client },
