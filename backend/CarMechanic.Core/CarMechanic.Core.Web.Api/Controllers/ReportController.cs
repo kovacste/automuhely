@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using CarMechanic.Core.BusinessLogic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarMechanic.Core.Web.Api.Controllers
 {
@@ -16,7 +18,17 @@ namespace CarMechanic.Core.Web.Api.Controllers
     public class ReportController : ControllerBase
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        
+        private readonly DbContextOptions<DomainModel.Models.CarMechanicContext> _options;
+
+        /// <summary>
+        /// Riport kontoller kontruktor
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public ReportController(IServiceProvider serviceProvider)
+        {
+            _options = serviceProvider.GetRequiredService<DbContextOptions<DomainModel.Models.CarMechanicContext>>();
+        }
+
         /// <summary>
         /// Dolgozói statisztika
         /// </summary>
@@ -26,7 +38,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new ReportManager();
+                var manager = new ReportManager(_options);
                 return Ok(manager.GetWorkerStatistic(year, month));
 
             }
@@ -47,7 +59,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new ReportManager();
+                var manager = new ReportManager(_options);
                 return Ok(manager.GetServiceStatistic(year, month));
 
             }

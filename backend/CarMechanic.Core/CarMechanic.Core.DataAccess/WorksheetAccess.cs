@@ -13,9 +13,14 @@ namespace CarMechanic.Core.DataAccess
    
     public class WorksheetAccess
     {
+        private readonly DbContextOptions<CarMechanicContext> _options;
+        public WorksheetAccess(DbContextOptions<CarMechanicContext> options)
+        {
+            _options = options;
+        }
         public List<Munkalapok> GetWorkSheets()
         {
-            using (var context =  new CarMechanicContext())
+            using (var context =  new CarMechanicContext(_options))
             {
                 return context.Munkalapok.Include(x => x.RogzitetteNavigation).Include(x => x.LezartaNavigation).Include(x=>x.Ugyfel).ThenInclude(x=>x.Telepules).Include(x=>x.Ugyfel).ThenInclude(x=>x.Kozteruletjelleg).ToList();
             }
@@ -23,7 +28,7 @@ namespace CarMechanic.Core.DataAccess
 
         public Munkalapok GetWorkSheetWithClientId(int clientId)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.Munkalapok.Where(x => x.Ugyfelid == clientId).Include(x => x.RogzitetteNavigation).Include(x => x.LezartaNavigation).Include(x => x.Ugyfel).ThenInclude(x => x.Telepules).Include(x => x.Ugyfel).ThenInclude(x => x.Kozteruletjelleg).FirstOrDefault();
             }
@@ -31,7 +36,7 @@ namespace CarMechanic.Core.DataAccess
 
         public Munkalapok GetWorkSheet(int workSheetId)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.Munkalapok.Where(x => x.Id == workSheetId).Include(x => x.RogzitetteNavigation).Include(x => x.LezartaNavigation).Include(x => x.Ugyfel).ThenInclude(x => x.Telepules).Include(x => x.Ugyfel).ThenInclude(x => x.Kozteruletjelleg).FirstOrDefault();
             }
@@ -39,7 +44,7 @@ namespace CarMechanic.Core.DataAccess
 
         public List<MunkalapRendelesek> GetWorkSheetOrders(int worksheetId)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.MunkalapRendelesek.Where(x => x.Munkalapid == worksheetId).Include(x => x.RogzitetteNavigation).Include(x => x.Alkatresz).ToList();
             }
@@ -47,7 +52,7 @@ namespace CarMechanic.Core.DataAccess
 
         public List<MunkalapTetelek> GetWorkSheetDetails(int worksheetId)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.MunkalapTetelek.Where(x => x.Munkalapid == worksheetId).Include(x => x.RogzitetteNavigation).Include(x => x.Szolgaltatas).ToList();
             }
@@ -55,7 +60,7 @@ namespace CarMechanic.Core.DataAccess
 
         public MunkalapTetelek GetWorkSheetDetail(int detailId)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.MunkalapTetelek.Where(x => x.Id == detailId).Include(x => x.RogzitetteNavigation).Include(x => x.Szolgaltatas).FirstOrDefault();
             }
@@ -64,7 +69,7 @@ namespace CarMechanic.Core.DataAccess
         public int SetWorkSheetOrders(MunkalapRendeles[] orders)
         {
             var result = 0;
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var order = new MunkalapRendelesek();
                 foreach (var row in orders)
@@ -95,7 +100,7 @@ namespace CarMechanic.Core.DataAccess
 
         public void RemoveWorkSheetOrder(MunkalapRendeles order)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var result = context.MunkalapRendelesek.FirstOrDefault(x => x.Id == order.Id);
                 if (result != null)
@@ -109,7 +114,7 @@ namespace CarMechanic.Core.DataAccess
         public int SetWorkSheetDetails(MunkalapTetel[] details)
         {
             var result = 0;
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var detail = new MunkalapTetelek();
                 foreach (var row in details)
@@ -144,7 +149,7 @@ namespace CarMechanic.Core.DataAccess
 
         public void RemoveWorkSheetDetail(MunkalapTetel detail)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var result = context.MunkalapTetelek.FirstOrDefault(x => x.Id == detail.Id);
                 if (result != null)
@@ -158,7 +163,7 @@ namespace CarMechanic.Core.DataAccess
 
         public int SetWorkSheet(Munkalap worksheet)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
 
                 var ws = new Munkalapok();
@@ -199,7 +204,7 @@ namespace CarMechanic.Core.DataAccess
 
         public void RemoveWorkSheet(Munkalap worksheet)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var oResult = context.MunkalapRendelesek.Where(x => x.Munkalapid == worksheet.Id);
                 if (oResult != null)
@@ -222,7 +227,7 @@ namespace CarMechanic.Core.DataAccess
 
         public void CloseWorkSheet(int worksheetId, string user)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var ws = context.Munkalapok.FirstOrDefault(x => x.Id == worksheetId);
                 ws.Lezarva = DateTime.Now;

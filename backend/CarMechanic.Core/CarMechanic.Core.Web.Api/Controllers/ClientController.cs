@@ -6,6 +6,9 @@ using CarMechanic.Core.BusinessLogic;
 using CarMechanic.Core.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarMechanic.Core.Web.Api.Controllers
 {
@@ -17,7 +20,17 @@ namespace CarMechanic.Core.Web.Api.Controllers
     public class ClientController : ControllerBase
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        
+        private readonly DbContextOptions<DomainModel.Models.CarMechanicContext> _options;
+
+        /// <summary>
+        /// Ügyfél kontoller kontruktor
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public ClientController(IServiceProvider serviceProvider)
+        {
+            _options = serviceProvider.GetRequiredService<DbContextOptions<DomainModel.Models.CarMechanicContext>>();
+        }
+
         /// <summary>
         /// Ügyfelek listája
         /// </summary>
@@ -27,7 +40,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new ClientManager();
+                var manager = new ClientManager(_options);
                 return Ok(manager.GetClientList());
 
             }
@@ -39,15 +52,16 @@ namespace CarMechanic.Core.Web.Api.Controllers
         }
 
         /// <summary>
-        /// Ügyfél adatai        
+        /// Ügyfél adatai
         /// </summary>
-        /// <returns>Ügyfél</returns>
+        /// <param name="clientId">Ügyfél azonosító</param>
+        /// <returns>Ügyfél adata</returns>
         [HttpGet]
         public IActionResult GetClient(int clientId)
         {
             try
             {
-                var manager = new ClientManager();
+                var manager = new ClientManager(_options);
                 return Ok(manager.GetClient(clientId));
 
             }
@@ -57,6 +71,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         /// <summary>
         /// Települések listája
         /// </summary>
@@ -66,8 +81,8 @@ namespace CarMechanic.Core.Web.Api.Controllers
          {
              try
              {
-                 var manager = new ClientManager();
-                 return Ok(manager.GetCities());
+                 var manager = new ClientManager(_options);
+                return Ok(manager.GetCities());
 
              }
              catch (Exception ex)
@@ -86,8 +101,8 @@ namespace CarMechanic.Core.Web.Api.Controllers
          {
              try
              {
-                 var manager = new ClientManager();
-                 return Ok(manager.GetStreetTypes());
+                 var manager = new ClientManager(_options);
+                return Ok(manager.GetStreetTypes());
 
              }
              catch (Exception ex)
@@ -106,7 +121,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new ClientManager();
+                var manager = new ClientManager(_options);
                 var result = manager.SetClient(data);
                 return Ok(result);
 
@@ -128,10 +143,17 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new ClientManager();
+                var manager = new ClientManager(_options);
                 manager.RemoveClient(data);
                 return Ok();
 
+            }
+            catch (DbUpdateException e)
+            {
+                if (e.InnerException.Message.Contains("FK_"))
+                    return BadRequest("DATA_IN_USE");
+                else
+                    return BadRequest(e.Message);
             }
             catch (Exception ex)
             {
@@ -151,7 +173,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new ClientManager();
+                var manager = new ClientManager(_options);
                 return Ok(manager.AuthenticateUser(loginName, password));
 
             }

@@ -9,6 +9,12 @@
             Ügyfél kontoller
             </summary>
         </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ClientController.#ctor(System.IServiceProvider)">
+            <summary>
+            Ügyfél kontoller kontruktor
+            </summary>
+            <param name="serviceProvider"></param>
+        </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.ClientController.GetClientList">
             <summary>
             Ügyfelek listája
@@ -58,6 +64,12 @@
             Alkatrész kontroller
             </summary>
         </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.PartController.#ctor(System.IServiceProvider)">
+            <summary>
+            Ügyfél kontoller kontruktor
+            </summary>
+            <param name="serviceProvider"></param>
+        </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.PartController.GetPartList">
             <summary>
             Alkatrészek listája
@@ -82,18 +94,22 @@
             </summary>
             <param name="data">Alkatrész adatai</param>    
         </member>
-        <member name="M:CarMechanic.Core.Web.Api.Controllers.PartController.SetPartPrice(System.Int32,System.Decimal,System.Decimal)">
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.PartController.SetPartPrice(CarMechanic.Core.Model.Alkatresz)">
             <summary>
             Alaktrész árazása
             </summary>
-            <param name="partId">Szolgáltatás azonosító</param>    
-            <param name="purchasePrice">Új beszerzési ára</param>    
-            <param name="salesPrice">Új eladási ára</param>    
+            <param name="data">Szolgáltatás azonosító</param>    
         </member>
         <member name="T:CarMechanic.Core.Web.Api.Controllers.ReportController">
             <summary>
             Riport kontroller
             </summary>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ReportController.#ctor(System.IServiceProvider)">
+            <summary>
+            Ügyfél kontoller kontruktor
+            </summary>
+            <param name="serviceProvider"></param>
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.ReportController.GetWorkerStatistic(System.Int32,System.Int32)">
             <summary>
@@ -111,6 +127,12 @@
             <summary>
             Szolgáltatás kontroller
             </summary>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.ServiceController.#ctor(System.IServiceProvider)">
+            <summary>
+            Ügyfél kontoller kontruktor
+            </summary>
+            <param name="serviceProvider"></param>
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.ServiceController.GetServiceList">
             <summary>
@@ -148,6 +170,12 @@
             
             </summary>
         </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.UserController.#ctor(System.IServiceProvider)">
+            <summary>
+            Ügyfél kontoller kontruktor
+            </summary>
+            <param name="serviceProvider"></param>
+        </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.UserController.Authenticate(System.String,System.String)">
             <summary>
             A felhasználó beléptetése
@@ -160,6 +188,12 @@
             <summary>
             Munkalap kontroller
             </summary>
+        </member>
+        <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.#ctor(System.IServiceProvider)">
+            <summary>
+            Ügyfél kontoller kontruktor
+            </summary>
+            <param name="serviceProvider"></param>
         </member>
         <member name="M:CarMechanic.Core.Web.Api.Controllers.WorksheetController.GetWorkSheets">
             <summary>

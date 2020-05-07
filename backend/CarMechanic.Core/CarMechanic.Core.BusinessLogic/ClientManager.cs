@@ -1,16 +1,21 @@
 ﻿using CarMechanic.Core.DataAccess;
 using CarMechanic.Core.DomainModel.Models;
 using CarMechanic.Core.Model;
-using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CarMechanic.Core.BusinessLogic
 {
     public class ClientManager
     {
-        private ClientAccess _clientAccess = new ClientAccess();
+        private DbContextOptions<CarMechanicContext> _options;
+        private ClientAccess _clientAccess;
+        public ClientManager(DbContextOptions<CarMechanicContext> options)
+        {
+            _options = options;
+            _clientAccess =  new ClientAccess(_options);
+        }  
 
         public List<Ugyfel> GetClientList()
         {
@@ -32,6 +37,7 @@ namespace CarMechanic.Core.BusinessLogic
                     Hazszam = row.Hazszam,
                     Telefonszam = row.Telefonszam,
                     Email = row.Email,
+                    Jelszo = row.Jelszo,
                     Rogzitve = row.Rogzitve,
                     Rogzitette = row.RogzitetteNavigation.Nev
                 });
@@ -58,6 +64,7 @@ namespace CarMechanic.Core.BusinessLogic
                 Hazszam = result.Hazszam,
                 Telefonszam = result.Telefonszam,
                 Email = result.Email,
+                Jelszo = result.Jelszo,
                 Rogzitve = result.Rogzitve,
                 Rogzitette = result.RogzitetteNavigation.Nev
             };
