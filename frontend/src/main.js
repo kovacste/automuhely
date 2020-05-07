@@ -22,7 +22,6 @@ router.beforeEach((to, from, next) => {
   const loggedIn = store.getters.user !== null || localStorage.getItem('username');
 
   if(loggedIn && to.name === 'login') {
-    console.log('TE ITT??')
     next('/home');
   } else if(!loggedIn && to.name !== 'login') {
     next('/login');
