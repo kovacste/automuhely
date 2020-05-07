@@ -91,7 +91,8 @@ export default {
         this.$store.commit('setUser', {
           username: localStorage.getItem('username'),
           name: localStorage.getItem('name'),
-          modules: localStorage.getItem('module').split('-')
+          modules: localStorage.getItem('module').split('-'),
+          id: localStorage.getItem('id')
         });
 
         if(this.$router.currentRoute.name === 'login') {
@@ -203,9 +204,8 @@ export default {
           label: 'Szolgáltatások',
           icon: 'mdi-car-arrow-left',
           items: [
-            { title: 'Új szolgáltatás', to: '/service' },
-            { title: 'Saját szolgáltatások', to: '/services/active' },
-            { title: 'Időpontok', to: '/schedule' },
+            { title: 'Új szolgáltatás', to: '/worksheet' },
+            { title: 'Saját szolgáltatások', to: '/worksheets' },
           ]
         }
       }

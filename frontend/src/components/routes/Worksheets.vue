@@ -55,6 +55,7 @@
     import {exportToCsv} from "../../utils/ExportToCsv";
     import ConfirmDialog from "../basecomponents/ConfirmDialog";
     import {toast} from "../../mixins/toast";
+    import {CLIENT} from "../../User";
 
     export default {
         name: "Worksheets",
@@ -144,11 +145,31 @@
             }
         },
         mounted() {
-            worksheetService.getWorksheetList().then(response => {
+
+            console.log(this.$store.getters.user.modules)
+            const listService = this.$store.getters.user.modules.includes(CLIENT)
+                ? () => worksheetService.getWorkSheetWithClientId(this.$store.getters.user.id)
+                : () => worksheetService.getWorksheetList();
+
+            listService().then(response => {
                 this.worksheets = response.data;
                 this.filterdWorksheets = response.data;
                 this.filterWorksheets();
             });
+
+           /* if(this.$store.getters.user.modules.include(CLIENT)) {
+                worksheetService.getWorkSheetWithClientId(this.$store.getters.user.id).then(response => {
+                    this.worksheets = response.data;
+                    this.filterdWorksheets = response.data;
+                    this.filterWorksheets();
+                });
+            } else {
+                worksheetService.getWorksheetList().then(response => {
+                    this.worksheets = response.data;
+                    this.filterdWorksheets = response.data;
+                    this.filterWorksheets();
+                });
+            }*/
         },
         data() {
             return {

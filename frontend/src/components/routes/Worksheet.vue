@@ -53,7 +53,7 @@
 
                         </v-flex>
 
-                        <v-flex md1 xs12 class="ma-2" v-if="fieldsEditable">
+                        <v-flex md1 xs12 class="ma-2" v-if="fieldsEditable && !client">
 
                             <v-tooltip left>
 
@@ -472,7 +472,12 @@
                         this.orderedParts = orders.data;
                     });
                 })
-
+            } else {
+                if(this.client) {
+                    clientService.getClient(this.$store.getters.user.id).then(response => {
+                        this.worksheet.ugyfel = response.data;
+                    })
+                }
             }
         },
         computed: {
@@ -484,6 +489,9 @@
             },
             canClose() {
                 return this.$store.getters.user.modules.includes(SERVICE)
+            },
+            client() {
+                return this.$store.getters.user.modules.includes(CLIENT);
             }
         },
         methods: {

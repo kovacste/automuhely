@@ -10,6 +10,10 @@ class WorksheetService extends Service {
         return this.get('GetWorkSheets');
     }
 
+    getWorkSheetWithClientId(id) {
+        return this.get('GetWorkSheetWithClientId?', { clientId: id });
+    }
+
     setWorksheet(worksheet) {
         return this.post('SetWorkSheet', worksheet);
     }

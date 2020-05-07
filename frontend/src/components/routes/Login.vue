@@ -98,9 +98,9 @@
                         modules: response.data.modul,
                         id: response.data.id
                     });
-                    console.log(response)
                     localStorage.setItem('username', response.data.loginNev);
                     localStorage.setItem('name', response.data.nev);
+                    localStorage.setItem('id', response.data.id);
                     localStorage.setItem('module', response.data.modul.join('-'));
                     this.$router.push('/home');
                 }).catch((error) => {
@@ -120,9 +120,9 @@
                         modules: response.data.modul,
                         id: response.data.id
                     });
-                    console.log(response)
                     localStorage.setItem('username', response.data.loginNev);
                     localStorage.setItem('name', response.data.nev);
+                    localStorage.setItem('id', response.data.id);
                     localStorage.setItem('module', response.data.modul.join('-'));
                     this.$router.push('/home');
                 }).catch((error) => {
