@@ -4,7 +4,6 @@
 
         <div slot="content">
 
-            Home
 
         </div>
 
