@@ -1,5 +1,6 @@
 ﻿using CarMechanic.Core.DataAccess;
 using CarMechanic.Core.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,14 @@ namespace CarMechanic.Core.BusinessLogic
 {
     public class PartManager
     {
-        private PartAccess _partAccess = new PartAccess();
+        private DbContextOptions<DomainModel.Models.CarMechanicContext> _options;
+        private PartAccess _partAccess;
+        public PartManager(DbContextOptions<DomainModel.Models.CarMechanicContext> options)
+        {
+            _options = options;
+            _partAccess = new PartAccess(_options);
+        }
+        
 
         public List<Alkatresz> GetParts()
         {
@@ -58,9 +66,9 @@ namespace CarMechanic.Core.BusinessLogic
             _partAccess.RemovePart(alkatresz);
         }
 
-        public void SetPartPrice(int partId, decimal purchasePrice, decimal salesPrice)
+        public void SetPartPrice(Alkatresz data)
         {
-            _partAccess.SetPartPrice(partId, purchasePrice, salesPrice);
+            _partAccess.SetPartPrice(data);
         }
     }
 }

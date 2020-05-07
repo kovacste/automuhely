@@ -6,6 +6,8 @@ using CarMechanic.Core.BusinessLogic;
 using CarMechanic.Core.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarMechanic.Core.Web.Api.Controllers
 {
@@ -17,6 +19,16 @@ namespace CarMechanic.Core.Web.Api.Controllers
     public class WorksheetController : ControllerBase
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private readonly DbContextOptions<DomainModel.Models.CarMechanicContext> _options;
+
+        /// <summary>
+        /// Munkalap kontoller kontruktor
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public WorksheetController(IServiceProvider serviceProvider)
+        {
+            _options = serviceProvider.GetRequiredService<DbContextOptions<DomainModel.Models.CarMechanicContext>>();
+        }
 
         /// <summary>
         /// Munkalapok listája
@@ -27,7 +39,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 return Ok(manager.GetWorkSheets());
 
             }
@@ -41,13 +53,14 @@ namespace CarMechanic.Core.Web.Api.Controllers
         /// <summary>
         /// Munkalap adatai
         /// </summary>
+        /// <param name="worksheetId">Munkalap azonosító</param>
         /// <returns>Munkalap adatai</returns>
         [HttpGet]
         public IActionResult GetWorkSheet(int worksheetId)
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 return Ok(manager.GetWorkSheet(worksheetId));
 
             }
@@ -59,15 +72,16 @@ namespace CarMechanic.Core.Web.Api.Controllers
         }
 
         /// <summary>
-        /// Munkalap adatai
+        /// Adott ügyfélhez tartozó munkalapok
         /// </summary>
-        /// <returns>Munkalap adatai</returns>
+        /// <param name="clientId">Ügyfél azonosító</param>
+        /// <returns>Munkalap adatok</returns>
         [HttpGet]
         public IActionResult GetWorkSheetWithClientId(int clientId)
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 return Ok(manager.GetWorkSheetWithClientId(clientId));
 
             }
@@ -79,15 +93,16 @@ namespace CarMechanic.Core.Web.Api.Controllers
         }
 
         /// <summary>
-        /// Munkalapok listája
+        /// Adott munkalaphoz tartozó szolgáltatások tételek
         /// </summary>
-        /// <returns>Munkalapok</returns>
+        /// <param name="worksheetId">Munkalap azonosító</param>
+        /// <returns>Munkalaphoz tartozó szolgáltatás tételek</returns>
         [HttpGet]
         public IActionResult GetWorkSheetDetails(int worksheetId)
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 return Ok(manager.GetWorkSheetDetails(worksheetId));
 
             }
@@ -99,15 +114,16 @@ namespace CarMechanic.Core.Web.Api.Controllers
         }
 
         /// <summary>
-        /// Munkalap rendelések listája
+        /// Adott munkalaphoz tartozó rendelések listája
         /// </summary>
-        /// <returns>Munkalap rendelések</returns>
+        /// <param name="worksheetId">Munkalap azonosító</param>
+        /// <returns>Munkalaphoz tartozó rendelések</returns>
         [HttpGet]
         public IActionResult GetWorkSheetOrders(int worksheetId)
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 return Ok(manager.GetWorkSheetOrders(worksheetId));
 
             }
@@ -121,13 +137,14 @@ namespace CarMechanic.Core.Web.Api.Controllers
         /// <summary>
         /// Munkalap tétel adatai
         /// </summary>
+        /// <param name="worksheetId">Munkalap azonosító</param>
         /// <returns>Munkalap tétel</returns>
         [HttpGet]
         public IActionResult GetWorkSheetDetail(int worksheetId)
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 return Ok(manager.GetWorkSheetDetail(worksheetId));
 
             }
@@ -147,7 +164,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 var result = manager.SetWorkSheet(data);
                 return Ok(result);
 
@@ -168,7 +185,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 var result = manager.SetWorkSheetDetails(data);
                 return Ok(result);
 
@@ -189,7 +206,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 var result = manager.SetWorkSheetOrders(data);
                 return Ok(result);
 
@@ -210,7 +227,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 manager.RemoveWorkSheet(data);
                 return Ok();
 
@@ -221,6 +238,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         /// <summary>
         /// Munkalap teétel törlése
         /// </summary>
@@ -230,7 +248,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 manager.RemoveWorkSheetDetail(data);
                 return Ok();
 
@@ -251,7 +269,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 manager.RemoveWorkSheetOrder(data);
                 return Ok();
 
@@ -274,7 +292,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new WorksheetManager();
+                var manager = new WorksheetManager(_options);
                 manager.CloseWorkSheet(worksheetId, user);
                 return Ok();
 

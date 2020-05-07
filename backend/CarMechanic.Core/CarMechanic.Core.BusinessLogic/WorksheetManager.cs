@@ -1,6 +1,7 @@
 ﻿using CarMechanic.Core.DataAccess;
 using CarMechanic.Core.DomainModel.Models;
 using CarMechanic.Core.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
@@ -10,7 +11,14 @@ namespace CarMechanic.Core.BusinessLogic
 {
     public class WorksheetManager
     {
-        private WorksheetAccess _worksheetAccess = new WorksheetAccess();
+        private DbContextOptions<DomainModel.Models.CarMechanicContext> _options;
+        private WorksheetAccess _worksheetAccess;
+        public WorksheetManager(DbContextOptions<DomainModel.Models.CarMechanicContext> options)
+        {
+            _options = options;
+            _worksheetAccess = new WorksheetAccess(_options);
+        }
+
         public List<Munkalap> GetWorkSheets()
         {
             var worksheets = new List<Munkalap>();

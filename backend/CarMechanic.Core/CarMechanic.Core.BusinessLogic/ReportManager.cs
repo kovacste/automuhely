@@ -1,5 +1,6 @@
 ﻿using CarMechanic.Core.DataAccess;
 using CarMechanic.Core.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,14 @@ namespace CarMechanic.Core.BusinessLogic
 {
     public class ReportManager
     {
-        private ReportAccess _reportAccess = new ReportAccess();
+        private DbContextOptions<DomainModel.Models.CarMechanicContext> _options;
+        private ReportAccess _reportAccess;
+        public ReportManager(DbContextOptions<DomainModel.Models.CarMechanicContext> options)
+        {
+            _options = options;
+            _reportAccess = new ReportAccess(_options);
+        }
+
         public List<DolgozoStatisztika> GetWorkerStatistic(int year, int month)
         {
             var result = _reportAccess.GetWorkerStatistic(year, month);

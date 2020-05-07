@@ -1,5 +1,6 @@
 ﻿using CarMechanic.Core.DataAccess;
 using CarMechanic.Core.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +9,13 @@ namespace CarMechanic.Core.BusinessLogic
 {
     public class ServiceManager
     {
-        private ServiceAccess _serviceAccess = new ServiceAccess();
+        private DbContextOptions<DomainModel.Models.CarMechanicContext> _options;
+        private ServiceAccess _serviceAccess;
+        public ServiceManager(DbContextOptions<DomainModel.Models.CarMechanicContext> options)
+        {
+            _options = options;
+            _serviceAccess = new ServiceAccess(_options);
+        }        
 
         public List<Szolgaltatas> GetServices()
         {

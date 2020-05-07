@@ -15,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 namespace CarMechanic.Core.Web.Api
 {
     public class Startup
@@ -30,7 +32,11 @@ namespace CarMechanic.Core.Web.Api
         [Obsolete]
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<CarMechanicContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarMechanicDatabase")));
+            var connectionString = Configuration.GetConnectionString("CarMechanicDatabase");
+            services.AddDbContext<CarMechanicContext>(options => options.UseSqlServer(connectionString));
+
+            //services.AddDbContext<CarMechanicContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CarMechanicDatabase")));
+
             services.AddMvc(option => option.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -90,3 +96,4 @@ namespace CarMechanic.Core.Web.Api
         }
     }
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

@@ -6,6 +6,8 @@ using CarMechanic.Core.BusinessLogic;
 using CarMechanic.Core.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CarMechanic.Core.Web.Api.Controllers
 {
@@ -16,7 +18,18 @@ namespace CarMechanic.Core.Web.Api.Controllers
     [ApiController]
     public class PartController : ControllerBase
     {
+
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private readonly DbContextOptions<DomainModel.Models.CarMechanicContext> _options;
+
+        /// <summary>
+        /// Alkatrész kontoller kontruktor
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public PartController(IServiceProvider serviceProvider)
+        {
+            _options = serviceProvider.GetRequiredService<DbContextOptions<DomainModel.Models.CarMechanicContext>>();
+        }
 
         /// <summary>
         /// Alkatrészek listája
@@ -27,7 +40,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new PartManager();
+                var manager = new PartManager(_options);
                 return Ok(manager.GetParts());
 
             }
@@ -47,7 +60,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new PartManager();
+                var manager = new PartManager(_options);
                 return Ok(manager.GetPart(partId));
 
             }
@@ -67,7 +80,7 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new PartManager();
+                var manager = new PartManager(_options);
                 var result = manager.SetPart(data);
                 return Ok(result);
 
@@ -88,10 +101,17 @@ namespace CarMechanic.Core.Web.Api.Controllers
         {
             try
             {
-                var manager = new PartManager();
+                var manager = new PartManager(_options);
                 manager.RemovePart(data);
                 return Ok();
 
+            }
+            catch (DbUpdateException e)
+            {
+                if (e.InnerException.Message.Contains("FK_"))
+                    return BadRequest("DATA_IN_USE");
+                else
+                    return BadRequest(e.Message);
             }
             catch (Exception ex)
             {
@@ -103,16 +123,14 @@ namespace CarMechanic.Core.Web.Api.Controllers
         /// <summary>
         /// Alaktrész árazása
         /// </summary>
-        /// <param name="partId">Szolgáltatás azonosító</param>    
-        /// <param name="purchasePrice">Új beszerzési ára</param>    
-        /// <param name="salesPrice">Új eladási ára</param>    
+        /// <param name="data">Alkatrész adatok</param>    
         [HttpPost]
-        public IActionResult SetPartPrice(int partId, decimal purchasePrice, decimal salesPrice)
+        public IActionResult SetPartPrice([FromBody] Alkatresz data)
         {
             try
             {
-                var manager = new PartManager();
-                manager.SetPartPrice(partId, purchasePrice, salesPrice);
+                var manager = new PartManager(_options);
+                manager.SetPartPrice(data);
                 return Ok();
 
             }

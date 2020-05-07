@@ -7,6 +7,7 @@ namespace CarMechanic.Core.DomainModel.Models
 {
     public partial class CarMechanicContext : DbContext
     {
+
         public CarMechanicContext()
         {
 
@@ -31,10 +32,6 @@ namespace CarMechanic.Core.DomainModel.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(@"");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

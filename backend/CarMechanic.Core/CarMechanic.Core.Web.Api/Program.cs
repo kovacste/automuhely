@@ -7,9 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 namespace CarMechanic.Core.Web.Api
 {
     public class Program
+
     {
         public static void Main(string[] args)
         {
@@ -24,3 +26,4 @@ namespace CarMechanic.Core.Web.Api
                 });
     }
 }
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member

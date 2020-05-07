@@ -10,9 +10,14 @@ namespace CarMechanic.Core.DataAccess
 {
     public class ServiceAccess
     {
+        private readonly DbContextOptions<CarMechanicContext> _options;
+        public ServiceAccess(DbContextOptions<CarMechanicContext> options)
+        {
+            _options = options;
+        }
         public List<Szolgaltatasok> GetServices()
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.Szolgaltatasok.Include(x => x.RogzitetteNavigation).ToList();
             }
@@ -20,7 +25,7 @@ namespace CarMechanic.Core.DataAccess
 
         public Szolgaltatasok GetService(int serviceId)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.Szolgaltatasok.Where(x => x.Id == serviceId).Include(x => x.RogzitetteNavigation).FirstOrDefault();
             }
@@ -28,7 +33,7 @@ namespace CarMechanic.Core.DataAccess
 
         public void RemoveService(Szolgaltatas szolgaltatas)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var result = context.Szolgaltatasok.FirstOrDefault(x => x.Id == szolgaltatas.Id);
                 if (result != null)
@@ -41,7 +46,7 @@ namespace CarMechanic.Core.DataAccess
 
         public void SetServicePrice(int serviceId, decimal price)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var result = context.Szolgaltatasok.FirstOrDefault(x => x.Id == serviceId);
                 if (result != null)
@@ -55,7 +60,7 @@ namespace CarMechanic.Core.DataAccess
         public int SetService(Szolgaltatas szolgaltatas)
         {
             var result = 0;
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var service = new Szolgaltatasok();
                 if (szolgaltatas.Id == 0)

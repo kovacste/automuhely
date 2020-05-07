@@ -4,17 +4,22 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
+
 
 namespace CarMechanic.Core.DataAccess
 {
     public class ClientAccess
     {
+        private readonly DbContextOptions<CarMechanicContext> _options;
+        public ClientAccess(DbContextOptions<CarMechanicContext> options)
+        {
+            _options = options;
+        }
+
         public List<Ugyfelek> GetClientList()
         {
-            using (var context = new CarMechanicContext())
+
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.Ugyfelek.Include(x => x.Telepules).Include(x => x.Kozteruletjelleg).Include(x => x.RogzitetteNavigation).ToList();
             }
@@ -22,7 +27,7 @@ namespace CarMechanic.Core.DataAccess
 
         public Ugyfelek GetClient(int clientId)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.Ugyfelek.Where(x=>x.Id == clientId).Include(x => x.Telepules).Include(x => x.Kozteruletjelleg).Include(x => x.RogzitetteNavigation).FirstOrDefault();
             }
@@ -30,7 +35,7 @@ namespace CarMechanic.Core.DataAccess
 
         public List<Telepulesek> GetCities()
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.Telepulesek.ToList();
             }
@@ -38,7 +43,7 @@ namespace CarMechanic.Core.DataAccess
 
         public List<KozteruletJellegek> GetStreetTypes()
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.KozteruletJellegek.ToList();
             }
@@ -46,7 +51,7 @@ namespace CarMechanic.Core.DataAccess
 
         public void RemoveClient(Ugyfel ugyfel)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var result = context.Ugyfelek.FirstOrDefault(x => x.Id == ugyfel.Id);
                 if (result != null)
@@ -60,7 +65,7 @@ namespace CarMechanic.Core.DataAccess
         public int SetClient(Ugyfel ugyfel)
         {
             var result = 0;
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var client = new Ugyfelek();
                 client = new Ugyfelek()
@@ -73,6 +78,7 @@ namespace CarMechanic.Core.DataAccess
                     Hazszam = ugyfel.Hazszam,
                     Telefonszam = ugyfel.Telefonszam,
                     Email = ugyfel.Email,
+                    Jelszo = ugyfel.Jelszo,
                     Rogzitve = DateTime.Now,
                     Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == ugyfel.Rogzitette).FirstOrDefault().Id
                 };
@@ -91,6 +97,7 @@ namespace CarMechanic.Core.DataAccess
                         client.Hazszam = ugyfel.Hazszam;
                         client.Telefonszam = ugyfel.Telefonszam;
                         client.Email = ugyfel.Email;
+                        client.Jelszo = ugyfel.Jelszo;
                         client.Rogzitve = DateTime.Now;
                         client.Rogzitette = context.Felhasznalok.Where(x => x.Loginnev == ugyfel.Rogzitette).FirstOrDefault().Id;
                     }
@@ -103,7 +110,7 @@ namespace CarMechanic.Core.DataAccess
 
         public Ugyfelek AuthenticateClient(string loginName, string password)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
 
                 return context.Ugyfelek.Where(x => x.Email == loginName && x.Jelszo == password).FirstOrDefault();

@@ -10,9 +10,15 @@ namespace CarMechanic.Core.DataAccess
 {
     public class PartAccess
     {
+        private readonly DbContextOptions<CarMechanicContext> _options;
+        public PartAccess(DbContextOptions<CarMechanicContext> options)
+        {
+            _options = options;
+        }
+
         public List<Alkatreszek> GetParts()
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.Alkatreszek.Include(x => x.RogzitetteNavigation).ToList();
             }
@@ -20,7 +26,7 @@ namespace CarMechanic.Core.DataAccess
 
         public Alkatreszek GetPart(int partId)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 return context.Alkatreszek.Where(x => x.Id == partId).Include(x => x.RogzitetteNavigation).FirstOrDefault();
             }
@@ -28,7 +34,7 @@ namespace CarMechanic.Core.DataAccess
 
         public void RemovePart(Alkatresz alkatresz)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var result = context.Alkatreszek.FirstOrDefault(x => x.Id == alkatresz.Id);
                 if (result != null)
@@ -42,7 +48,7 @@ namespace CarMechanic.Core.DataAccess
         public int SetPart(Alkatresz alkatresz)
         {
             var result = 0;
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
                 var part = new Alkatreszek();
                 if (alkatresz.Id == 0)
@@ -76,15 +82,15 @@ namespace CarMechanic.Core.DataAccess
             return result;
         }
 
-        public void SetPartPrice(int partId, decimal purchasePrice, decimal salesPrice)
+        public void SetPartPrice(Alkatresz data)
         {
-            using (var context = new CarMechanicContext())
+            using (var context = new CarMechanicContext(_options))
             {
-                var result = context.Alkatreszek.FirstOrDefault(x => x.Id == partId);
+                var result = context.Alkatreszek.FirstOrDefault(x => x.Id == data.Id);
                 if (result != null)
                 {
-                    result.Beszerar = purchasePrice;
-                    result.Eladasiar = salesPrice;
+                    result.Beszerar = data.Beszerar;
+                    result.Eladasiar = data.Eladasiar;
                 }
                 context.SaveChanges();
             }
