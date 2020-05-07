@@ -75,8 +75,8 @@
         methods: {
             logout() {
                 this.$store.commit('logOutUser');
-                this.$router.push('/logout');
                 localStorage.clear();
+                this.$router.push('/login');
             }
         }
     }
