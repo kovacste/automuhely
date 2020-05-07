@@ -5,7 +5,7 @@
 
             <v-toolbar color="primary" dark flat>
 
-                <v-toolbar-title> Munkalap adatai  </v-toolbar-title>
+                <v-toolbar-title> Munkalap adatai {{ worksheetStatus }}  </v-toolbar-title>
 
             </v-toolbar>
 
@@ -100,13 +100,6 @@
                             </v-tooltip>
 
                         </v-flex>
-
-                        <v-flex md2 xs12 class="ma-2">
-
-                            {{ worksheetStatus }}
-
-                        </v-flex>
-
 
                     </v-layout>
 
@@ -337,9 +330,9 @@
 
                                 <td style="padding-right: 10px;"> {{ service.nev }}  </td>
 
-                                <td> {{ service.egysegar }} Ft  </td>
+                                <td style="text-align: right; padding:5px;"> {{ service.egysegar }} Ft  </td>
 
-                                <td> {{ service.me }} db  </td>
+                                <td style="text-align: right; padding:5px;"> {{ service.me }} db  </td>
 
                                 <td>
 
@@ -391,13 +384,13 @@
 
                         <table>
 
-                            <tr  v-for="(part, index) in parts" :key="index">
+                            <tr   v-for="(part, index) in parts" :key="index">
 
                                 <td> {{ part.nev }}  </td>
 
-                                <td> {{ part.eladasiar }}  </td>
+                                <td style="text-align: right; padding:5px;"> {{ part.eladasiar }} Ft  </td>
 
-                                <td> 1 db  </td>
+                                <td style="text-align: right; padding:5px;"> 1 db  </td>
 
                                 <td>
 
@@ -517,7 +510,7 @@
                 return (this.editable || this.newWorksheet) && !this.worksheet.lezarva;
             },
             worksheetStatus() {
-                return this.worksheet.lezarva ? 'Munkalap lezárt' : 'Munkalap nyitott';
+                return this.worksheet.lezarva ? ' - Lezárt' : '';
             },
             canClose() {
                 return this.$store.getters.user.modules.includes(SERVICE);
