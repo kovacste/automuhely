@@ -108,7 +108,6 @@
                 this.$router.push('worksheet/' + worksheet.id);
             },
             deleteWorksheet() {
-
                let worksheetDate = new Date(this.worksheetToDelete.idopont);
                let today = new Date();
 
@@ -118,11 +117,7 @@
                     this.saveFail('Munkalap legkésőbb az foglalt időpont előtt egy nappal törölhető!');
                 } else  {
                     worksheetService.removeWorksheet(this.worksheetToDelete.id).then(() => {
-                        worksheetService.getWorksheetList().then(response => {
-                            this.worksheets = response.data;
-                            this.filterdWorksheets = response.data;
-                            this.filterWorksheets();
-                        });
+                        this.getWorksheets();
                         this.saveSuccess('Munkalap törlése sikeres!');
                     }).catch(() => {
                         this.saveFail('Munkalap törlése sikertelen!')
@@ -148,18 +143,21 @@
                 this.filterdWorksheets.sort((a, b) => {
                     return b.id - a.id;
                 });
-            }
+            },
+            getWorksheets() {
+                const listService = this.$store.getters.user.modules.includes(CLIENT)
+                    ? () => worksheetService.getWorkSheetWithClientId(this.$store.getters.user.id)
+                    : () => worksheetService.getWorksheetList();
+
+                 listService().then(response => {
+                    this.worksheets = response.data;
+                    this.filterdWorksheets = response.data;
+                    this.filterWorksheets();
+                });
+            },
         },
         mounted() {
-            const listService = this.$store.getters.user.modules.includes(CLIENT)
-                ? () => worksheetService.getWorkSheetWithClientId(this.$store.getters.user.id)
-                : () => worksheetService.getWorksheetList();
-
-            listService().then(response => {
-                this.worksheets = response.data;
-                this.filterdWorksheets = response.data;
-                this.filterWorksheets();
-            });
+            this.getWorksheets();
         },
         data() {
             return {
