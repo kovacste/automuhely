@@ -285,19 +285,33 @@
             }
         },
         mounted() {
-            const id = parseInt(this.$route.params.id, 10);
-            this.newClient = !id;
 
-            if(!this.newClient) {
-                const client = this.$store.getters.client;
+            if(this.$route.name === 'profile') {
+                console.log(this.$store.getters.user)
+                const id = this.$store.getters.user.id;
+                this.newClient = !id;
 
-                if(client.id && id === client.id) {
-                    this.client = { ...client };
-                } else {
-                    clientService.getClient(id).then(response => {
-                        this.client = response.data;
-                        this.$store.commit('setClient', this.client);
-                    });
+                console.log('FASZOM MOUNTED')
+
+                clientService.getClient(id).then(response => {
+                    this.client = response.data;
+                    this.$store.commit('setClient', this.client);
+                });
+            } else {
+                const id = parseInt(this.$route.params.id, 10);
+                this.newClient = !id;
+
+                if(!this.newClient) {
+                    const client = this.$store.getters.client;
+
+                    if(client.id && id === client.id) {
+                        this.client = { ...client };
+                    } else {
+                        clientService.getClient(id).then(response => {
+                            this.client = response.data;
+                            this.$store.commit('setClient', this.client);
+                        });
+                    }
                 }
             }
 

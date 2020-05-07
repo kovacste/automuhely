@@ -22,6 +22,7 @@ export const routes = [
     { path: '/clients', component: Clients },
     { path: '/client/:id', component: Client },
     { path: '/client', component: Client },
+    { path: '/profile', component: Client, name: 'profile' },
     { path: '/services', component: Services },
     { path: '/service/:id', component: Service },
     { path: '/service', component: Service },

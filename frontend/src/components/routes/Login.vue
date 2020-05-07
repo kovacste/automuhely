@@ -95,7 +95,8 @@
                     this.$store.commit('setUser', {
                         username: response.data.loginNev,
                         name: response.data.nev,
-                        modules: response.data.modul
+                        modules: response.data.modul,
+                        id: response.data.id
                     });
                     console.log(response)
                     localStorage.setItem('username', response.data.loginNev);
@@ -116,7 +117,8 @@
                     this.$store.commit('setUser', {
                         username: response.data.loginNev,
                         name: response.data.nev,
-                        modules: response.data.modul
+                        modules: response.data.modul,
+                        id: response.data.id
                     });
                     console.log(response)
                     localStorage.setItem('username', response.data.loginNev);
